@@ -18,6 +18,12 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>We want to use Bluetooth</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We want to detect the beacons around you</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
