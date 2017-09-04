@@ -1,0 +1,6 @@
+framework module Pods_ATK_BLE_LECT {
+  umbrella header "Pods-ATK_BLE_LECT-umbrella.h"
+
+  export *
+  module * { export * }
+}

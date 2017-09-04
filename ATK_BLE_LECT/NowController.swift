@@ -11,7 +11,7 @@ import UserNotifications
 import CoreBluetooth
 import CoreLocation
 
-class NowViewController: UIViewController, UNUserNotificationCenterDelegate, CLLocationManagerDelegate, CBPeripheralManagerDelegate {
+class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocationManagerDelegate, CBPeripheralManagerDelegate {
     
     var locationManager = CLLocationManager()
     var bluetoothManager = CBPeripheralManager()
@@ -27,15 +27,15 @@ class NowViewController: UIViewController, UNUserNotificationCenterDelegate, CLL
         locationManager.delegate = self
         bluetoothManager.delegate = self
         locationManager.requestAlwaysAuthorization()
-        broadcast()
+        //broadcast()
         // Do any additional setup after loading the view.
-       /* let bar = NSStatus.system()
-        let length: CGFloat = -1
-        var item = bar.statusItem(withLength: length)
-        item?.button?.image = NS*/
+        /* let bar = NSStatus.system()
+         let length: CGFloat = -1
+         var item = bar.statusItem(withLength: length)
+         item?.button?.image = NS*/
         
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -53,7 +53,7 @@ class NowViewController: UIViewController, UNUserNotificationCenterDelegate, CLL
         }
         print(status)
     }
-
+    
     func broadcast() {
         if bluetoothManager.state == .poweredOn {
             uuid = UUID(uuidString: "00112233-4455-6677-8899-123456789012")as UUID?
@@ -82,15 +82,23 @@ class NowViewController: UIViewController, UNUserNotificationCenterDelegate, CLL
         let app = UIApplication.shared
         app.open(url!, options: ["string":""], completionHandler: nil)
     }
-
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
+}
+struct displayTime {
+    static func display(time: String) -> String{
+        let timeSplit = time.components(separatedBy: ":")
+        let hour = timeSplit[0]
+        let minute = timeSplit[1]
+        return hour + ":" + minute
     }
-    */
-
 }

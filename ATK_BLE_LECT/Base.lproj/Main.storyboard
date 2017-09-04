@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="3YV-BW-o0w">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="3YV-BW-o0w">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -32,7 +32,7 @@
         <!--Now-->
         <scene sceneID="DOB-dR-s70">
             <objects>
-                <viewController id="vSU-JB-FpU" customClass="NowViewController" customModule="ATK_BLE_LECT" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="vSU-JB-FpU" customClass="NowController" customModule="ATK_BLE_LECT" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hjm-fP-6m6"/>
                         <viewControllerLayoutGuide type="bottom" id="M3W-s2-1bj"/>
@@ -126,7 +126,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="Gbw-zB-XRA">
             <objects>
-                <tabBarController id="aHc-9z-Nne" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="tab_bar_controller" id="aHc-9z-Nne" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="Mst-P5-7Ue">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -299,25 +299,6 @@
             </objects>
             <point key="canvasLocation" x="-455.19999999999999" y="850.52473763118451"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="cqt-Q7-jg5">
-            <objects>
-                <viewController id="Xvx-PE-Fbn" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="cFk-z6-5Ea"/>
-                        <viewControllerLayoutGuide type="bottom" id="PGL-oj-pes"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="gwj-6o-VM9">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="kFY-GB-oqG"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="STN-Wp-yN9" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1342" y="815"/>
-        </scene>
         <!--Timetable-->
         <scene sceneID="Pht-7w-MWb">
             <objects>
@@ -330,12 +311,41 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="Xvx-PE-Fbn" kind="relationship" relationship="rootViewController" id="fD4-2U-O8C"/>
+                        <segue destination="xmX-V9-bBg" kind="relationship" relationship="rootViewController" id="LXd-NJ-GNM"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CVa-UY-ZBv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="598" y="815"/>
+        </scene>
+        <!--Timetable Controller-->
+        <scene sceneID="i9y-Jr-2zs">
+            <objects>
+                <tableViewController id="xmX-V9-bBg" customClass="TimetableController" customModule="ATK_BLE_LECT" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="aMF-Tt-ZVo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="cell" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="9xL-5v-yHa" customClass="TimetableCell" customModule="ATK_BLE_LECT" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9xL-5v-yHa" id="MgG-Tp-yHa">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="xmX-V9-bBg" id="Ipx-XN-rmc"/>
+                            <outlet property="delegate" destination="xmX-V9-bBg" id="04c-NW-4WL"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="PHw-dT-Na4"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rUH-3z-33M" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1342" y="815"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="SeV-eA-5Xj">
@@ -468,10 +478,10 @@
             </objects>
             <point key="canvasLocation" x="-783" y="1594"/>
         </scene>
-        <!--Login View Controller-->
+        <!--Login Controller-->
         <scene sceneID="p6n-UT-zKZ">
             <objects>
-                <viewController storyboardIdentifier="sign in" id="3YV-BW-o0w" customClass="LoginViewController" customModule="ATK_BLE_LECT" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="sign in" id="3YV-BW-o0w" customClass="LoginController" customModule="ATK_BLE_LECT" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="mLa-lQ-w76"/>
                         <viewControllerLayoutGuide type="bottom" id="zri-jB-cb5"/>
@@ -514,10 +524,10 @@
                                     <color key="titleColor" red="0.11079049539999999" green="0.1244671158" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="aHc-9z-Nne" kind="show" id="FiJ-hK-lc7"/>
+                                    <action selector="LoginPressed:" destination="3YV-BW-o0w" eventType="touchUpInside" id="5jt-oD-hpk"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="canhnht" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Vcs-fi-8AD">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="zhangqinjie" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Vcs-fi-8AD">
                                 <rect key="frame" x="16" y="314" width="343" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -580,6 +590,11 @@
                             <constraint firstItem="HeC-vb-am6" firstAttribute="centerX" secondItem="Vcs-fi-8AD" secondAttribute="centerX" id="zic-Nr-GPd"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="passwordTxt" destination="Exc-TL-UNL" id="6Fm-mD-tPM"/>
+                        <outlet property="usernameTxt" destination="Vcs-fi-8AD" id="16q-9R-IM1"/>
+                        <segue destination="aHc-9z-Nne" kind="presentation" identifier="tab_bar_segue" id="Wyp-ip-Qvd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U8H-Vf-rLQ" sceneMemberID="firstResponder"/>
             </objects>

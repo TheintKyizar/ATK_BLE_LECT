@@ -7,27 +7,39 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B9457920FA1D799F44AD3082 /* Pods_ATK_BLE_LECT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EDC8658F0394AD045224C0F /* Pods_ATK_BLE_LECT.framework */; };
 		C37056201F56AC210029C0E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C370561F1F56AC210029C0E4 /* AppDelegate.swift */; };
-		C37056221F56AC210029C0E4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37056211F56AC210029C0E4 /* ViewController.swift */; };
 		C37056251F56AC210029C0E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C37056231F56AC210029C0E4 /* Main.storyboard */; };
 		C37056271F56AC210029C0E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C37056261F56AC210029C0E4 /* Assets.xcassets */; };
 		C370562A1F56AC210029C0E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C37056281F56AC210029C0E4 /* LaunchScreen.storyboard */; };
-		C3F472C21F57E3BE00B0DFD5 /* NowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F472C11F57E3BE00B0DFD5 /* NowViewController.swift */; };
-		C3F472C41F57E3D800B0DFD5 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F472C31F57E3D800B0DFD5 /* LoginViewController.swift */; };
 		C3F472C61F57E45300B0DFD5 /* MoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F472C51F57E45300B0DFD5 /* MoreController.swift */; };
+		E102786A1F5D200400429562 /* items.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10278691F5D200400429562 /* items.swift */; };
+		E102786C1F5D24BA00429562 /* classes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E102786B1F5D24BA00429562 /* classes.swift */; };
+		E102786E1F5D336400429562 /* FilePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = E102786D1F5D336400429562 /* FilePath.swift */; };
+		E10278711F5D396A00429562 /* TimetableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E102786F1F5D396A00429562 /* TimetableController.swift */; };
+		E10278751F5D3A2100429562 /* TimetableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10278731F5D3A2100429562 /* TimetableCell.swift */; };
+		E144D4501F5D1BDC00667DBD /* NowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E144D44E1F5D1BDC00667DBD /* NowController.swift */; };
+		E144D4551F5D1C4B00667DBD /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E144D4531F5D1C4B00667DBD /* LoginController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1EDC8658F0394AD045224C0F /* Pods_ATK_BLE_LECT.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ATK_BLE_LECT.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		34ABEA90802D5B68E3291290 /* Pods-ATK_BLE_LECT.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ATK_BLE_LECT.release.xcconfig"; path = "Pods/Target Support Files/Pods-ATK_BLE_LECT/Pods-ATK_BLE_LECT.release.xcconfig"; sourceTree = "<group>"; };
+		9F6E5BDFEC365B0B14E6F847 /* Pods-ATK_BLE_LECT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ATK_BLE_LECT.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ATK_BLE_LECT/Pods-ATK_BLE_LECT.debug.xcconfig"; sourceTree = "<group>"; };
 		C370561C1F56AC210029C0E4 /* ATK_BLE_LECT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ATK_BLE_LECT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C370561F1F56AC210029C0E4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C37056211F56AC210029C0E4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C37056241F56AC210029C0E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C37056261F56AC210029C0E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C37056291F56AC210029C0E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C370562B1F56AC210029C0E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C3F472C11F57E3BE00B0DFD5 /* NowViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowViewController.swift; sourceTree = "<group>"; };
-		C3F472C31F57E3D800B0DFD5 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		C3F472C51F57E45300B0DFD5 /* MoreController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreController.swift; sourceTree = "<group>"; };
+		E10278691F5D200400429562 /* items.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = items.swift; sourceTree = "<group>"; };
+		E102786B1F5D24BA00429562 /* classes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = classes.swift; sourceTree = "<group>"; };
+		E102786D1F5D336400429562 /* FilePath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilePath.swift; sourceTree = "<group>"; };
+		E102786F1F5D396A00429562 /* TimetableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimetableController.swift; sourceTree = "<group>"; };
+		E10278731F5D3A2100429562 /* TimetableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimetableCell.swift; sourceTree = "<group>"; };
+		E144D44E1F5D1BDC00667DBD /* NowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowController.swift; sourceTree = "<group>"; };
+		E144D4531F5D1C4B00667DBD /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,17 +47,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9457920FA1D799F44AD3082 /* Pods_ATK_BLE_LECT.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		49D8D8ED530E8D2C12F189E1 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9F6E5BDFEC365B0B14E6F847 /* Pods-ATK_BLE_LECT.debug.xcconfig */,
+				34ABEA90802D5B68E3291290 /* Pods-ATK_BLE_LECT.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		A58D7165B98378C1B1FB7948 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1EDC8658F0394AD045224C0F /* Pods_ATK_BLE_LECT.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C37056131F56AC210029C0E4 = {
 			isa = PBXGroup;
 			children = (
 				C370561E1F56AC210029C0E4 /* ATK_BLE_LECT */,
 				C370561D1F56AC210029C0E4 /* Products */,
+				49D8D8ED530E8D2C12F189E1 /* Pods */,
+				A58D7165B98378C1B1FB7948 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -61,16 +93,44 @@
 			isa = PBXGroup;
 			children = (
 				C370561F1F56AC210029C0E4 /* AppDelegate.swift */,
-				C37056211F56AC210029C0E4 /* ViewController.swift */,
+				E10278681F5D1FF100429562 /* Entity */,
+				E10278671F5D1FDE00429562 /* Controllers */,
 				C37056231F56AC210029C0E4 /* Main.storyboard */,
+				E144D44D1F5D1B7400667DBD /* Supporting files */,
+			);
+			path = ATK_BLE_LECT;
+			sourceTree = "<group>";
+		};
+		E10278671F5D1FDE00429562 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E144D44E1F5D1BDC00667DBD /* NowController.swift */,
+				E102786F1F5D396A00429562 /* TimetableController.swift */,
+				E144D4531F5D1C4B00667DBD /* LoginController.swift */,
+				E10278731F5D3A2100429562 /* TimetableCell.swift */,
+				C3F472C51F57E45300B0DFD5 /* MoreController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		E10278681F5D1FF100429562 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				E10278691F5D200400429562 /* items.swift */,
+				E102786B1F5D24BA00429562 /* classes.swift */,
+				E102786D1F5D336400429562 /* FilePath.swift */,
+			);
+			name = Entity;
+			sourceTree = "<group>";
+		};
+		E144D44D1F5D1B7400667DBD /* Supporting files */ = {
+			isa = PBXGroup;
+			children = (
 				C37056261F56AC210029C0E4 /* Assets.xcassets */,
 				C37056281F56AC210029C0E4 /* LaunchScreen.storyboard */,
 				C370562B1F56AC210029C0E4 /* Info.plist */,
-				C3F472C11F57E3BE00B0DFD5 /* NowViewController.swift */,
-				C3F472C31F57E3D800B0DFD5 /* LoginViewController.swift */,
-				C3F472C51F57E45300B0DFD5 /* MoreController.swift */,
 			);
-			path = ATK_BLE_LECT;
+			name = "Supporting files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -80,9 +140,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C370562E1F56AC210029C0E4 /* Build configuration list for PBXNativeTarget "ATK_BLE_LECT" */;
 			buildPhases = (
+				AEA04A355BED858CA807F53C /* [CP] Check Pods Manifest.lock */,
 				C37056181F56AC210029C0E4 /* Sources */,
 				C37056191F56AC210029C0E4 /* Frameworks */,
 				C370561A1F56AC210029C0E4 /* Resources */,
+				F3272636A2AD52C9B5E336BD /* [CP] Embed Pods Frameworks */,
+				BC883931BDDF0B157BBCC967 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -105,7 +168,7 @@
 				TargetAttributes = {
 					C370561B1F56AC210029C0E4 = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = R397SMDAA7;
+						DevelopmentTeam = EBWK75HAK4;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -141,16 +204,68 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		AEA04A355BED858CA807F53C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		BC883931BDDF0B157BBCC967 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ATK_BLE_LECT/Pods-ATK_BLE_LECT-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F3272636A2AD52C9B5E336BD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ATK_BLE_LECT/Pods-ATK_BLE_LECT-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C37056181F56AC210029C0E4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E144D4501F5D1BDC00667DBD /* NowController.swift in Sources */,
+				E10278751F5D3A2100429562 /* TimetableCell.swift in Sources */,
+				E102786A1F5D200400429562 /* items.swift in Sources */,
+				E144D4551F5D1C4B00667DBD /* LoginController.swift in Sources */,
+				E102786C1F5D24BA00429562 /* classes.swift in Sources */,
+				E102786E1F5D336400429562 /* FilePath.swift in Sources */,
 				C3F472C61F57E45300B0DFD5 /* MoreController.swift in Sources */,
-				C3F472C41F57E3D800B0DFD5 /* LoginViewController.swift in Sources */,
-				C3F472C21F57E3BE00B0DFD5 /* NowViewController.swift in Sources */,
-				C37056221F56AC210029C0E4 /* ViewController.swift in Sources */,
 				C37056201F56AC210029C0E4 /* AppDelegate.swift in Sources */,
+				E10278711F5D396A00429562 /* TimetableController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,12 +386,13 @@
 		};
 		C370562F1F56AC210029C0E4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9F6E5BDFEC365B0B14E6F847 /* Pods-ATK_BLE_LECT.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = R397SMDAA7;
+				DEVELOPMENT_TEAM = EBWK75HAK4;
 				INFOPLIST_FILE = ATK_BLE_LECT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.kyizar.ATK-BLE-LECT";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ATK-BLE-LECT";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -284,12 +400,13 @@
 		};
 		C37056301F56AC210029C0E4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 34ABEA90802D5B68E3291290 /* Pods-ATK_BLE_LECT.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = R397SMDAA7;
+				DEVELOPMENT_TEAM = EBWK75HAK4;
 				INFOPLIST_FILE = ATK_BLE_LECT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.kyizar.ATK-BLE-LECT";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ATK-BLE-LECT";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
