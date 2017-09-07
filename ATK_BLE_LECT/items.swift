@@ -13,11 +13,12 @@ class Constant{
     static let baseURL = "http://188.166.247.154/atk-ble/"
     static let URLLogin = baseURL + "api/web/index.php/v1/lecturer/login"
     static let URLLessonList = baseURL + "api/web/index.php/v1/lesson-lecturer?expand=lesson,venue,lesson_date,beacon_lesson"
-    static let URLAllDateOfLesson = baseURL + "api/web/index.php/v1/lesson-date/search?lesson_id=1"
+    static let URLAllDateOfLesson = baseURL + "api/web/index.php/v1/lesson-date/search?lesson_id="
     static let URLAtkStatus = baseURL + "api/web/index.php/v1/attendance/list-attendance-status-by-lecturer"
     static let URLUpdateStatus = baseURL + "api/web/index.php/v1/attendance/update-status"
     static let URLGetStudentOfLesson = baseURL + "api/web/index.php/v1/timetable/get-student"
     static let URLCreateAtk = baseURL + "api/web/index.php/v1/beacon-attendance-lecturer/student-attendance"
+    static let URLWeeklyTimetable = baseURL + "api/web/index.php/v1/lesson-lecturer/weekly-lesson?expand=lesson,venue,lesson_date,beacon_lesson"
     
     static var name = String()
     static var token = String()
@@ -29,6 +30,24 @@ class Constant{
 
 class GlobalData{
     
+    static var weeklyTimetable = [Lesson]()
     static var timetable = [Lesson]()
+    static var today = [Lesson]()
+    static var currentLesson = Lesson()
+    static var nextLessonTime = String()
+    static var nextLesson = Lesson()
+    static var students = [Student]()
+    static var studentStatus = [Status]()
+    
+    static let wdayStr = ["Monday", "Tuesday", "Wednesday", "Thursday" , "Friday", "Saturday"]
+    static let wdayInt = ["2", "3", "4", "5", "6", "7"]
+    static let wday:Dictionary = [
+        "2" : "Monday",
+        "3" : "Tuesday",
+        "4" : "Wednesday",
+        "5" : "Thursday",
+        "6" : "Friday",
+        "7" : "Saturday"
+    ]
     
 }

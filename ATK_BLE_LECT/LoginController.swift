@@ -117,6 +117,7 @@ class LoginController: UIViewController {
                     if let lesson = json["lesson"] as? [String:Any]{
                         newLesson.lesson_id = lesson["id"] as? Int
                         newLesson.catalog = lesson["catalog_number"] as? String
+                        newLesson.module_id = lesson["module_id"] as? String
                         newLesson.subject = lesson["subject_area"] as? String
                         newLesson.class_section = lesson["class_section"] as? String
                         newLesson.weekday = lesson["weekday"] as? String
@@ -144,6 +145,7 @@ class LoginController: UIViewController {
                 }
                 NSKeyedArchiver.archiveRootObject(GlobalData.timetable, toFile: filePath.timetablePath)
                 print("Done loading timetable")
+                alamofire.loadWeeklyTimetable()
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshTable"), object: nil)
                 self.dismiss(animated: false, completion: nil)
                 self.performSegue(withIdentifier: "tab_bar_segue", sender: nil)

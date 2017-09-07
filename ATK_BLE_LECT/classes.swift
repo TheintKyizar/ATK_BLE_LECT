@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Alamofire
 
 class Lesson : NSObject, NSCoding {
     
@@ -16,12 +17,14 @@ class Lesson : NSObject, NSCoding {
     var venueName: String?
     var location: String?
     var class_section: String?
+    var module_id:String?
     
     
     var ldate: String?
     var weekday: String?
     var ldateid: Int?
     
+    var uuid: String?
     var major: UInt16?
     var minor: UInt16?
     
@@ -33,19 +36,21 @@ class Lesson : NSObject, NSCoding {
     var recorded_time: String?
     
     override init() {
-        lesson_id = 0
+        lesson_id = nil
         subject = "X"
         catalog = "X"
         ldate = "0/0/0"
         class_section = "P2J3"
         weekday = "0"
         ldateid = 0
+        uuid = ""
         major = 0
         minor = 0
         start_time = "00:00"
         end_time = "00:00"
         status = nil
         recorded_time = "00:00"
+        module_id = ""
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -53,6 +58,7 @@ class Lesson : NSObject, NSCoding {
         
         subject = aDecoder.decodeObject(forKey: "subject") as! String?
         catalog = aDecoder.decodeObject(forKey: "catalog") as! String?
+        module_id = aDecoder.decodeObject(forKey: "module_id") as! String?
         
         venueName = aDecoder.decodeObject(forKey: "venueName") as! String?
         location = aDecoder.decodeObject(forKey: "location") as! String?
@@ -62,6 +68,7 @@ class Lesson : NSObject, NSCoding {
         ldate = aDecoder.decodeObject(forKey: "ldate") as! String?
         weekday = aDecoder.decodeObject(forKey: "weekday") as! String?
         
+        uuid = aDecoder.decodeObject(forKey: "uuid") as! String?
         major = aDecoder.decodeObject(forKey: "major") as! UInt16?
         minor = aDecoder.decodeObject(forKey: "minor") as! UInt16?
         
@@ -77,6 +84,7 @@ class Lesson : NSObject, NSCoding {
         
         aCoder.encode(subject, forKey: "subject")
         aCoder.encode(catalog, forKey: "catalog")
+        aCoder.encode(module_id, forKey: "module_id")
         
         aCoder.encode(venueName, forKey: "venueName")
         
@@ -87,6 +95,7 @@ class Lesson : NSObject, NSCoding {
         aCoder.encode(ldate, forKey: "ldate")
         aCoder.encode(weekday, forKey: "weekday")
         
+        aCoder.encode(uuid, forKey: "uuid")
         aCoder.encode(major, forKey: "major")
         aCoder.encode(minor, forKey: "minor")
         
@@ -111,35 +120,108 @@ class Venue{
 
 class Student: NSObject, NSCoding{
     
-    var lesson_id:Int?
-    var student_id:[Int]?
-    var major:[Int]?
-    var minor:[Int]?
+    var student_card:String?
+    var student_id:Int?
+    var major:Int?
+    var minor:Int?
+    var name:String?
     
     override init(){
-        lesson_id = 0
-        student_id = []
-        major = []
-        minor = []
+        student_card = ""
+        student_id = 0
+        major = 0
+        minor = 0
+        name = ""
     }
     
     required init?(coder aDecoder: NSCoder) {
         
-        lesson_id = aDecoder.decodeObject(forKey: "lesson_id") as? Int
-        student_id = aDecoder.decodeObject(forKey: "id") as? [Int]
-        major = aDecoder.decodeObject(forKey: "major") as? [Int]
-        minor = aDecoder.decodeObject(forKey: "minor") as? [Int]
+        student_card = aDecoder.decodeObject(forKey: "card") as? String
+        student_id = aDecoder.decodeObject(forKey: "id") as? Int
+        major = aDecoder.decodeObject(forKey: "major") as? Int
+        minor = aDecoder.decodeObject(forKey: "minor") as? Int
+        name = aDecoder.decodeObject(forKey: "name") as? String
         
     }
     
     func encode(with aCoder: NSCoder) {
         
-        aCoder.encode(lesson_id, forKey: "lesson_id")
+        aCoder.encode(student_card, forKey: "card")
+        aCoder.encode(name, forKey: "name")
         aCoder.encode(student_id, forKey: "id")
         aCoder.encode(major, forKey: "major")
         aCoder.encode(minor, forKey: "minor")
         
     }
+}
+
+class checkLesson{
+    
+    static func checkCurrentLesson() -> Bool{
+        let today = Date()
+        let currentDateStr = format.formateDate(format: "yyyy-MM-dd", date: today)
+        GlobalData.today = GlobalData.weeklyTimetable.filter({$0.ldate == currentDateStr})
+        //check if today has lessons
+        
+        if GlobalData.today.count > 0{
+            let currentTimeStr = format.formateDate(format: "HH:mm:ss", date: today)
+            let currentLesson = GlobalData.today.first(where: {$0.start_time!<=currentTimeStr && $0.end_time!>=currentTimeStr})
+            //check if current has lessons
+            if currentLesson != nil{
+                GlobalData.currentLesson = currentLesson!
+                return true
+            }else{
+                GlobalData.currentLesson.ldateid = nil
+                GlobalData.currentLesson = .init()
+                return false
+            }
+            
+        }else{
+            GlobalData.currentLesson.ldateid = nil
+            GlobalData.currentLesson = .init()
+            return false
+        }
+    }
+    
+    static func checkNextLesson() -> Bool{
+        let today = Date()
+        let currentTimeStr = format.formateDate(format: "HH:mm:ss", date: today)
+        if let nLesson = GlobalData.today.first(where: {$0.start_time!>currentTimeStr}){
+            //estimate next lesson's time
+            let time = nLesson.start_time?.components(separatedBy: ":")
+            var hour:Int!
+            var minute:Int!
+            hour = Int((time?[0])!)
+            minute = Int((time?[1])!)
+            let totalSecond = hour*3600 + minute*60 - 300
+            let hr = totalSecond/3600
+            let min = (totalSecond%3600)/60
+            GlobalData.nextLessonTime = "not yet time \ntry again after \(hr):\(min)"
+            GlobalData.nextLesson = nLesson
+            return true
+        }else{
+            GlobalData.nextLesson = .init()
+            return false
+        }
+    }
+    
+}
+
+class Status{
+    var recorded_time:String?
+    var status:Int?
+    var student_id:Int?
+    required init(){
+        recorded_time = " "
+        status = -5
+        student_id = 0
+    }
+}
+
+class LessonDate{
+    var lesson_date_id:Int?
+    var lesson_date:String?
+    var lesson_id:Int?
 }
 
 class format{
@@ -153,4 +235,106 @@ class format{
         dateFormatter.dateFormat = format
         return dateFormatter.string(from: date)
     }
+}
+
+class alamofire{
+    
+    static func loadStudents(lesson:Lesson){
+        print("Lesson_id : \(String(describing: lesson.lesson_id))")
+        let token = UserDefaults.standard.string(forKey: "token")
+        let headers:HTTPHeaders = [
+            "Authorization" : "Bearer " + token!,
+            "Content-Type" : "application/json"
+        ]
+        let parameters:[String:Any]=[
+            "lesson_id" : lesson.lesson_id!//13
+        ]
+        Alamofire.request(Constant.URLGetStudentOfLesson, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
+            if let JSON = response.result.value as? [[String:AnyObject]]{
+                GlobalData.students.removeAll()
+                for json in JSON{
+                    let newStudent = Student()
+                    newStudent.name = json["name"] as? String
+                    newStudent.student_card = json["card"] as? String
+                    newStudent.student_id = json["id"] as? Int
+                    if let beacon = json["beacon_user"] as? [String:AnyObject]{
+                        newStudent.major = beacon["major"] as? Int
+                        newStudent.minor = beacon["minor"] as? Int
+                    }
+                    GlobalData.students.append(newStudent)
+                }
+                print("Done loading students")
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshTable+\(String(describing: (lesson.module_id)!))"), object: nil)
+            }
+        }
+    }
+    
+    static func loadWeeklyTimetable(){
+        
+        let token = UserDefaults.standard.string(forKey: "token")
+        let headers:HTTPHeaders = [
+            "Authorization" : "Bearer " + token!,
+            "Content-Type" : "application/json"
+        ]
+        Alamofire.request(Constant.URLWeeklyTimetable, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
+            if let JSON = response.result.value as? [AnyObject]{
+                GlobalData.weeklyTimetable.removeAll()
+                for json in JSON{
+                    let newLesson = Lesson()
+                    if let lesson = json["lesson"] as? [String:Any]{
+                        newLesson.lesson_id = lesson["id"] as? Int
+                        newLesson.module_id = lesson["module_id"] as? String
+                        newLesson.subject = lesson["subject_area"] as? String
+                        newLesson.catalog = lesson["catalog_number"] as? String
+                        newLesson.class_section = lesson["class_section"] as? String
+                        newLesson.weekday = lesson["weekday"] as? String
+                        newLesson.start_time = lesson["start_time"] as? String
+                        newLesson.end_time = lesson["end_time"] as? String
+                    }
+                    
+                    if let lesson_date = json["lesson_date"] as? [[String:Any]]{
+                        for i in lesson_date{
+                            newLesson.ldate = i["ldate"] as? String
+                            newLesson.ldateid = i["id"] as? Int
+                        }
+                    }
+                    
+                    if let venue = json["venue"] as? [String:Any]{
+                        newLesson.location = venue["location"] as? String
+                        newLesson.venueName = venue["name"] as? String
+                    }
+                    if let beacon = json["beacon_lesson"] as? [String:Any]{
+                        newLesson.uuid = beacon["uuid"] as? String
+                    }
+                    GlobalData.weeklyTimetable.append(newLesson)
+                }
+                print("Done loading weeklyTimetable")
+            }
+        }
+        
+    }
+    
+    static func getStudentStatus(lesson:Lesson){
+        let token = UserDefaults.standard.string(forKey: "token")
+        let headers:HTTPHeaders = [
+            "Authorization" : "Bearer " + token!,
+            "Content-Type" : "application/json"
+        ]
+        let parameters:[String:Any] = [
+            "lesson_date_id" : lesson.ldateid!
+        ]
+        Alamofire.request(Constant.URLAtkStatus, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
+            if let JSON = response.result.value as? [AnyObject]{
+                GlobalData.studentStatus.removeAll()
+                for json in JSON{
+                    let newStatus = Status()
+                    newStatus.recorded_time = json["recorded_time"] as? String
+                    newStatus.status = json["status"] as? Int
+                    newStatus.student_id = json["student_id"] as? Int
+                    GlobalData.studentStatus.append(newStatus)
+                }
+            }
+        }
+    }
+    
 }

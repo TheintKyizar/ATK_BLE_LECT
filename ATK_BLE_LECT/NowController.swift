@@ -18,6 +18,17 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     var uuid:UUID!
     var dataDictionary = NSDictionary()
     
+    
+    @IBOutlet weak var subject_label: UILabel!
+    @IBOutlet weak var class_section_label: UILabel!
+    @IBOutlet weak var time_label: UILabel!
+    @IBOutlet weak var location_label: UILabel!
+    @IBOutlet weak var broadcast_label: UILabel!
+    @IBOutlet weak var status_label: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
+    
+    var lesson:Lesson?
+    
     @IBAction func beaconButton(_ sender: UIButton) {
         
     }
@@ -27,6 +38,9 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         locationManager.delegate = self
         bluetoothManager.delegate = self
         locationManager.requestAlwaysAuthorization()
+        setupImageView()
+        checkTime()
+        
         //broadcast()
         // Do any additional setup after loading the view.
         /* let bar = NSStatus.system()
@@ -39,6 +53,88 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    private func checkTime(){
+        
+        if checkLesson.checkCurrentLesson() != false{
+            
+            //Currently has lesson
+            lesson = GlobalData.currentLesson
+            
+        }else if checkLesson.checkNextLesson() != false{
+            
+            //No lesson currently, show next lesson
+            lesson = GlobalData.nextLesson
+            
+        }else{
+            
+            //Today no lesson
+            
+        }
+        updateLabels()
+        
+    }
+    
+    private func updateLabels(){
+        
+        if GlobalData.currentLesson.lesson_id != nil{
+            
+            subject_label.text = (lesson?.subject)! + " " + (lesson?.catalog)!
+            class_section_label.text = (lesson?.class_section)!
+            time_label.text = displayTime.display(time: (lesson?.start_time)!) + " " + displayTime.display(time: (lesson?.end_time)!)
+            location_label.text = (lesson?.location)!
+            imageView.image = #imageLiteral(resourceName: "bluetooth_on")
+            imageView.isUserInteractionEnabled = true
+            status_label.text = ""
+            
+        }else if GlobalData.nextLesson.lesson_id != nil{
+            
+            subject_label.text = (lesson?.subject)! + " " + (lesson?.catalog)!
+            class_section_label.text = (lesson?.class_section)!
+            time_label.text = displayTime.display(time: (lesson?.start_time)!) + " " + displayTime.display(time: (lesson?.end_time)!)
+            location_label.text = (lesson?.location)!
+            imageView.image = #imageLiteral(resourceName: "bluetooth_off")
+            status_label.text = GlobalData.nextLessonTime
+            
+        }else{
+            
+            subject_label.isHidden = true
+            class_section_label.isHidden = true
+            time_label.isHidden = true
+            location_label.isHidden = true
+            status_label.font = UIFont.systemFont(ofSize: 24)
+            status_label.text = "No lesson today"
+            
+        }
+        
+    }
+    
+    private func setupImageView(){
+        
+        imageView.isUserInteractionEnabled = false
+        let singleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(broadcastSignal))
+        singleTap.numberOfTapsRequired = 1
+        imageView.addGestureRecognizer(singleTap)
+        
+    }
+    
+    @objc private func stopBroadcast(){
+        imageView.stopAnimating()
+        imageView.isUserInteractionEnabled = false
+    }
+    
+    @objc private func broadcastSignal() {
+        if imageView.isAnimating{
+            imageView.stopAnimating()
+            imageView.image = #imageLiteral(resourceName: "bluetooth_on")
+            //bluetoothManager.stopAdvertising()
+            return
+        }
+        if GlobalData.currentLesson.lesson_id != nil {
+            broadcast()
+        }
+        
     }
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
@@ -56,12 +152,15 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     
     func broadcast() {
         if bluetoothManager.state == .poweredOn {
-            uuid = UUID(uuidString: "00112233-4455-6677-8899-123456789012")as UUID?
-            let beaconRegion = CLBeaconRegion(proximityUUID: uuid!, major: 100, minor: 2, identifier: "kyizar")
-            dataDictionary = beaconRegion.peripheralData(withMeasuredPower: nil)
-            //bluetoothManager = CBPeripheralManager.init(delegate: self, queue: nil)
-            bluetoothManager.startAdvertising(dataDictionary as?[String: Any])
-            print("broadcasting!!!!!!!!!!!! \(beaconRegion.identifier) + \(beaconRegion.proximityUUID) + \(String(describing: beaconRegion.major)) +\(String(describing: beaconRegion.minor))")
+            
+            imageView.animationImages = [
+                #imageLiteral(resourceName: "blue_1"),
+                #imageLiteral(resourceName: "blue_2"),
+                #imageLiteral(resourceName: "blue_3")
+            ]
+            imageView.animationDuration = 0.5
+            imageView.startAnimating()
+            
         }
         else {
             let alert = UIAlertController(title: "Bluetooth Turn on Request", message: " AME would like to turn on your bluetooth!", preferredStyle: UIAlertControllerStyle.alert)
