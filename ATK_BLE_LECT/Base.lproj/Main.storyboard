@@ -69,7 +69,8 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="69" id="gnz-6Y-iWh"/>
                                 </constraints>
-                                <string key="text">Not yet timeTry again after some time</string>
+                                <string key="text">Not yet time
+Try again after some time</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -303,6 +304,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="slN-cR-Vid" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+          
             <point key="canvasLocation" x="-1748" y="1661"/>
         </scene>
         <!--Timetable-->
@@ -322,6 +324,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CVa-UY-ZBv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+
             <point key="canvasLocation" x="327" y="851"/>
         </scene>
         <!--Timetable Controller-->
@@ -329,20 +332,24 @@
             <objects>
                 <tableViewController id="xmX-V9-bBg" customClass="TimetableController" customModule="ATK_BLE_LECT" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="aMF-Tt-ZVo">
+
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
+
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="cell" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="9xL-5v-yHa" customClass="TimetableCell" customModule="ATK_BLE_LECT" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9xL-5v-yHa" id="MgG-Tp-yHa">
+
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
                         <connections>
+
                             <outlet property="dataSource" destination="xmX-V9-bBg" id="Ipx-XN-rmc"/>
                             <outlet property="delegate" destination="xmX-V9-bBg" id="04c-NW-4WL"/>
                         </connections>
