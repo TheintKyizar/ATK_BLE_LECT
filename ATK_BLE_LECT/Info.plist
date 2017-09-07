@@ -18,14 +18,12 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>We want to use Bluetooth</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>We want to detect the beacons around you</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -37,8 +35,8 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>
