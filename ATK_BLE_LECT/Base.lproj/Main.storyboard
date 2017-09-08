@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="3YV-BW-o0w">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="3YV-BW-o0w">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -118,7 +118,7 @@ Try again after some time</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ub-7g-Rzk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1528.8" y="-618.44077961019491"/>
+            <point key="canvasLocation" x="1348" y="-618"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Gbw-zB-XRA">
@@ -158,7 +158,7 @@ Try again after some time</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bOM-s6-4hy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="705" y="-617"/>
+            <point key="canvasLocation" x="670" y="-618"/>
         </scene>
         <!--Monitor-->
         <scene sceneID="RW9-ak-ZKd">
@@ -177,7 +177,7 @@ Try again after some time</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Q1-E5-rKu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="705" y="69"/>
+            <point key="canvasLocation" x="670" y="62"/>
         </scene>
         <!--Monitor Controller-->
         <scene sceneID="SuV-ko-xyG">
@@ -206,7 +206,7 @@ Try again after some time</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S5Y-Oo-ZX6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1529" y="69"/>
+            <point key="canvasLocation" x="1348" y="62"/>
         </scene>
         <!--Settings-->
         <scene sceneID="9fL-ek-d5g">
@@ -304,7 +304,6 @@ Try again after some time</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="slN-cR-Vid" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-          
             <point key="canvasLocation" x="-1748" y="1661"/>
         </scene>
         <!--Timetable-->
@@ -324,7 +323,6 @@ Try again after some time</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CVa-UY-ZBv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-
             <point key="canvasLocation" x="327" y="851"/>
         </scene>
         <!--Timetable Controller-->
@@ -332,24 +330,20 @@ Try again after some time</string>
             <objects>
                 <tableViewController id="xmX-V9-bBg" customClass="TimetableController" customModule="ATK_BLE_LECT" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="aMF-Tt-ZVo">
-
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="cell" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="9xL-5v-yHa" customClass="TimetableCell" customModule="ATK_BLE_LECT" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9xL-5v-yHa" id="MgG-Tp-yHa">
-
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
                         <connections>
-
                             <outlet property="dataSource" destination="xmX-V9-bBg" id="Ipx-XN-rmc"/>
                             <outlet property="delegate" destination="xmX-V9-bBg" id="04c-NW-4WL"/>
                         </connections>
@@ -361,7 +355,7 @@ Try again after some time</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rUH-3z-33M" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1110" y="851"/>
+            <point key="canvasLocation" x="996" y="851"/>
         </scene>
         <!--Lesson Detail Controller-->
         <scene sceneID="jAu-WO-qMw">
@@ -518,7 +512,7 @@ Try again after some time</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2NE-5C-1OK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1864.8" y="850.52473763118451"/>
+            <point key="canvasLocation" x="1665" y="851"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="SeV-eA-5Xj">
