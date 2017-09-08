@@ -14,15 +14,25 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SwiftyTimer.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>023B22CCC86D0D058C8D96C4A78D8A65</key>
+		<key>7EC1F21B90E5E0A0A52E370DD650F11D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>88E9EC28B8B46C3631E6B242B50F4442</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C741BA34AE737F47481A2C8E6F83764C</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import CoreLocation
 import CoreBluetooth
-
+import SwiftyTimer
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
@@ -18,37 +18,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     var window: UIWindow?
     var locationManager = CLLocationManager()
     var bluetoothManager = CBPeripheralManager()
-    var uuid: UUID! 
+    var uuid: UUID!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         self.locationManager.delegate = self
         self.locationManager.requestAlwaysAuthorization()
         bluetoothManager.delegate = self as? CBPeripheralManagerDelegate
         if(GlobalData.currentLesson.lesson_id != nil) {
-        loadLateStudents()
-        monitor()
+            loadLateStudents()// And monitor
         }
         return true
     }
     
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
+        var status = ""
         switch state {
         case .inside:
+            status = "inside"
             print("inside \(region.identifier)")
             if region.identifier == "common"{
-                
-                //locationManager.requestState(for: region)
-                /*let date = Date().addingTimeInterval(TimeInterval(5))
-                 let timer = Timer(fireAt: date, interval: 0, target: self, selector: #selector(startMonitorCommon(region:)), userInfo: region, repeats: false)
-                 RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)*/
                 if GlobalData.flags == false {
                     if !GlobalData.regions.contains(region as! CLBeaconRegion){
                         self.checkRegion()
                     }
-                 }
+                }
                 else{
-                 GlobalData.flags = false
-                 }
+                    GlobalData.flags = false
+                }
                 
             }else{
                 
@@ -59,21 +55,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 GlobalData.flags = true
                 
             }
-        case .outside: print("Outside bg \(region.identifier)")
-        case .unknown: print("UNKNOWN")
+        case .outside:
+            status = "outside"
+            print("Outside bg \(region.identifier)")
+        case .unknown:
+            status = "unknown"
+            print("UNKNOWN")
             
         }
+        if region.identifier == "common"{
+            GlobalData.regionStatus[19] = status
+        }else{
+            for i in 0...GlobalData.tempRegions.count{
+                if GlobalData.tempRegions[i].identifier == region.identifier{
+                    GlobalData.regionStatus[i] = status
+                }
+            }
+        }
     }
+    
     func requestStateForMonitoredRegions() {
         for i in 0...GlobalData.monitoredRegions.count {
             locationManager.requestState(for: GlobalData.monitoredRegions[i])
         }
+        
+        
     }
+    
     @objc func takensuccess(region:CLBeaconRegion) {
-            //if let index2 = GlobalData.monitoredRegions.index(of: region)
-            GlobalData.monitoredRegions.remove(at: GlobalData.monitoredRegions.index(of: region)!)
-            GlobalData.tempRegions.remove(at: GlobalData.tempRegions.index(of: region)!)
-            self.locationManager.stopMonitoring(for: region)
+        //if let index2 = GlobalData.monitoredRegions.index(of: region)
+        GlobalData.monitoredRegions.remove(at: GlobalData.monitoredRegions.index(of: region)!)
+        GlobalData.tempRegions.remove(at: GlobalData.tempRegions.index(of: region)!)
+        self.locationManager.stopMonitoring(for: region)
         
     }
     
@@ -111,6 +124,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 GlobalData.lateStudents.append(GlobalData.students.filter({$0.student_id! == GlobalData.studentStatus[i].student_id!}).first!)
             }
         }
+        monitor()
         
     }
     func monitor() {
@@ -172,15 +186,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         if (GlobalData.lateStudents.count - start) > 19 {
             for i in 0...18{
                 let newRegion = CLBeaconRegion(proximityUUID: uuid!, major:UInt16(GlobalData.lateStudents[i+start].major!), minor: UInt16(GlobalData.lateStudents[i+start].minor!), identifier: String(GlobalData.lateStudents[i+start].student_id!))
-                    locationManager.startMonitoring(for: newRegion)
-                    GlobalData.monitoredRegions.append(newRegion)
-                    GlobalData.tempRegions.append(newRegion)
-                    GlobalData.regions.append(newRegion)
+                locationManager.startMonitoring(for: newRegion)
+                GlobalData.monitoredRegions.append(newRegion)
+                GlobalData.tempRegions.append(newRegion)
+                GlobalData.regions.append(newRegion)
             }
-            }
-            let newRegion = CLBeaconRegion(proximityUUID: uuid!, identifier: "common")
-            locationManager.startMonitoring(for: newRegion)
-            //locationManager.requestState(for: newRegion)
+        }
+        let newRegion = CLBeaconRegion(proximityUUID: uuid!, identifier: "common")
+        locationManager.startMonitoring(for: newRegion)
+        //locationManager.requestState(for: newRegion)
     }
     func takeAttendance() {
         print(" bg Inside \(Constant.identifier)");
@@ -213,7 +227,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             
         }
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "taken+\(Constant.identifier)"), object: nil)
-
+        
     }
     
     
@@ -223,6 +237,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
+        Timer.every(3) { 
+            self.requestStateForMonitoredRegions()
+        }
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }

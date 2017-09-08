@@ -1,12 +1,15 @@
 PODS:
   - Alamofire (4.4.0)
+  - SwiftyTimer (2.0.0)
 
 DEPENDENCIES:
   - Alamofire
+  - SwiftyTimer
 
 SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  SwiftyTimer: 2efd74b060d69ad4f1496baf5bbedbe132125fcf
 
-PODFILE CHECKSUM: 990ef29b32683816d05e39b9e94115a968f553cf
+PODFILE CHECKSUM: 670e506493fd8f74a374073560f9ec60af7e7e2b
 
 COCOAPODS: 1.1.1
