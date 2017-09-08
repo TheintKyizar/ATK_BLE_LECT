@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 class Constant{
     
@@ -19,12 +20,20 @@ class Constant{
     static let URLGetStudentOfLesson = baseURL + "api/web/index.php/v1/timetable/get-student"
     static let URLCreateAtk = baseURL + "api/web/index.php/v1/beacon-attendance-lecturer/student-attendance"
     static let URLWeeklyTimetable = baseURL + "api/web/index.php/v1/lesson-lecturer/weekly-lesson?expand=lesson,venue,lesson_date,beacon_lesson"
+    static let URLlessonUUID = baseURL + "api/web/index.php/v1/beacon-lesson/uuid"
+
     
     static var name = String()
     static var token = String()
     static var major = UInt16()
     static var minor = UInt16()
     static var device_hash = String()
+    
+    static var identifier = Int()
+    static var student_id = Int()
+    static var studentGroup = Int()
+    static var currentGroup = Int()
+    static var lecturer_id = Int()
     
 }
 
@@ -38,6 +47,10 @@ class GlobalData{
     static var nextLesson = Lesson()
     static var students = [Student]()
     static var studentStatus = [Status]()
+    static var flags = Bool()
+    static var regions = [CLBeaconRegion]()
+    static var tempRegions = [CLBeaconRegion]()
+    static var lateStudents = [Student]()
     
     static let wdayStr = ["Monday", "Tuesday", "Wednesday", "Thursday" , "Friday", "Saturday"]
     static let wdayInt = ["2", "3", "4", "5", "6", "7"]

@@ -264,6 +264,19 @@ class alamofire{
                     GlobalData.students.append(newStudent)
                 }
                 print("Done loading students")
+                Alamofire.request(Constant.URLAtkStatus, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
+                    if let JSON = response.result.value as? [AnyObject]{
+                        GlobalData.studentStatus.removeAll()
+                        for json in JSON{
+                            let newStatus = Status()
+                            newStatus.recorded_time = json["recorded_time"] as? String
+                            newStatus.status = json["status"] as? Int
+                            newStatus.student_id = json["student_id"] as? Int
+                            GlobalData.studentStatus.append(newStatus)
+                        }
+                        print("done loading status")
+                    }
+                }
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshTable+\(String(describing: (lesson.module_id)!))"), object: nil)
             }
         }
