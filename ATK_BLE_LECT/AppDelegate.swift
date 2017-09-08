@@ -25,7 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         self.locationManager.requestAlwaysAuthorization()
         bluetoothManager.delegate = self as? CBPeripheralManagerDelegate
         if(GlobalData.currentLesson.lesson_id != nil) {
+
             loadLateStudents()// And monitor
+            
         }
         return true
     }
