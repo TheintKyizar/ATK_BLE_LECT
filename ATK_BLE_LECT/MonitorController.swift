@@ -37,8 +37,13 @@ class MonitorController: UITableViewController {
             print("Current lesson")
             lesson = GlobalData.currentLesson
             alamofire.loadStudents(lesson: lesson!)
-            alamofire.getStudentStatus(lesson: lesson!)
-            NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "refreshTable+\(String(describing: lesson?.module_id))"), object: nil)
+            let nlesson = GlobalData.weeklyTimetable.filter({$0.lesson_id! == lesson?.lesson_id!}).first
+            let lesson_date = LessonDate()
+            lesson_date.lesson_date = nlesson?.ldate
+            lesson_date.lesson_date_id = nlesson?.ldateid
+            lesson_date.lesson_id = nlesson?.lesson_id
+            alamofire.getStudentStatus(lesson: lesson_date)
+            NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading status"), object: nil)
         }
     }
 
@@ -82,6 +87,10 @@ class MonitorController: UITableViewController {
         case 0: return "Taken"
         default: return "Late"
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     /*

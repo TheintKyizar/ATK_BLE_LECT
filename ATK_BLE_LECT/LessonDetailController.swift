@@ -92,35 +92,9 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
         return cell!
     }
     
-    /*private func downloadStudents(){
-        
-        let token = UserDefaults.standard.string(forKey: "token")
-        let headers:HTTPHeaders = [
-            "Authorization" : "Bearer " + token!,
-            "Content-Type" : "application/json"
-        ]
-        let parameters:[String:Any]=[
-            "lesson_id" : 13//lesson!.lesson_id!
-        ]
-        Alamofire.request(Constant.URLGetStudentOfLesson, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
-            if let JSON = response.result.value as? [[String:AnyObject]]{
-                GlobalData.students.removeAll()
-                for json in JSON{
-                    let newStudent = Student()
-                    newStudent.name = json["name"] as? String
-                    newStudent.student_id = json["card"] as? String
-                    if let beacon = json["beacon_user"] as? [String:AnyObject]{
-                        newStudent.major = beacon["major"] as? Int
-                        newStudent.minor = beacon["minor"] as? Int
-                    }
-                    GlobalData.students.append(newStudent)
-                }
-                print("Done loading students")
-                self.tableView.reloadData()
-            }
-        }
-        
-    }*/
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     
     /*

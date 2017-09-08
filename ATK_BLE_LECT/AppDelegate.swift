@@ -8,15 +8,25 @@
 
 import UIKit
 import Alamofire
+import SwiftyTimer       
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var backgroundTask:UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        if UserDefaults.standard.string(forKey: "name") == nil{
+            //No user logged in
+        }else{
+            //User logged in
+            self.loadData()
+            if let nowController = window?.rootViewController?.storyboard?.instantiateViewController(withIdentifier: "tab_bar_controller") as? UITabBarController{
+                window?.rootViewController  = nowController
+            }
+        }
         return true
     }
 
@@ -26,8 +36,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
+        print("schculed timer")
+        registerBackgroundTask()
+        
+        /*switch UIApplication.shared.applicationState {
+        case .active:
+            print("active")
+        case .background:
+            registerBackgroundTask()
+            print("Background time remaining = \(UIApplication.shared.backgroundTimeRemaining) seconds")
+        case .inactive:
+            break
+        }*/
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    }
+    
+    func registerBackgroundTask() {
+        backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
+            self?.endBackgroundTask()
+        }
+        assert(backgroundTask != UIBackgroundTaskInvalid)
+    }
+    
+    func endBackgroundTask() {
+        print("Background task ended.")
+        UIApplication.shared.endBackgroundTask(backgroundTask)
+        backgroundTask = UIBackgroundTaskInvalid
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -40,6 +75,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    private func loadData(){
+        
+        if let weeklyTimetable = NSKeyedUnarchiver.unarchiveObject(withFile: filePath.weeklyTimetable) as? [Lesson]{
+            GlobalData.weeklyTimetable = weeklyTimetable
+        }
+        
+        if let timeTable = NSKeyedUnarchiver.unarchiveObject(withFile: filePath.timetablePath) as? [Lesson]{
+            GlobalData.timetable = timeTable
+        }
+        
     }
 
 

@@ -116,6 +116,8 @@ class TimetableController: UITableViewController {
         }
     }
     
-
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
 }

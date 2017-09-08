@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7EC1F21B90E5E0A0A52E370DD650F11D"
-               BuildableName = "Pods_ATK_BLE_LECT.framework"
-               BlueprintName = "Pods-ATK_BLE_LECT"
+               BlueprintIdentifier = "C741BA34AE737F47481A2C8E6F83764C"
+               BuildableName = "SwiftyTimer.framework"
+               BlueprintName = "SwiftyTimer"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7EC1F21B90E5E0A0A52E370DD650F11D"
-            BuildableName = "Pods_ATK_BLE_LECT.framework"
-            BlueprintName = "Pods-ATK_BLE_LECT"
+            BlueprintIdentifier = "C741BA34AE737F47481A2C8E6F83764C"
+            BuildableName = "SwiftyTimer.framework"
+            BlueprintName = "SwiftyTimer"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

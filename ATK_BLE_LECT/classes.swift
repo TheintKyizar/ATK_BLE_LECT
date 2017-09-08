@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import UserNotifications
 
 class Lesson : NSObject, NSCoding {
     
@@ -155,6 +156,25 @@ class Student: NSObject, NSCoding{
     }
 }
 
+class notification{
+    static func notiContent(title: String, body: String) -> UNMutableNotificationContent {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        return content
+    }
+    static func addNotification(trigger: UNNotificationTrigger?, content:UNMutableNotificationContent, identifier: String) {
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request) {
+            (error) in
+            if error != nil {
+                print("error adding notigicaion: \(error!.localizedDescription)")
+            }
+        }
+    }
+    
+}
+
 class checkLesson{
     
     static func checkCurrentLesson() -> Bool{
@@ -207,15 +227,30 @@ class checkLesson{
     
 }
 
-class Status{
+class Status: NSObject,NSCoding{
     var recorded_time:String?
     var status:Int?
     var student_id:Int?
-    required init(){
+    override init(){
         recorded_time = " "
         status = -5
         student_id = 0
     }
+    
+    required init?(coder aDecoder: NSCoder) {
+        recorded_time = aDecoder.decodeObject(forKey: "recorded_time") as? String
+        status = aDecoder.decodeObject(forKey: "status") as? Int
+        student_id = aDecoder.decodeObject(forKey: "student_id") as? Int
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        
+        aCoder.encode(recorded_time, forKey: "recorded_time")
+        aCoder.encode(status, forKey: "status")
+        aCoder.encode(student_id, forKey: "student_id")
+        
+    }
+    
 }
 
 class LessonDate{
@@ -240,31 +275,39 @@ class format{
 class alamofire{
     
     static func loadStudents(lesson:Lesson){
+        GlobalData.lesson_id = String(describing: lesson.lesson_id)
         print("Lesson_id : \(String(describing: lesson.lesson_id))")
-        let token = UserDefaults.standard.string(forKey: "token")
-        let headers:HTTPHeaders = [
-            "Authorization" : "Bearer " + token!,
-            "Content-Type" : "application/json"
-        ]
-        let parameters:[String:Any]=[
-            "lesson_id" : lesson.lesson_id!//13
-        ]
-        Alamofire.request(Constant.URLGetStudentOfLesson, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
-            if let JSON = response.result.value as? [[String:AnyObject]]{
-                GlobalData.students.removeAll()
-                for json in JSON{
-                    let newStudent = Student()
-                    newStudent.name = json["name"] as? String
-                    newStudent.student_card = json["card"] as? String
-                    newStudent.student_id = json["id"] as? Int
-                    if let beacon = json["beacon_user"] as? [String:AnyObject]{
-                        newStudent.major = beacon["major"] as? Int
-                        newStudent.minor = beacon["minor"] as? Int
+        if let students = NSKeyedUnarchiver.unarchiveObject(withFile: filePath.studentPath) as? [Student]{
+            print("Loading students locally")
+            GlobalData.students = students
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshTable+\(String(describing: (lesson.module_id)!))"), object: nil)
+        }else{
+            let token = UserDefaults.standard.string(forKey: "token")
+            let headers:HTTPHeaders = [
+                "Authorization" : "Bearer " + token!,
+                "Content-Type" : "application/json"
+            ]
+            let parameters:[String:Any]=[
+                "lesson_id" : lesson.lesson_id!//13
+            ]
+            Alamofire.request(Constant.URLGetStudentOfLesson, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
+                if let JSON = response.result.value as? [[String:AnyObject]]{
+                    GlobalData.students.removeAll()
+                    for json in JSON{
+                        let newStudent = Student()
+                        newStudent.name = json["name"] as? String
+                        newStudent.student_card = json["card"] as? String
+                        newStudent.student_id = json["id"] as? Int
+                        if let beacon = json["beacon_user"] as? [String:AnyObject]{
+                            newStudent.major = beacon["major"] as? Int
+                            newStudent.minor = beacon["minor"] as? Int
+                        }
+                        GlobalData.students.append(newStudent)
                     }
-                    GlobalData.students.append(newStudent)
+                    print("Done loading students")
+                    NSKeyedArchiver.archiveRootObject(GlobalData.students, toFile: filePath.studentPath)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshTable+\(String(describing: (lesson.module_id)!))"), object: nil)
                 }
-                print("Done loading students")
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshTable+\(String(describing: (lesson.module_id)!))"), object: nil)
             }
         }
     }
@@ -309,22 +352,26 @@ class alamofire{
                     GlobalData.weeklyTimetable.append(newLesson)
                 }
                 print("Done loading weeklyTimetable")
+                NSKeyedArchiver.archiveRootObject(GlobalData.weeklyTimetable, toFile: filePath.weeklyTimetable)
             }
         }
         
     }
     
-    static func getStudentStatus(lesson:Lesson){
+    static func getStudentStatus(lesson:LessonDate){
+        
+        GlobalData.ldate_id = String(describing:lesson.lesson_date_id!)
+        print(lesson.lesson_date_id)
         let token = UserDefaults.standard.string(forKey: "token")
         let headers:HTTPHeaders = [
             "Authorization" : "Bearer " + token!,
             "Content-Type" : "application/json"
         ]
-        let parameters:[String:Any] = [
-            "lesson_date_id" : lesson.ldateid!
+        let parameters:[String:Any]=[
+            "lesson_date_id" : 31476//lesson.lesson_date_id!//13
         ]
         Alamofire.request(Constant.URLAtkStatus, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
-            if let JSON = response.result.value as? [AnyObject]{
+            if let JSON = response.result.value as? [[String:AnyObject]]{
                 GlobalData.studentStatus.removeAll()
                 for json in JSON{
                     let newStatus = Status()
@@ -333,8 +380,12 @@ class alamofire{
                     newStatus.student_id = json["student_id"] as? Int
                     GlobalData.studentStatus.append(newStatus)
                 }
+                print("done loading status")
+                NSKeyedArchiver.archiveRootObject(GlobalData.studentStatus, toFile: filePath.historyPath)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "done loading status"), object: nil)
             }
         }
+        
     }
     
 }

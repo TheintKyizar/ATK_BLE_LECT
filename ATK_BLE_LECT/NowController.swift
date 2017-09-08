@@ -40,6 +40,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         locationManager.requestAlwaysAuthorization()
         setupImageView()
         checkTime()
+        setupTimer() //Upcoming lessons
         
         //broadcast()
         // Do any additional setup after loading the view.
@@ -87,6 +88,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             imageView.image = #imageLiteral(resourceName: "bluetooth_on")
             imageView.isUserInteractionEnabled = true
             status_label.text = ""
+            broadcast_label.text = "Broadcast My Beacon"
             
         }else if GlobalData.nextLesson.lesson_id != nil{
             
@@ -96,6 +98,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             location_label.text = (lesson?.location)!
             imageView.image = #imageLiteral(resourceName: "bluetooth_off")
             status_label.text = GlobalData.nextLessonTime
+            broadcast_label.isHidden = true
             
         }else{
             
@@ -105,6 +108,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             location_label.isHidden = true
             status_label.font = UIFont.systemFont(ofSize: 24)
             status_label.text = "No lesson today"
+            broadcast_label.isHidden = true
             
         }
         
@@ -133,6 +137,25 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         }
         if GlobalData.currentLesson.lesson_id != nil {
             broadcast()
+        }
+        
+    }
+    
+    @objc func setupTimer(){
+        UserDefaults.standard.set("10", forKey: "notification time")
+        let date = format.formateDate(format: "HH:mm:ss", date: Date())
+        let upcomingLesson = GlobalData.today.filter({$0.start_time! > date})
+        for i in upcomingLesson{
+            let start_time = format.formatTime(format: "HH:mm:ss", time: i.start_time!)
+            let calendar = Calendar.current.dateComponents([.hour,.minute,.second], from: format.formatTime(format: "HH:mm:ss", time: date), to: start_time)
+            let time = Int(UserDefaults.standard.string(forKey: "notification time")!)!
+            let interval = Double(calendar.hour!*3600 + calendar.minute!*60 + calendar.second! - time*60)
+            if interval > 0 {
+                let notificationContent = notification.notiContent(title: "Upcoming lesson", body: "\(String(describing: i.catalog!)) \(String(describing: i.class_section!)) \(String(describing: i.location!))")
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
+                notification.addNotification(trigger: trigger, content: notificationContent, identifier: String(describing:i.ldateid))
+            }
+            
         }
         
     }
@@ -180,6 +203,11 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         let url = URL(string: "App-Prefs:root=Bluetooth") //for bluetooth setting
         let app = UIApplication.shared
         app.open(url!, options: ["string":""], completionHandler: nil)
+    }
+    
+    deinit {
+        print("deinit is called")
+        NotificationCenter.default.removeObserver(self)
     }
     
     /*

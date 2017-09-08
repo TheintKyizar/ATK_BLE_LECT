@@ -81,6 +81,23 @@ class LoginController: UIViewController {
                     UserDefaults.standard.set(Constant.token, forKey: "token")
                     UserDefaults.standard.set(Constant.major, forKey: "major")
                     UserDefaults.standard.set(Constant.minor, forKey: "minor")
+                    
+                    if let office = JSON["office"] as? String{
+                        UserDefaults.standard.set(office, forKey: "office")
+                    }else{
+                        UserDefaults.standard.removeObject(forKey: "office")
+                    }
+                    if let email = JSON["email"] as? String{
+                        UserDefaults.standard.set(email, forKey: "email")
+                    }else{
+                        UserDefaults.standard.removeObject(forKey: "email")
+                    }
+                    if let phone = JSON["phone"] as? String{
+                        UserDefaults.standard.set(phone, forKey: "phone")
+                    }else{
+                        UserDefaults.standard.removeObject(forKey: "phone")
+                    }
+                    
                     self.setupData()
                     
                 }else{
