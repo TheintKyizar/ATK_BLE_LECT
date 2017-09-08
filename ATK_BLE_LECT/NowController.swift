@@ -28,7 +28,6 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     @IBOutlet weak var imageView: UIImageView!
     
     var lesson:Lesson?
-    
     @IBAction func beaconButton(_ sender: UIButton) {
         
     }
@@ -41,6 +40,12 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         setupImageView()
         checkTime()
         
+        guard let statusBar = (UIApplication.shared.value(forKey: "statusBarWindow") as AnyObject).value(forKey: "statusBar") as? UIView
+            else { return }
+        statusBar.backgroundColor = UIColor.white
+        let view = UIView(frame: CGRect(x: 1, y: 10, width: 30, height: 20))
+        view.backgroundColor = UIColor.red
+        statusBar.addSubview(view)
         //broadcast()
         // Do any additional setup after loading the view.
         /* let bar = NSStatus.system()
@@ -125,14 +130,20 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     }
     
     @objc private func broadcastSignal() {
+        guard let statusBar = (UIApplication.shared.value(forKey: "statusBarWindow") as AnyObject).value(forKey: "statusBar") as? UIView
+            else { return }
         if imageView.isAnimating{
             imageView.stopAnimating()
+            statusBar.backgroundColor = UIColor.clear
             imageView.image = #imageLiteral(resourceName: "bluetooth_on")
             //bluetoothManager.stopAdvertising()
             return
         }
+
         if GlobalData.currentLesson.lesson_id != nil {
             broadcast()
+            statusBar.backgroundColor = UIColor.blue
+            statusBar.draw(CGRect(x: CGFloat(1), y: CGFloat(1), width: CGFloat(1), height: CGFloat(1)))
         }
         
     }

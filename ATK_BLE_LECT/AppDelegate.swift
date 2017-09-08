@@ -18,15 +18,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     var window: UIWindow?
     var locationManager = CLLocationManager()
     var bluetoothManager = CBPeripheralManager()
-    var uuid: UUID! 
+    var uuid: UUID!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         self.locationManager.delegate = self
         self.locationManager.requestAlwaysAuthorization()
         bluetoothManager.delegate = self as? CBPeripheralManagerDelegate
         if(GlobalData.currentLesson.lesson_id != nil) {
-        loadLateStudents()
-        monitor()
+            loadLateStudents()
+            monitor()
         }
         return true
     }
@@ -45,10 +45,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                     if !GlobalData.regions.contains(region as! CLBeaconRegion){
                         self.checkRegion()
                     }
-                 }
+                }
                 else{
-                 GlobalData.flags = false
-                 }
+                    GlobalData.flags = false
+                }
                 
             }else{
                 
@@ -70,10 +70,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
     }
     @objc func takensuccess(region:CLBeaconRegion) {
-            //if let index2 = GlobalData.monitoredRegions.index(of: region)
-            GlobalData.monitoredRegions.remove(at: GlobalData.monitoredRegions.index(of: region)!)
-            GlobalData.tempRegions.remove(at: GlobalData.tempRegions.index(of: region)!)
-            self.locationManager.stopMonitoring(for: region)
+        //if let index2 = GlobalData.monitoredRegions.index(of: region)
+        GlobalData.monitoredRegions.remove(at: GlobalData.monitoredRegions.index(of: region)!)
+        GlobalData.tempRegions.remove(at: GlobalData.tempRegions.index(of: region)!)
+        self.locationManager.stopMonitoring(for: region)
         
     }
     
@@ -172,15 +172,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         if (GlobalData.lateStudents.count - start) > 19 {
             for i in 0...18{
                 let newRegion = CLBeaconRegion(proximityUUID: uuid!, major:UInt16(GlobalData.lateStudents[i+start].major!), minor: UInt16(GlobalData.lateStudents[i+start].minor!), identifier: String(GlobalData.lateStudents[i+start].student_id!))
-                    locationManager.startMonitoring(for: newRegion)
-                    GlobalData.monitoredRegions.append(newRegion)
-                    GlobalData.tempRegions.append(newRegion)
-                    GlobalData.regions.append(newRegion)
+                locationManager.startMonitoring(for: newRegion)
+                GlobalData.monitoredRegions.append(newRegion)
+                GlobalData.tempRegions.append(newRegion)
+                GlobalData.regions.append(newRegion)
             }
-            }
-            let newRegion = CLBeaconRegion(proximityUUID: uuid!, identifier: "common")
-            locationManager.startMonitoring(for: newRegion)
-            //locationManager.requestState(for: newRegion)
+        }
+        let newRegion = CLBeaconRegion(proximityUUID: uuid!, identifier: "common")
+        locationManager.startMonitoring(for: newRegion)
+        //locationManager.requestState(for: newRegion)
     }
     func takeAttendance() {
         print(" bg Inside \(Constant.identifier)");
@@ -213,7 +213,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             
         }
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "taken+\(Constant.identifier)"), object: nil)
-
+        
     }
     
     
