@@ -51,6 +51,8 @@ class GlobalData{
     static var regions = [CLBeaconRegion]()
     static var tempRegions = [CLBeaconRegion]()
     static var lateStudents = [Student]()
+    static var monitoredRegions = [CLBeaconRegion]()
+    static var crIn = Bool()
     
     static let wdayStr = ["Monday", "Tuesday", "Wednesday", "Thursday" , "Friday", "Saturday"]
     static let wdayInt = ["2", "3", "4", "5", "6", "7"]
