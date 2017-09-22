@@ -31,6 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             }
         }
         self.checkTime()
+        monitortesting()
         return true
     }
     
@@ -109,7 +110,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         //if let index2 = GlobalData.monitoredRegions.index(of: region)
         GlobalData.monitoredRegions.remove(at: GlobalData.monitoredRegions.index(of: region)!)
         GlobalData.tempRegions.remove(at: GlobalData.tempRegions.index(of: region)!)
-        self.locationManager.stopMonitoring(for: region)
+        locationManager.stopMonitoring(for: region)
         
     }
     
@@ -154,6 +155,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
         monitor()
         
+    }
+    func monitortesting() {
+        let uuid = NSUUID(uuidString: "00112233-5566-7788-9900-012345678912")as UUID?
+        let region = CLBeaconRegion(proximityUUID: uuid!, identifier: "abc")
+        self.locationManager.startMonitoring(for: region)
     }
     func monitor() {
         
@@ -263,15 +269,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     
     func applicationWillResignActive(_ application: UIApplication) {
+        print("application will resign active")
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
     }
-    
+    func applicationWillEnterBackground(_ application: UIApplication) {
+        print("will!!!!1")
+    }
     func applicationDidEnterBackground(_ application: UIApplication) {
         print("schculed timer")
-        registerBackgroundTask()
-        loadLateStudents()
-        
+       // registerBackgroundTask()
+        //loadLateStudents()
+        monitortesting()//test monitoring
         /*switch UIApplication.shared.applicationState {
          case .active:
          print("active")
@@ -308,6 +317,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        print("application will terminate")
     }
     
     private func loadData(){

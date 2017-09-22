@@ -44,8 +44,11 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         guard let statusBar = (UIApplication.shared.value(forKey: "statusBarWindow") as AnyObject).value(forKey: "statusBar") as? UIView
             else { return }
         statusBar.backgroundColor = UIColor.white
-        let view = UIView(frame: CGRect(x: 1, y: 10, width: 30, height: 20))
-        view.backgroundColor = UIColor.red
+        statusBar.invalidateIntrinsicContentSize()
+        let view = UIView(frame: CGRect(x: 70, y: 1, width: 30, height: 5))
+        // view.backgroundColor = UIColor.red
+        let imageview = UIImageView(image: #imageLiteral(resourceName: "document"))
+        view.addSubview(imageview)
         statusBar.addSubview(view)
         //broadcast()
         // Do any additional setup after loading the view.
