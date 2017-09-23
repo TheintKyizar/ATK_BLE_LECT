@@ -208,7 +208,7 @@
 				TargetAttributes = {
 					C370561B1F56AC210029C0E4 = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = R397SMDAA7;
+						DevelopmentTeam = EBWK75HAK4;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -438,10 +438,10 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = R397SMDAA7;
+				DEVELOPMENT_TEAM = EBWK75HAK4;
 				INFOPLIST_FILE = ATK_BLE_LECT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.ATK-BLE-LECTt";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ATK-BLE-LECT";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -453,10 +453,10 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = R397SMDAA7;
+				DEVELOPMENT_TEAM = EBWK75HAK4;
 				INFOPLIST_FILE = ATK_BLE_LECT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.ATK-BLE-LECTt";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ATK-BLE-LECT";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
