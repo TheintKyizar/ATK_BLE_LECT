@@ -7,23 +7,24 @@
 //
 
 import Foundation
-struct filePath{
+class filePath{
+    
     static var timetablePath: String{
         let manager = FileManager.default
         let url = manager.urls(for: .documentDirectory, in: .userDomainMask).first
         return url!.appendingPathComponent("timetable").path
     }
     
-    static var classmatePath: String{
+    static var weeklyTimetable: String{
         let manager = FileManager.default
         let url = manager.urls(for: .documentDirectory, in: .userDomainMask).first
-        return url!.appendingPathComponent("classmate").path
+        return url!.appendingPathComponent("weeklyTimetable").path
     }
-    
-    static var lecturerPath: String{
+
+    static var studentPath: String{
         let manager = FileManager.default
         let url = manager.urls(for: .documentDirectory, in: .userDomainMask).first
-        return url!.appendingPathComponent("lecturer").path
+        return url!.appendingPathComponent("student" + GlobalData.lesson_id).path
     }
     
     static var lessonuuidPath: String{
@@ -35,7 +36,7 @@ struct filePath{
     static var historyPath: String{
         let manager = FileManager.default
         let url = manager.urls(for: .documentDirectory, in: .userDomainMask).first
-        return url!.appendingPathComponent("history").path
+        return url!.appendingPathComponent("history" + GlobalData.ldate_id).path
     }
     
     static var historyDTPath: String{

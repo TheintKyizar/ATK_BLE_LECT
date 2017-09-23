@@ -6,189 +6,62 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ATK_BLE_LECT/LessonDetailController.swift"
-            timestampString = "526353250.850292"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
-            landmarkName = "tableView(_:cellForRowAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ATK_BLE_LECT/classes.swift"
-            timestampString = "526531915.533993"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "338"
-            endingLineNumber = "338"
-            landmarkName = "getStudentStatus(lesson:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "static ATK_BLE_LECT.alamofire.(loadWeeklyTimetable () -&gt; ()).(closure #1)"
-                  moduleName = "ATK_BLE_LECT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kyawlin/Desktop/ATK_BLE_LECT/ATK_BLE_LECT/classes.swift"
-                  timestampString = "526290654.558265"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "274"
-                  endingLineNumber = "274"
-                  offsetFromSymbolStart = "5316">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "static ATK_BLE_LECT.alamofire.(loadWeeklyTimetable () -&gt; ()).(closure #1)"
-                  moduleName = "ATK_BLE_LECT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kyawlin/Desktop/ATK_BLE_LECT/ATK_BLE_LECT/classes.swift"
-                  timestampString = "526290654.559618"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "274"
-                  endingLineNumber = "274"
-                  offsetFromSymbolStart = "6756">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ATK_BLE_LECT/classes.swift"
-            timestampString = "526531915.533993"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "340"
-            endingLineNumber = "340"
-            landmarkName = "getStudentStatus(lesson:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ATK_BLE_LECT/HistoryDaySelectController.swift"
-            timestampString = "526368326.849181"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
-            landmarkName = "tableView(_:cellForRowAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ATK_BLE_LECT/classes.swift"
-            timestampString = "526531915.533993"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "373"
-            endingLineNumber = "373">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "static ATK_BLE_LECT.alamofire.getStudentStatus (lesson : ATK_BLE_LECT.LessonDate) -&gt; ()"
-                  moduleName = "ATK_BLE_LECT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kyawlin/Desktop/ATK_BLE_LECT/ATK_BLE_LECT/classes.swift"
-                  timestampString = "526530708.076691"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "357"
-                  endingLineNumber = "357"
-                  offsetFromSymbolStart = "1200">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "static ATK_BLE_LECT.alamofire.(getStudentStatus (lesson : ATK_BLE_LECT.LessonDate) -&gt; ()).(closure #1)"
-                  moduleName = "ATK_BLE_LECT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kyawlin/Desktop/ATK_BLE_LECT/ATK_BLE_LECT/classes.swift"
-                  timestampString = "526530708.078051"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "358"
-                  endingLineNumber = "358"
-                  offsetFromSymbolStart = "20">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ATK_BLE_LECT/HistoryLessonController.swift"
-            timestampString = "526533806.73096"
+            timestampString = "527826211.370394"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "22"
-            endingLineNumber = "22"
-            landmarkName = "viewDidLoad()"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  shouldBeEnabled = "No"
+                  shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "ATK_BLE_LECT.HistoryLessonController.viewDidLoad () -&gt; ()"
+                  symbolName = "ATK_BLE_LECT.HistoryLessonController.tableView (__ObjC.UITableView, cellForRowAt : Foundation.IndexPath) -&gt; __ObjC.UITableViewCell"
                   moduleName = "ATK_BLE_LECT"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/kyawlin/Desktop/ATK_BLE_LECT/ATK_BLE_LECT/HistoryLessonController.swift"
-                  timestampString = "526530233.999543"
+                  timestampString = "527828631.010308"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "21"
-                  endingLineNumber = "21"
-                  offsetFromSymbolStart = "1180">
+                  startingLineNumber = "74"
+                  endingLineNumber = "74"
+                  offsetFromSymbolStart = "296">
                </Location>
                <Location
-                  shouldBeEnabled = "No"
+                  shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "ATK_BLE_LECT.HistoryLessonController.(viewDidLoad () -&gt; ()).(closure #2)"
+                  symbolName = "ATK_BLE_LECT.HistoryLessonController.tableView (__ObjC.UITableView, cellForRowAt : Foundation.IndexPath) -&gt; __ObjC.UITableViewCell"
                   moduleName = "ATK_BLE_LECT"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/kyawlin/Desktop/ATK_BLE_LECT/ATK_BLE_LECT/HistoryLessonController.swift"
-                  timestampString = "526530234.000901"
+                  timestampString = "527828631.012219"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "21"
-                  endingLineNumber = "21"
-                  offsetFromSymbolStart = "28">
+                  startingLineNumber = "74"
+                  endingLineNumber = "74"
+                  offsetFromSymbolStart = "1664">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ATK_BLE_LECT.HistoryLessonController.(tableView (__ObjC.UITableView, cellForRowAt : Foundation.IndexPath) -&gt; __ObjC.UITableViewCell).(closure #1)"
+                  moduleName = "ATK_BLE_LECT"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kyawlin/Desktop/ATK_BLE_LECT/ATK_BLE_LECT/HistoryLessonController.swift"
+                  timestampString = "527828631.013923"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "74"
+                  endingLineNumber = "74"
+                  offsetFromSymbolStart = "32">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -196,103 +69,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ATK_BLE_LECT/classes.swift"
-            timestampString = "526531915.533993"
+            filePath = "ATK_BLE_LECT/HistoryLessonController.swift"
+            timestampString = "527826213.315288"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "363"
-            endingLineNumber = "363">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ATK_BLE_LECT/classes.swift"
-            timestampString = "526531915.533993"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "374"
-            endingLineNumber = "374">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "static ATK_BLE_LECT.alamofire.(getStudentStatus (lesson : ATK_BLE_LECT.LessonDate) -&gt; ()).(closure #1)"
-                  moduleName = "ATK_BLE_LECT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kyawlin/Desktop/ATK_BLE_LECT/ATK_BLE_LECT/classes.swift"
-                  timestampString = "526531694.083879"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "359"
-                  endingLineNumber = "359"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "static ATK_BLE_LECT.alamofire.(getStudentStatus (lesson : ATK_BLE_LECT.LessonDate) -&gt; ()).(closure #1)"
-                  moduleName = "ATK_BLE_LECT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kyawlin/Desktop/ATK_BLE_LECT/ATK_BLE_LECT/classes.swift"
-                  timestampString = "526531694.087004"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "359"
-                  endingLineNumber = "359"
-                  offsetFromSymbolStart = "372">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ATK_BLE_LECT/classes.swift"
-            timestampString = "526531915.533993"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "375"
-            endingLineNumber = "375">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ATK_BLE_LECT/classes.swift"
-            timestampString = "526532123.452866"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "377"
-            endingLineNumber = "377">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ATK_BLE_LECT/classes.swift"
-            timestampString = "526532157.921914"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "376"
-            endingLineNumber = "376">
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -302,12 +89,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ATK_BLE_LECT/AppDelegate.swift"
-            timestampString = "526535457.743074"
+            timestampString = "527828333.48461"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
-            landmarkName = "requestStateForMonitoredRegions()"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
+            landmarkName = "getLateStudentss()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ATK_BLE_LECT/AppDelegate.swift"
+            timestampString = "527828333.48461"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
+            landmarkName = "getLateStudentss()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

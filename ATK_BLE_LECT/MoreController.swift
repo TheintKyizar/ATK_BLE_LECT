@@ -10,8 +10,16 @@ import UIKit
 
 class MoreController: UIViewController {
 
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var name_label: UILabel!
+    @IBOutlet weak var email_label: UILabel!
+    @IBOutlet weak var phone_label: UILabel!
+    @IBOutlet weak var office_label: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        hideKeyboardWhenTappedAround()
+        setupLabels()
 
         // Do any additional setup after loading the view.
     }
@@ -21,6 +29,29 @@ class MoreController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    private func setupLabels(){
+        
+        if let name = UserDefaults.standard.string(forKey: "name"){
+            name_label.text = name
+        }
+        if let email = UserDefaults.standard.string(forKey: "email"){
+            email_label.text = email
+        }
+        if let phone = UserDefaults.standard.string(forKey: "phone"){
+            phone_label.text = phone
+        }
+        if let office = UserDefaults.standard.string(forKey: "office"){
+            office_label.text = office
+        }
+        
+    }
+    
+    @IBAction func signOutPressed(_ sender: UIButton) {
+        
+        UserDefaults.standard.removeObject(forKey: "name")
+        self.performSegue(withIdentifier: "login_segue", sender: nil)
+        
+    }
 
     /*
     // MARK: - Navigation

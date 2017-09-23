@@ -28,6 +28,7 @@
 		E166BB771F5E2C1200EE41EF /* MonitorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E166BB761F5E2C1100EE41EF /* MonitorController.swift */; };
 		E166BB811F5E3B8000EE41EF /* LessonDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E166BB801F5E3B8000EE41EF /* LessonDetailController.swift */; };
 		E166BB841F5E740100EE41EF /* StudentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E166BB821F5E740100EE41EF /* StudentCell.swift */; };
+		E1959D2A1F6131910015F171 /* ChangePasswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1959D291F6131910015F171 /* ChangePasswordController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		E166BB761F5E2C1100EE41EF /* MonitorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonitorController.swift; sourceTree = "<group>"; };
 		E166BB801F5E3B8000EE41EF /* LessonDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LessonDetailController.swift; sourceTree = "<group>"; };
 		E166BB821F5E740100EE41EF /* StudentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentCell.swift; sourceTree = "<group>"; };
+		E1959D291F6131910015F171 /* ChangePasswordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswordController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,7 +110,6 @@
 		C370561E1F56AC210029C0E4 /* ATK_BLE_LECT */ = {
 			isa = PBXGroup;
 			children = (
-				C370561F1F56AC210029C0E4 /* AppDelegate.swift */,
 				E10278681F5D1FF100429562 /* Entity */,
 				E10278671F5D1FDE00429562 /* Controllers */,
 				C37056231F56AC210029C0E4 /* Main.storyboard */,
@@ -121,12 +122,14 @@
 			isa = PBXGroup;
 			children = (
 				E12CA3E31F5F827500597719 /* Cells */,
+				C370561F1F56AC210029C0E4 /* AppDelegate.swift */,
 				E144D44E1F5D1BDC00667DBD /* NowController.swift */,
 				E102786F1F5D396A00429562 /* TimetableController.swift */,
 				E166BB801F5E3B8000EE41EF /* LessonDetailController.swift */,
 				E144D4531F5D1C4B00667DBD /* LoginController.swift */,
 				E166BB761F5E2C1100EE41EF /* MonitorController.swift */,
 				C3F472C51F57E45300B0DFD5 /* MoreController.swift */,
+				E1959D291F6131910015F171 /* ChangePasswordController.swift */,
 				E12CA3EC1F5FC19900597719 /* History */,
 			);
 			name = Controllers;
@@ -311,6 +314,7 @@
 				E102786E1F5D336400429562 /* FilePath.swift in Sources */,
 				E12CA3E71F5F90C100597719 /* HistoryController.swift in Sources */,
 				C3F472C61F57E45300B0DFD5 /* MoreController.swift in Sources */,
+				E1959D2A1F6131910015F171 /* ChangePasswordController.swift in Sources */,
 				C37056201F56AC210029C0E4 /* AppDelegate.swift in Sources */,
 				E10278711F5D396A00429562 /* TimetableController.swift in Sources */,
 				E12CA3E91F5FA26300597719 /* HistoryDaySelectController.swift in Sources */,

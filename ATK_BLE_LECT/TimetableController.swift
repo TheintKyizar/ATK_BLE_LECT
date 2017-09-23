@@ -43,7 +43,7 @@ class TimetableController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return GlobalData.timetable.filter({$0.weekday == GlobalData.wdayInt[section]}).count
+        return GlobalData.weeklyTimetable.filter({$0.weekday == GlobalData.wdayInt[section]}).count
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -56,7 +56,7 @@ class TimetableController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for:indexPath) as! TimetableCell
-        let lessonInDay = GlobalData.timetable.filter({$0.weekday == GlobalData.wdayInt[indexPath.section]})
+        let lessonInDay = GlobalData.weeklyTimetable.filter({$0.weekday == GlobalData.wdayInt[indexPath.section]})
         
         let lesson = lessonInDay[indexPath.row]
         cell.lesson = lesson
@@ -116,6 +116,8 @@ class TimetableController: UITableViewController {
         }
     }
     
-
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
 }

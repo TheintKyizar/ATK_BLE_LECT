@@ -16,19 +16,21 @@ import SwiftyTimer
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
     
     var window: UIWindow?
+    var backgroundTask:UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
     var locationManager = CLLocationManager()
-    var bluetoothManager = CBPeripheralManager()
-    var uuid: UUID!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        self.locationManager.delegate = self
-        self.locationManager.requestAlwaysAuthorization()
-        bluetoothManager.delegate = self as? CBPeripheralManagerDelegate
-        if(GlobalData.currentLesson.lesson_id != nil) {
-
-            loadLateStudents()// And monitor
-            
+        // Override point for customization after application launch.
+        if UserDefaults.standard.string(forKey: "name") == nil{
+            //No user logged in
+        }else{
+            //User logged in
+            self.loadData()
+            if let nowController = window?.rootViewController?.storyboard?.instantiateViewController(withIdentifier: "tab_bar_controller") as? UITabBarController{
+                window?.rootViewController  = nowController
+            }
         }
+        self.checkTime()
         return true
     }
     
@@ -76,6 +78,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
     }
     
+    private func checkTime(){
+        
+        if checkLesson.checkCurrentLesson() != false{
+            
+            //Currently has lesson
+            loadLateStudents()
+            
+        }else if checkLesson.checkNextLesson() != false{
+            
+            //No lesson currently, show next lesson
+            
+        }else{
+            
+            //Today no lesson
+            
+        }
+        
+    }
+    
     func requestStateForMonitoredRegions() {
         for i in 0...GlobalData.monitoredRegions.count {
             locationManager.requestState(for: GlobalData.monitoredRegions[i])
@@ -117,11 +138,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         
     }
     func loadLateStudents() {
+        let lesson_date = LessonDate()
+        lesson_date.lesson_date = GlobalData.currentLesson.ldate
+        lesson_date.lesson_date_id = GlobalData.currentLesson.ldateid
+        lesson_date.lesson_id = GlobalData.currentLesson.lesson_id
         alamofire.loadStudents(lesson: GlobalData.currentLesson)
-        NotificationCenter.default.addObserver(self, selector: #selector(getLateStudentss), name: Notification.Name(rawValue: "refreshTable+\(String(describing: GlobalData.currentLesson.module_id))"), object: nil)    }
+        alamofire.getStudentStatus(lesson: lesson_date)
+        NotificationCenter.default.addObserver(self, selector: #selector(getLateStudentss), name: Notification.Name(rawValue: "done loading status"), object: nil)    }
     
     @objc func getLateStudentss() {
-        for i in 0...GlobalData.studentStatus.count {
+        for i in 0...GlobalData.studentStatus.count-1 {
             if(GlobalData.studentStatus[i].status == -1) {
                 GlobalData.lateStudents.append(GlobalData.students.filter({$0.student_id! == GlobalData.studentStatus[i].student_id!}).first!)
             }
@@ -131,21 +157,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     func monitor() {
         
-        uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!)as UUID?
-        if GlobalData.lateStudents.count > 20{
+        let uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!)as UUID?
+        if GlobalData.lateStudents.count > 3{
             let newRegion = CLBeaconRegion(proximityUUID: uuid!, identifier: "common")
             locationManager.startMonitoring(for: newRegion)
             
             Constant.studentGroup = GlobalData.lateStudents.count/20
             Constant.currentGroup = 1
             for i in 0...GlobalData.lateStudents.count-1{
+                print(uuid)
+                print(GlobalData.lateStudents[i].minor)
+                print(GlobalData.lateStudents[i].major)
                 let newRegion = CLBeaconRegion(proximityUUID: uuid!, major:UInt16(GlobalData.lateStudents[i].major!), minor: UInt16(GlobalData.lateStudents[i].minor!), identifier: String(GlobalData.lateStudents[i].student_id!))
                 if i<19{
                     locationManager.startMonitoring(for: newRegion)
                     GlobalData.tempRegions.append(newRegion)
                     GlobalData.monitoredRegions.append(newRegion)
                 }
-                
+                locationManager.startMonitoring(for: newRegion)
             }
             /////////////request the state of common region
             //locationManager.requestState(for: newRegion)
@@ -183,7 +212,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     private func refreshStudents(){
         GlobalData.monitoredRegions.removeAll()
-        uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!)as UUID?
+        let uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!)as UUID?
         let start = (Constant.currentGroup - 1)*19
         if (GlobalData.lateStudents.count - start) > 19 {
             for i in 0...18{
@@ -239,11 +268,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
-        Timer.every(3) { 
-            self.requestStateForMonitoredRegions()
-        }
+        print("schculed timer")
+        registerBackgroundTask()
+        loadLateStudents()
+        
+        /*switch UIApplication.shared.applicationState {
+         case .active:
+         print("active")
+         case .background:
+         registerBackgroundTask()
+         print("Background time remaining = \(UIApplication.shared.backgroundTimeRemaining) seconds")
+         case .inactive:
+         break
+         }*/
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    }
+    
+    func registerBackgroundTask() {
+        backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
+            self?.endBackgroundTask()
+        }
+        assert(backgroundTask != UIBackgroundTaskInvalid)
+    }
+    
+    func endBackgroundTask() {
+        print("Background task ended.")
+        UIApplication.shared.endBackgroundTask(backgroundTask)
+        backgroundTask = UIBackgroundTaskInvalid
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -258,6 +310,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
-    
+    private func loadData(){
+        
+        if let weeklyTimetable = NSKeyedUnarchiver.unarchiveObject(withFile: filePath.weeklyTimetable) as? [Lesson]{
+            GlobalData.weeklyTimetable = weeklyTimetable
+        }
+        
+        if let timeTable = NSKeyedUnarchiver.unarchiveObject(withFile: filePath.timetablePath) as? [Lesson]{
+            GlobalData.timetable = timeTable
+        }
+        
+    }
 }
 

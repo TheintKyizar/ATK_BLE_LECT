@@ -21,7 +21,7 @@ class Constant{
     static let URLCreateAtk = baseURL + "api/web/index.php/v1/beacon-attendance-lecturer/student-attendance"
     static let URLWeeklyTimetable = baseURL + "api/web/index.php/v1/lesson-lecturer/weekly-lesson?expand=lesson,venue,lesson_date,beacon_lesson"
     static let URLlessonUUID = baseURL + "api/web/index.php/v1/beacon-lesson/uuid"
-
+    static let URLchangepass = baseURL + "api/web/index.php/v1/user/change-password"
     
     static var name = String()
     static var token = String()
@@ -39,6 +39,8 @@ class Constant{
 
 class GlobalData{
     
+    static var ldate_id = String()
+    static var lesson_id = String()
     static var weeklyTimetable = [Lesson]()
     static var timetable = [Lesson]()
     static var today = [Lesson]()
