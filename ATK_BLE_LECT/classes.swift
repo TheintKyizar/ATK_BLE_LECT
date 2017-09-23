@@ -335,11 +335,9 @@ class alamofire{
                         newLesson.end_time = lesson["end_time"] as? String
                     }
                     
-                    if let lesson_date = json["lesson_date"] as? [[String:Any]]{
-                        for i in lesson_date{
-                            newLesson.ldate = i["ldate"] as? String
-                            newLesson.ldateid = i["id"] as? Int
-                        }
+                    if let lesson_date = json["lesson_date"] as? [String:Any]{
+                            newLesson.ldate = lesson_date["ldate"] as? String
+                            newLesson.ldateid = lesson_date["id"] as? Int
                     }
                     
                     if let venue = json["venue"] as? [String:Any]{
