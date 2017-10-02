@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        locationManager.delegate = self
         if UserDefaults.standard.string(forKey: "name") == nil{
             //No user logged in
         }else{
@@ -31,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             }
         }
         self.checkTime()
-        monitortesting()
+        
         return true
     }
     
@@ -78,6 +79,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             }
         }
     }
+   /* func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
+        switch(state){
+        case .inside: print("inside\(region.identifier)")
+        case .outside: print("outside\(region.identifier)")
+        case .unknown: print("unknowm\(region.identifier)")
+        }
+    }*/
     
     private func checkTime(){
         
@@ -157,9 +165,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         
     }
     func monitortesting() {
+        print("monitortesting!")
+        
         let uuid = NSUUID(uuidString: "00112233-5566-7788-9900-012345678912")as UUID?
         let region = CLBeaconRegion(proximityUUID: uuid!, identifier: "abc")
         self.locationManager.startMonitoring(for: region)
+        locationManager.requestState(for: region)
     }
     func monitor() {
         

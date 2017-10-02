@@ -40,23 +40,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         setupImageView()
         checkTime()
         setupTimer() //Upcoming lessons
-        
-        guard let statusBar = (UIApplication.shared.value(forKey: "statusBarWindow") as AnyObject).value(forKey: "statusBar") as? UIView
-            else { return }
-        statusBar.backgroundColor = UIColor.white
-        statusBar.invalidateIntrinsicContentSize()
-        let view = UIView(frame: CGRect(x: 70, y: 1, width: 30, height: 5))
-        // view.backgroundColor = UIColor.red
-        let imageview = UIImageView(image: #imageLiteral(resourceName: "document"))
-        view.addSubview(imageview)
-        statusBar.addSubview(view)
-        //broadcast()
-        // Do any additional setup after loading the view.
-        /* let bar = NSStatus.system()
-         let length: CGFloat = -1
-         var item = bar.statusItem(withLength: length)
-         item?.button?.image = NS*/
-        
+       
     }
     
     override func didReceiveMemoryWarning() {
@@ -189,7 +173,30 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     
     func broadcast() {
         if bluetoothManager.state == .poweredOn {
-            
+            guard let statusBar = (UIApplication.shared.value(forKey: "statusBarWindow") as AnyObject).value(forKey: "statusBar") as? UIView
+                else {
+                    return
+                    
+            }
+            statusBar.backgroundColor = UIColor.white
+            statusBar.invalidateIntrinsicContentSize()
+            let view = UIView(frame: CGRect(x: 70, y: 0.7, width: 30, height: 4))
+            let imageview = UIImageView(image: #imageLiteral(resourceName: "blue_11"))
+            imageview.animationImages = [
+                #imageLiteral(resourceName: "blue_11"),
+                #imageLiteral(resourceName: "blue_22"),
+                #imageLiteral(resourceName: "blue_33")
+            ]
+            imageview.animationDuration = 0.5
+            imageview.startAnimating()
+            //view.addSubview(imageview)
+            view.addSubview(imageview)
+            let textview = UILabel()
+            textview.text = "transmitting"
+            textview.layer.borderWidth = 0.5
+            textview.sizeToFit()
+            //view.addSubview(textview)
+            statusBar.addSubview(view)
             imageView.animationImages = [
                 #imageLiteral(resourceName: "blue_1"),
                 #imageLiteral(resourceName: "blue_2"),
@@ -197,6 +204,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             ]
             imageView.animationDuration = 0.5
             imageView.startAnimating()
+            //broadcast()
             
         }
         else {
