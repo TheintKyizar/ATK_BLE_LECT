@@ -277,11 +277,6 @@ class alamofire{
     static func loadStudents(lesson:Lesson){
         GlobalData.lesson_id = String(describing: lesson.lesson_id)
         print("Lesson_id : \(String(describing: lesson.lesson_id))")
-        /*if let students = NSKeyedUnarchiver.unarchiveObject(withFile: filePath.studentPath) as? [Student]{
-            print("Loading students locally")
-            GlobalData.students = students
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshTable+\(String(describing: (lesson.module_id)!))"), object: nil)
-        }else{*/
             let token = UserDefaults.standard.string(forKey: "token")
             let headers:HTTPHeaders = [
                 "Authorization" : "Bearer " + token!,
@@ -306,7 +301,7 @@ class alamofire{
                     }
                     print("Done loading students")
                     NSKeyedArchiver.archiveRootObject(GlobalData.students, toFile: filePath.studentPath)
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshTable+\(String(describing: (lesson.module_id)!))"), object: nil)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "done loading students"), object: nil)
                 }
             }
         //}
@@ -335,7 +330,7 @@ class alamofire{
                         newLesson.end_time = lesson["end_time"] as? String
                     }
                     
-                    if let lesson_date = json["lesson_date"] as? [String:Any]{
+                    if let lesson_date = json["lesson_date_weekly"] as? [String:Any]{
                             newLesson.ldate = lesson_date["ldate"] as? String
                             newLesson.ldateid = lesson_date["id"] as? Int
                     }
@@ -359,7 +354,7 @@ class alamofire{
     static func getStudentStatus(lesson:LessonDate){
         
         GlobalData.ldate_id = String(describing:lesson.lesson_date_id!)
-        print(lesson.lesson_date_id)
+        print(lesson.lesson_date_id ?? "")
         let token = UserDefaults.standard.string(forKey: "token")
         let headers:HTTPHeaders = [
             "Authorization" : "Bearer " + token!,

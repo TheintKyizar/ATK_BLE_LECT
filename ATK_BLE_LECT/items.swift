@@ -19,7 +19,7 @@ class Constant{
     static let URLUpdateStatus = baseURL + "api/web/index.php/v1/attendance/update-status"
     static let URLGetStudentOfLesson = baseURL + "api/web/index.php/v1/timetable/get-student"
     static let URLCreateAtk = baseURL + "api/web/index.php/v1/beacon-attendance-lecturer/student-attendance"
-    static let URLWeeklyTimetable = baseURL + "api/web/index.php/v1/lesson-lecturer/weekly-lesson?expand=lesson,venue,lesson_date,beacon_lesson"
+    static let URLWeeklyTimetable = baseURL + "api/web/index.php/v1/lesson-lecturer/weekly-lesson?expand=lesson,venue,lesson_date_weekly,beacon_lesson"
     static let URLlessonUUID = baseURL + "api/web/index.php/v1/beacon-lesson/uuid"
     static let URLchangepass = baseURL + "api/web/index.php/v1/user/change-password"
     
@@ -49,11 +49,9 @@ class GlobalData{
     static var nextLesson = Lesson()
     static var students = [Student]()
     static var studentStatus = [Status]()
-    static var flags = Bool()
+    static var regionExitFlag = Bool()
     static var regions = [CLBeaconRegion]()
-    static var tempRegions = [CLBeaconRegion]()
     static var lateStudents = [Student]()
-    static var monitoredRegions = [CLBeaconRegion]()
     static var regionStatus = [String]()
     
     static let wdayStr = ["Monday", "Tuesday", "Wednesday", "Thursday" , "Friday", "Saturday"]

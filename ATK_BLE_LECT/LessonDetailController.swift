@@ -27,7 +27,7 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
         tableView.delegate = self
         tableView.dataSource = self
         alamofire.loadStudents(lesson: lesson!)
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "refreshTable+\((lesson?.module_id)!)"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading students"), object: nil)
         tableView.autoresizesSubviews = true
         //tableView.separatorStyle = .none
         // Do any additional setup after loading the view.

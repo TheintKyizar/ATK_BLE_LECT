@@ -34,6 +34,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     override func viewDidLoad() {
         super.viewDidLoad()
         UNUserNotificationCenter.current().delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(checkTime), name: Notification.Name(rawValue:"update time"), object: nil)
         locationManager.delegate = self
         bluetoothManager.delegate = self
         locationManager.requestAlwaysAuthorization()
@@ -48,7 +49,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         // Dispose of any resources that can be recreated.
     }
     
-    private func checkTime(){
+    @objc private func checkTime(){
         
         if checkLesson.checkCurrentLesson() != false{
             
