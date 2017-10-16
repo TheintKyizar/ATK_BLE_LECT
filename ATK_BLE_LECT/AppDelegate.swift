@@ -190,6 +190,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
         monitor()
     }
+    
     func monitor() {
         
         let uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!)as UUID?
