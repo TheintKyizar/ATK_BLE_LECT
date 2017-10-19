@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         //add the destinations to SwifyBeaver
         log.addDestination(console)
         log.addDestination(file)
-        //file.logFileURL = URL(fileURLWithPath: "/tmp/hahaha.log")
+        file.logFileURL = URL(fileURLWithPath: "/tmp/swiftybeaver.log")
         log.addDestination(cloud)
         
         //Do log
