@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         //add log destinations.
         let console = ConsoleDestination() // log to Xcode Console
         let file = FileDestination() // log to default swiftybeaver.log file
-        let cloud = SBPlatformDestination(appID: "foo", appSecret: "bar", encryptionKey: "123")
+        let cloud = SBPlatformDestination(appID: "0G8vQ1", appSecret: "ieuq2buxAk4hOpxs6xhekpAizbbdlhsG", encryptionKey: "nFjc1oWmxr3morgyouJrtn1xzd0sNzg4")
         // use custom format and set console output to short time, log level & message
         console.format = "$DHH:mm:ss$d $L $M"
         //use this for JSON output: console.format = "$J"
@@ -50,11 +50,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         //add the destinations to SwifyBeaver
         log.addDestination(console)
         log.addDestination(file)
-        file.logFileURL = URL(fileURLWithPath: "/tmp/swiftybeaver.log")
         log.addDestination(cloud)
-        
         //Do log
-        log.verbose("not so important")  // prio 1, VERBOSE in silver
+        /*log.verbose("not so important")  // prio 1, VERBOSE in silver
         log.debug("something to debug")  // prio 2, DEBUG in green
         log.info("a nice information")   // prio 3, INFO in blue
         log.warning("oh no, that won’t be good")  // prio 4, WARNING in yellow
@@ -65,7 +63,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         log.info(-123.45678)
         log.warning(Date())
         log.error(["I", "like", "logs!"])
-        log.error(["name": "Mr Beaver", "address": "7 Beaver Lodge"])
+        log.error(["name": "Mr Beaver", "address": "7 Beaver Lodge"])*/
+        
+        //read the swiftybeaver.log file 
+        var readString = ""
+        //var fileURL = "~/Library/Caches/swiftybeaver.log"
+        let CacheDirURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        let fileURL = CacheDirURL.appendingPathComponent("swiftybeaver").appendingPathExtension("log")
+        //let pathString = fileURL.path
+        
+        do {
+            readString = try String(contentsOf: fileURL)
+        }
+        catch let error as NSError {
+            print("Failed to read file")
+            print(error)
+        }
+        print("@@@@@@@contents of the file \(readString)")
         
         return true
     }
