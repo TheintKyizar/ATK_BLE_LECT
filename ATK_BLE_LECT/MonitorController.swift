@@ -43,6 +43,7 @@ class MonitorController: UITableViewController {
             lesson_date.lesson_date_id = nlesson?.ldateid
             lesson_date.lesson_id = nlesson?.lesson_id
             alamofire.getStudentStatus(lesson: lesson_date)
+            NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "done loading status"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading status"), object: nil)
         }
     }
@@ -76,16 +77,16 @@ class MonitorController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! StudentCell
         cell.studentName.text = GlobalData.students[indexPath.row].name
         if let status = GlobalData.studentStatus.filter({$0.student_id == GlobalData.students[indexPath.row].student_id}).first{
-            cell.status.text = checkStatus(status: status)
+            cell.status.image = checkStatus(status: status)
         }
         return cell
     }
     
-    private func checkStatus(status:Status) -> String{
+    private func checkStatus(status:Status) -> UIImage{
         switch status.status!{
-        case -1: return "Not taken"
-        case 0: return "Taken"
-        default: return "Late"
+        case -1: return #imageLiteral(resourceName: "red")
+        case 0: return #imageLiteral(resourceName: "green")
+        default: return #imageLiteral(resourceName: "yellow")
         }
     }
     

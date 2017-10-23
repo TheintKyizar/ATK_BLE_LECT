@@ -26,9 +26,11 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
         setupLabels()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.tableFooterView = UIView(frame: .zero)
         alamofire.loadStudents(lesson: lesson!)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done loading students"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading students"), object: nil)
-        tableView.autoresizesSubviews = true
+        
         //tableView.separatorStyle = .none
         // Do any additional setup after loading the view.
     }
@@ -81,14 +83,14 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 30
+        return 40
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? StudentCell
         //let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as? StudentCell
         cell?.status.isHidden = true
-        cell?.studentName.text = GlobalData.students[indexPath.row].name!
+        cell?.studentName.text = String(indexPath.row + 1) + ". " + GlobalData.students[indexPath.row].name!
         return cell!
     }
     

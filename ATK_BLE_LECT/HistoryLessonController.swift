@@ -18,7 +18,9 @@ class HistoryLessonController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading status"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done loading students and status"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading studuents and status"), object: nil)
+        
         alamofire.loadStudents(lesson: GlobalData.timetable.filter({$0.lesson_id! == (lesson_date?.lesson_id)!}).first!)
         alamofire.getStudentStatus(lesson: lesson_date!)
         // Uncomment the following line to preserve selection between presentations
@@ -73,7 +75,11 @@ class HistoryLessonController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? StudentCell
         let mStatus = (status.filter({$0.student_id! == students[indexPath.row].student_id!}).first?.status)!
         cell?.studentName.text = students[indexPath.row].name
-        cell?.status.text = String(mStatus)
+        if GlobalData.statusImg[mStatus] != nil{
+            cell?.status.image = UIImage(named: GlobalData.statusImg[mStatus]!)
+        }else{
+            cell?.status.image =  #imageLiteral(resourceName: "yellow")
+        }
         return cell!
     }
     

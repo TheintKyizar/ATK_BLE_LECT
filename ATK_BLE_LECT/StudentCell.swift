@@ -16,9 +16,8 @@ class StudentCell: UITableViewCell {
         return label
     }()
     
-    let status:UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 15)
+    let status:UIImageView = {
+        let label = UIImageView()
         return label
     }()
     

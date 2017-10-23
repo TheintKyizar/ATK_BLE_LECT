@@ -17,7 +17,8 @@ class TimetableController: UITableViewController {
         
         let title = format.formateDate(format: "MMM dd (E)", date: today)
         navigationItem.title = "Timetable \(title)"
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: NSNotification.Name(rawValue:"refreshTable"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"refreshTable"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue:"refreshTable"), object: nil)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 

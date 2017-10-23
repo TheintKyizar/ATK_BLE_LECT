@@ -34,6 +34,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     override func viewDidLoad() {
         super.viewDidLoad()
         UNUserNotificationCenter.current().delegate = self
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"update time"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(checkTime), name: Notification.Name(rawValue:"update time"), object: nil)
         locationManager.delegate = self
         bluetoothManager.delegate = self
@@ -82,6 +83,12 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             imageView.isUserInteractionEnabled = true
             status_label.text = ""
             broadcast_label.text = "Broadcast My Beacon"
+            subject_label.isHidden = false
+            class_section_label.isHidden = false
+            time_label.isHidden = false
+            location_label.isHidden = false
+            broadcast_label.isHidden = false
+            status_label.isHidden = false
             
         }else if GlobalData.nextLesson.lesson_id != nil{
             
@@ -92,6 +99,11 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             imageView.image = #imageLiteral(resourceName: "bluetooth_off")
             status_label.text = GlobalData.nextLessonTime
             broadcast_label.isHidden = true
+            subject_label.isHidden = false
+            class_section_label.isHidden = false
+            time_label.isHidden = false
+            location_label.isHidden = false
+            status_label.isHidden = false
             
         }else{
             
@@ -102,6 +114,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             status_label.font = UIFont.systemFont(ofSize: 24)
             status_label.text = "No lesson today"
             broadcast_label.isHidden = true
+            imageView.isHidden = true
             
         }
         
