@@ -72,11 +72,13 @@ class LoginController: UIViewController {
                 
                 if let JSON = response.result.value as? [String:AnyObject]{
                     
+                    Constant.lecturer_id = JSON["id"] as! Int
                     Constant.name = JSON["name"] as! String
                     Constant.token = JSON["token"] as! String
                     Constant.major = JSON["major"] as! UInt16
                     Constant.minor = JSON["minor"] as! UInt16
                 
+                    UserDefaults.standard.set(Constant.lecturer_id, forKey: "lecturer_id")
                     UserDefaults.standard.set(Constant.name, forKey: "name")
                     UserDefaults.standard.set(Constant.token, forKey: "token")
                     UserDefaults.standard.set(Constant.major, forKey: "major")

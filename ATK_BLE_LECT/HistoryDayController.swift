@@ -17,6 +17,7 @@ class HistoryDayController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "refreshDate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "refreshDate"), object: nil)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false

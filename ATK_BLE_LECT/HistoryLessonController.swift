@@ -18,9 +18,16 @@ class HistoryLessonController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading status"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done loading students and status"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading studuents and status"), object: nil)
+        
         alamofire.loadStudents(lesson: GlobalData.timetable.filter({$0.lesson_id! == (lesson_date?.lesson_id)!}).first!)
         alamofire.getStudentStatus(lesson: lesson_date!)
+        
+        tableView.tableFooterView = UIView(frame: .zero)
+        
+        let nib = UINib(nibName: "StudentCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: "cell")
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
         
@@ -72,8 +79,7 @@ class HistoryLessonController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? StudentCell
         let mStatus = (status.filter({$0.student_id! == students[indexPath.row].student_id!}).first?.status)!
-        cell?.studentName.text = students[indexPath.row].name
-        cell?.status.text = String(mStatus)
+        cell?.commonInit(studentName: students[indexPath.row].name!, status: mStatus)
         return cell!
     }
     

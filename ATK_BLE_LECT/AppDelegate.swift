@@ -23,7 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     let studentsLimit = 3
     var regionStatus = [String:String]()
     var flag = Bool()
-    var loadingStudents = Bool()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -95,6 +94,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 Constant.identifier = Int(region.identifier)!
                 print("Entered specific")
                 takeAttendance()
+                NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"taken+\(Constant.identifier)"), object: nil)
                 NotificationCenter.default.addObserver(self, selector: #selector(takensuccess(region:)), name: Notification.Name(rawValue: "taken+\(Constant.identifier)"), object: region)
                 
             }
@@ -197,32 +197,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     func loadLateStudents() {
         GlobalData.lateStudents.removeAll()
         GlobalData.studentStatus.removeAll()
-        loadingStudents = false
         let lesson_date = LessonDate()
         lesson_date.lesson_date = GlobalData.currentLesson.ldate
         lesson_date.lesson_date_id = GlobalData.currentLesson.ldateid
         lesson_date.lesson_id = GlobalData.currentLesson.lesson_id
-        alamofire.loadStudents(lesson: GlobalData.currentLesson)
-        alamofire.getStudentStatus(lesson: lesson_date)
-        NotificationCenter.default.addObserver(self, selector: #selector(doneLoadingStudents), name: Notification.Name(rawValue: "done loading students"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(doneLoadingStatus), name: Notification.Name(rawValue: "done loading status"), object: nil)
-        
+        alamofire.loadStudentsAndStatus(lesson: GlobalData.currentLesson, lesson_date: lesson_date)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done loading students and status"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(doneLoadingStudentsAndStatus), name: Notification.Name(rawValue: "done loading students and status"), object: nil)
     }
 
-    @objc func doneLoadingStudents(){
-        if loadingStudents == true{
+    @objc func doneLoadingStudentsAndStatus(){
             self.getLateStudents()
-        }else{
-            loadingStudents = true
-        }
-    }
-    
-    @objc func doneLoadingStatus(){
-        if loadingStudents == true{
-            self.getLateStudents()
-        }else{
-            loadingStudents = true
-        }
     }
 
     private func getLateStudents() {
@@ -260,8 +245,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 }
                 count += 1
             }
-            /////////////request the state of common region
-            //locationManager.requestState(for: newRegion)
         }
         
     }
