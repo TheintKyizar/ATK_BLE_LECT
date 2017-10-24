@@ -9,5 +9,6 @@ target 'ATK_BLE_LECT' do
   
   pod 'Alamofire'
   pod 'SwiftyTimer'
+  pod 'SwiftyBeaver'
 
 end
