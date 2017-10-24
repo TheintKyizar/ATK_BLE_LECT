@@ -14,7 +14,13 @@ class MonitorController: UITableViewController {
     var lesson:Lesson?
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        GlobalData.students.removeAll()
         self.checkLessons()
+        tableView.tableFooterView = UIView(frame: .zero)
+        
+        let nib = UINib(nibName: "StudentCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: "cell")
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -36,15 +42,15 @@ class MonitorController: UITableViewController {
             //current lesson
             print("Current lesson")
             lesson = GlobalData.currentLesson
-            alamofire.loadStudents(lesson: lesson!)
             let nlesson = GlobalData.weeklyTimetable.filter({$0.lesson_id! == lesson?.lesson_id!}).first
             let lesson_date = LessonDate()
             lesson_date.lesson_date = nlesson?.ldate
             lesson_date.lesson_date_id = nlesson?.ldateid
             lesson_date.lesson_id = nlesson?.lesson_id
-            alamofire.getStudentStatus(lesson: lesson_date)
-            NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "done loading status"), object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading status"), object: nil)
+            
+            alamofire.loadStudentsAndStatus(lesson: lesson!, lesson_date: lesson_date)
+            NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "done loading students and status"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading students and status"), object: nil)
         }
     }
 
@@ -75,19 +81,8 @@ class MonitorController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! StudentCell
-        cell.studentName.text = GlobalData.students[indexPath.row].name
-        if let status = GlobalData.studentStatus.filter({$0.student_id == GlobalData.students[indexPath.row].student_id}).first{
-            cell.status.image = checkStatus(status: status)
-        }
+        cell.commonInit(studentName: GlobalData.students[indexPath.row].name!, status: (GlobalData.studentStatus.filter({$0.student_id == GlobalData.students[indexPath.row].student_id}).first?.status)!)
         return cell
-    }
-    
-    private func checkStatus(status:Status) -> UIImage{
-        switch status.status!{
-        case -1: return #imageLiteral(resourceName: "red")
-        case 0: return #imageLiteral(resourceName: "green")
-        default: return #imageLiteral(resourceName: "yellow")
-        }
     }
     
     deinit {

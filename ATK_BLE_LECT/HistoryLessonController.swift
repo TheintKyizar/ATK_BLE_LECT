@@ -23,6 +23,11 @@ class HistoryLessonController: UITableViewController {
         
         alamofire.loadStudents(lesson: GlobalData.timetable.filter({$0.lesson_id! == (lesson_date?.lesson_id)!}).first!)
         alamofire.getStudentStatus(lesson: lesson_date!)
+        
+        tableView.tableFooterView = UIView(frame: .zero)
+        
+        let nib = UINib(nibName: "StudentCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: "cell")
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
         
@@ -74,12 +79,7 @@ class HistoryLessonController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? StudentCell
         let mStatus = (status.filter({$0.student_id! == students[indexPath.row].student_id!}).first?.status)!
-        cell?.studentName.text = students[indexPath.row].name
-        if GlobalData.statusImg[mStatus] != nil{
-            cell?.status.image = UIImage(named: GlobalData.statusImg[mStatus]!)
-        }else{
-            cell?.status.image =  #imageLiteral(resourceName: "yellow")
-        }
+        cell?.commonInit(studentName: students[indexPath.row].name!, status: mStatus)
         return cell!
     }
     

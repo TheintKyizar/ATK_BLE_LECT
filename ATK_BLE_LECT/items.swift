@@ -64,9 +64,5 @@ class GlobalData{
         "6" : "Friday",
         "7" : "Saturday"
     ]
-    static let statusImg:[Int:String] = [
-        -1 : "red",
-        0 : "green"
-    ]
     
 }

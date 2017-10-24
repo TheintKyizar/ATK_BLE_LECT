@@ -31,6 +31,8 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
         NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done loading students"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading students"), object: nil)
         
+        let nib = UINib(nibName: "StudentCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: "cell")
         //tableView.separatorStyle = .none
         // Do any additional setup after loading the view.
     }
@@ -88,9 +90,7 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? StudentCell
-        //let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as? StudentCell
-        cell?.status.isHidden = true
-        cell?.studentName.text = String(indexPath.row + 1) + ". " + GlobalData.students[indexPath.row].name!
+        cell?.commonInit(studentName: String(indexPath.row + 1) + ". " + GlobalData.students[indexPath.row].name!, status: false)
         return cell!
     }
     

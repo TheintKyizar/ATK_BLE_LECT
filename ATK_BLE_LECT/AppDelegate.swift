@@ -152,7 +152,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     func loadLateStudents() {
         GlobalData.lateStudents.removeAll()
         GlobalData.studentStatus.removeAll()
-        loadingStudents = false
         let lesson_date = LessonDate()
         lesson_date.lesson_date = GlobalData.currentLesson.ldate
         lesson_date.lesson_date_id = GlobalData.currentLesson.ldateid
