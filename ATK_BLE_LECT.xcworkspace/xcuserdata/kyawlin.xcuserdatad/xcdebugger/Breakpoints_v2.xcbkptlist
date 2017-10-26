@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ATK_BLE_LECT/NowController.swift"
-            timestampString = "530527787.717407"
+            timestampString = "530700508.271037"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "196"
-            endingLineNumber = "196"
-            landmarkName = "broadcast()"
+            startingLineNumber = "172"
+            endingLineNumber = "172"
+            landmarkName = "setupTimer()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ATK_BLE_LECT/NowController.swift"
-            timestampString = "530527787.71797"
+            timestampString = "530700508.271105"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "233"
-            endingLineNumber = "233"
+            startingLineNumber = "209"
+            endingLineNumber = "209"
             landmarkName = "broadcast()"
             landmarkType = "7">
          </BreakpointContent>

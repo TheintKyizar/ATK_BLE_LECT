@@ -15,18 +15,18 @@ class HistoryLessonController: UITableViewController {
     var students = [Student]()
     var status = [Status]()
     var count = Int()
+    var selectedIndexPath = [IndexPath]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done loading students and status"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading studuents and status"), object: nil)
-        
-        alamofire.loadStudents(lesson: GlobalData.timetable.filter({$0.lesson_id! == (lesson_date?.lesson_id)!}).first!)
-        alamofire.getStudentStatus(lesson: lesson_date!)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading students and status"), object: nil)
+        alamofire.loadStudentsAndStatus(lesson: GlobalData.timetable.filter({$0.lesson_id! == (lesson_date?.lesson_id)!}).first!, lesson_date: lesson_date!)
         
         tableView.tableFooterView = UIView(frame: .zero)
+        tableView.rowHeight = UITableViewAutomaticDimension
         
-        let nib = UINib(nibName: "StudentCell", bundle: nil)
+        let nib = UINib(nibName: "ManualAttendanceCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "cell")
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -39,22 +39,12 @@ class HistoryLessonController: UITableViewController {
         students = GlobalData.students
         status = GlobalData.studentStatus
         count  = 0
-        if students.count < status.count{
-            
+        if students.count > 0 && status.count > 0{
             for i in 0...students.count-1{
                 if let _ = students.filter({$0.student_id! == status[i].student_id!}).first{
                     count += 1
                 }
             }
-            
-        }else{
-            
-            for i in 0...status.count-1 {
-                if let _ = status.filter({$0.student_id! == students[i].student_id!}).first{
-                    count += 1
-                }
-            }
-            
         }
         self.tableView.reloadData()
     }
@@ -77,10 +67,28 @@ class HistoryLessonController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? StudentCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? ManualAttendanceCell
         let mStatus = (status.filter({$0.student_id! == students[indexPath.row].student_id!}).first?.status)!
         cell?.commonInit(studentName: students[indexPath.row].name!, status: mStatus)
         return cell!
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? ManualAttendanceCell{
+            print("IndexPath: \(indexPath), indexPath.row: \(indexPath.row), selectedIndexPath: \(selectedIndexPath)")
+            print(selectedIndexPath.filter({$0 == indexPath}).first)
+            if selectedIndexPath.filter({$0 == indexPath}).first != nil{
+                cell.view.isHidden = true
+                selectedIndexPath = selectedIndexPath.filter(){$0 != indexPath}
+            }else{
+                cell.view.isHidden = false
+                selectedIndexPath.append(indexPath)
+            }
+            UIView.animate(withDuration: 0.3, animations: {
+                tableView.beginUpdates()
+                tableView.endUpdates()
+            })
+        }
     }
     
     /*

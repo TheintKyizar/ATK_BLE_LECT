@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7EC1F21B90E5E0A0A52E370DD650F11D"
+               BlueprintIdentifier = "2262C4460D7BD4A4D9A23715C46A8044"
                BuildableName = "Pods_ATK_BLE_LECT.framework"
                BlueprintName = "Pods-ATK_BLE_LECT"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -47,7 +47,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7EC1F21B90E5E0A0A52E370DD650F11D"
+            BlueprintIdentifier = "2262C4460D7BD4A4D9A23715C46A8044"
             BuildableName = "Pods_ATK_BLE_LECT.framework"
             BlueprintName = "Pods-ATK_BLE_LECT"
             ReferencedContainer = "container:Pods.xcodeproj">
