@@ -56,6 +56,12 @@
                                 </constraints>
                             </view>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="vxq-dz-4dL" firstAttribute="leading" secondItem="piW-Ny-xFp" secondAttribute="leading" id="5s2-zV-ajx"/>
+                            <constraint firstAttribute="trailing" secondItem="vxq-dz-4dL" secondAttribute="trailing" id="9Ft-7Z-opL"/>
+                            <constraint firstAttribute="trailing" secondItem="rN5-Fb-mXe" secondAttribute="trailing" id="CWb-Il-9in"/>
+                            <constraint firstItem="rN5-Fb-mXe" firstAttribute="leading" secondItem="piW-Ny-xFp" secondAttribute="leading" id="drO-Fd-GtZ"/>
+                        </constraints>
                     </stackView>
                 </subviews>
                 <constraints>

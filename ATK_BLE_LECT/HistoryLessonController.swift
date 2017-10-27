@@ -16,6 +16,9 @@ class HistoryLessonController: UITableViewController {
     var status = [Status]()
     var count = Int()
     var selectedIndexPath = [IndexPath]()
+    var currentTag = Int()
+    
+    let spinnerController = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +31,8 @@ class HistoryLessonController: UITableViewController {
         
         let nib = UINib(nibName: "ManualAttendanceCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "cell")
+        
+        spinnerController.center = CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height/2)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
         
@@ -69,18 +74,66 @@ class HistoryLessonController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? ManualAttendanceCell
         let mStatus = (status.filter({$0.student_id! == students[indexPath.row].student_id!}).first?.status)!
-        cell?.commonInit(studentName: students[indexPath.row].name!, status: mStatus)
+        cell?.commonInit(studentName: students[indexPath.row].name!, status: mStatus,student_id: students[indexPath.row].student_id!)
+        
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed(_:)))
+        doneButton.tag = indexPath.row
+        toolbar.setItems([doneButton], animated: false)
+        cell?.view.addSubview(toolbar)
+        cell?.selectionStyle = .none
         return cell!
+    }
+    
+    @objc func doneButtonPressed(_ sender:UIButton){
+        let row = sender.tag
+        currentTag = row
+        let indexPath = IndexPath(row: sender.tag, section: 0)
+        if let cell = tableView.cellForRow(at: indexPath) as? ManualAttendanceCell{
+            /*cell.view.isHidden = true
+            status.filter({$0.student_id! == students[row].student_id!}).first?.status = checkStatus(status: cell.selectedValue)
+            print(cell.student_id)*/
+            self.view.addSubview(spinnerController)
+            spinnerController.startAnimating()
+            tableView.allowsSelection = false
+            NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done updating status"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(doneUpdatingStatus), name: Notification.Name(rawValue:"done updating status"), object: nil)
+            alamofire.updateStatus(lesson_date: self.lesson_date!, student_id: students[sender.tag].student_id!, status: checkStatus(status: cell.selectedValue))
+        }
+        /*UIView.animate(withDuration: 0.3) {
+            self.tableView.reloadData()
+        }*/
+    }
+    
+    @objc func doneUpdatingStatus(){
+        self.spinnerController.removeFromSuperview()
+        tableView.allowsSelection = true
+        let indexPath = IndexPath(row: currentTag, section: 0)
+        if let cell = tableView.cellForRow(at: indexPath) as? ManualAttendanceCell{
+            cell.view.isHidden = true
+            status.filter({$0.student_id! == students[currentTag].student_id!}).first?.status = checkStatus(status: cell.selectedValue)
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.tableView.reloadData()
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? ManualAttendanceCell{
-            print("IndexPath: \(indexPath), indexPath.row: \(indexPath.row), selectedIndexPath: \(selectedIndexPath)")
-            print(selectedIndexPath.filter({$0 == indexPath}).first)
+            cell.backgroundColor = UIColor.white
             if selectedIndexPath.filter({$0 == indexPath}).first != nil{
                 cell.view.isHidden = true
                 selectedIndexPath = selectedIndexPath.filter(){$0 != indexPath}
             }else{
+                if selectedIndexPath.count > 0{
+                    for i in selectedIndexPath{
+                        if let cell2 = tableView.cellForRow(at: i) as? ManualAttendanceCell{
+                            cell2.view.isHidden = true
+                            selectedIndexPath = selectedIndexPath.filter(){$0 != i}
+                        }
+                    }
+                }
                 cell.view.isHidden = false
                 selectedIndexPath.append(indexPath)
             }
@@ -88,6 +141,18 @@ class HistoryLessonController: UITableViewController {
                 tableView.beginUpdates()
                 tableView.endUpdates()
             })
+        }
+    }
+    
+    private func checkStatus(status:String) -> Int{
+        switch status {
+        case "Absent":
+            return -1
+        case "Present":
+            return 0
+        default:
+            let split = status.split(separator: " ")
+            return Int(split[0])!
         }
     }
     

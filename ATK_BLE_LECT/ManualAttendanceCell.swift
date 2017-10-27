@@ -16,6 +16,7 @@ class ManualAttendanceCell: UITableViewCell, UIPickerViewDelegate, UIPickerViewD
     @IBOutlet weak var view: UIView!
     
     var selectedValue:String = "Absent"
+    var student_id = Int()
     
     let pickerData = [
         "Absent","Present","5 mins","10 mins","15 mins","20 mins","25 mins","30 mins"
@@ -32,16 +33,12 @@ class ManualAttendanceCell: UITableViewCell, UIPickerViewDelegate, UIPickerViewD
         // Configure the view for the selected state
     }
     
-    func commonInit(studentName:String,status:Int){
+    func commonInit(studentName:String,status:Int,student_id:Int){
         student.text = studentName
         statusIcon.image = checkStatus(status: status)
         picker.delegate = self
         picker.dataSource = self
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed))
-        toolbar.setItems([doneButton], animated: false)
-        self.view.addSubview(toolbar)
+        self.student_id = student_id
     }
     
     @objc func doneButtonPressed(){
