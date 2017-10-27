@@ -33,6 +33,9 @@ class HistoryLessonController: UITableViewController {
         tableView.register(nib, forCellReuseIdentifier: "cell")
         
         spinnerController.center = CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height/2)
+        spinnerController.color = UIColor.black
+        self.view.addSubview(spinnerController)
+        spinnerController.startAnimating()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
         
@@ -41,6 +44,8 @@ class HistoryLessonController: UITableViewController {
     }
     
     @objc private func refreshTable(){
+        self.spinnerController.removeFromSuperview()
+        self.spinnerController.stopAnimating()
         students = GlobalData.students
         status = GlobalData.studentStatus
         count  = 0
@@ -87,6 +92,9 @@ class HistoryLessonController: UITableViewController {
     }
     
     @objc func doneButtonPressed(_ sender:UIButton){
+        
+        self.view.addSubview(spinnerController)
+        spinnerController.startAnimating()
         let row = sender.tag
         currentTag = row
         let indexPath = IndexPath(row: sender.tag, section: 0)
@@ -101,9 +109,6 @@ class HistoryLessonController: UITableViewController {
             NotificationCenter.default.addObserver(self, selector: #selector(doneUpdatingStatus), name: Notification.Name(rawValue:"done updating status"), object: nil)
             alamofire.updateStatus(lesson_date: self.lesson_date!, student_id: students[sender.tag].student_id!, status: checkStatus(status: cell.selectedValue))
         }
-        /*UIView.animate(withDuration: 0.3) {
-            self.tableView.reloadData()
-        }*/
     }
     
     @objc func doneUpdatingStatus(){
