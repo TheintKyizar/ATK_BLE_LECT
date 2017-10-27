@@ -241,7 +241,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                         locationManager.startMonitoring(for: newRegion)
                         GlobalData.regions.append(newRegion)
                     }
-                    locationManager.startMonitoring(for: newRegion)
                 }
                 count += 1
             }

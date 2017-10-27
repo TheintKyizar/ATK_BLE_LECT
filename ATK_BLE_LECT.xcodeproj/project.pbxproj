@@ -30,6 +30,8 @@
 		E18248DF1F9DC627009939DD /* UserInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18248DD1F9DC627009939DD /* UserInfoCell.swift */; };
 		E18248E01F9DC627009939DD /* UserInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E18248DE1F9DC627009939DD /* UserInfoCell.xib */; };
 		E1959D2A1F6131910015F171 /* ChangePasswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1959D291F6131910015F171 /* ChangePasswordController.swift */; };
+		E1A357A31FA1A2F50056A270 /* ManualAttendanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A357A11FA1A2F50056A270 /* ManualAttendanceCell.swift */; };
+		E1A357A41FA1A2F50056A270 /* ManualAttendanceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1A357A21FA1A2F50056A270 /* ManualAttendanceCell.xib */; };
 		E1B910861F9F23EC00AA6A40 /* StudentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B910841F9F23EC00AA6A40 /* StudentCell.swift */; };
 		E1B910871F9F23EC00AA6A40 /* StudentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1B910851F9F23EC00AA6A40 /* StudentCell.xib */; };
 /* End PBXBuildFile section */
@@ -62,6 +64,8 @@
 		E18248DD1F9DC627009939DD /* UserInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoCell.swift; sourceTree = "<group>"; };
 		E18248DE1F9DC627009939DD /* UserInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserInfoCell.xib; sourceTree = "<group>"; };
 		E1959D291F6131910015F171 /* ChangePasswordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswordController.swift; sourceTree = "<group>"; };
+		E1A357A11FA1A2F50056A270 /* ManualAttendanceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualAttendanceCell.swift; sourceTree = "<group>"; };
+		E1A357A21FA1A2F50056A270 /* ManualAttendanceCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ManualAttendanceCell.xib; sourceTree = "<group>"; };
 		E1B910841F9F23EC00AA6A40 /* StudentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentCell.swift; sourceTree = "<group>"; };
 		E1B910851F9F23EC00AA6A40 /* StudentCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StudentCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -160,6 +164,8 @@
 				E18248DE1F9DC627009939DD /* UserInfoCell.xib */,
 				E1B910841F9F23EC00AA6A40 /* StudentCell.swift */,
 				E1B910851F9F23EC00AA6A40 /* StudentCell.xib */,
+				E1A357A11FA1A2F50056A270 /* ManualAttendanceCell.swift */,
+				E1A357A21FA1A2F50056A270 /* ManualAttendanceCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -258,6 +264,7 @@
 				C370562A1F56AC210029C0E4 /* LaunchScreen.storyboard in Resources */,
 				C37056271F56AC210029C0E4 /* Assets.xcassets in Resources */,
 				C37056251F56AC210029C0E4 /* Main.storyboard in Resources */,
+				E1A357A41FA1A2F50056A270 /* ManualAttendanceCell.xib in Resources */,
 				E1B910871F9F23EC00AA6A40 /* StudentCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -329,6 +336,7 @@
 			files = (
 				E144D4501F5D1BDC00667DBD /* NowController.swift in Sources */,
 				E10278751F5D3A2100429562 /* TimetableCell.swift in Sources */,
+				E1A357A31FA1A2F50056A270 /* ManualAttendanceCell.swift in Sources */,
 				E102786A1F5D200400429562 /* items.swift in Sources */,
 				E12CA3E51F5F829900597719 /* HistoryCell.swift in Sources */,
 				E12CA3F01F5FD63200597719 /* HistoryLessonController.swift in Sources */,

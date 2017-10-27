@@ -5,7 +5,7 @@
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -38,19 +38,19 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="09:00 - 10:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CaA-h1-reh">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="09:00 - 10:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CaA-h1-reh">
                                         <rect key="frame" x="0.0" y="102" width="355" height="23"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="#07-01-01" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0vp-j1-JVJ">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#07-01-01" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0vp-j1-JVJ">
                                         <rect key="frame" x="0.0" y="149.5" width="355" height="23"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pcO-uT-bpV">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pcO-uT-bpV">
                                         <rect key="frame" x="0.0" y="196.5" width="355" height="45.5"/>
                                         <string key="text">Not yet time
 Try again after some time</string>
@@ -58,14 +58,14 @@ Try again after some time</string>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="bluetooth_off" translatesAutoresizingMaskIntoConstraints="NO" id="hI4-WJ-RrD">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bluetooth_off" translatesAutoresizingMaskIntoConstraints="NO" id="hI4-WJ-RrD">
                                         <rect key="frame" x="92.5" y="266.5" width="170" height="170"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="lessThanOrEqual" constant="170" id="DsC-7W-nFs"/>
                                             <constraint firstAttribute="width" secondItem="hI4-WJ-RrD" secondAttribute="height" multiplier="1:1" id="dTF-AJ-7fT"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Broadcast My Beacon" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zhq-kz-ZBH">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Broadcast My Beacon" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zhq-kz-ZBH">
                                         <rect key="frame" x="84.5" y="461" width="186" height="23"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <nil key="textColor"/>
@@ -104,6 +104,7 @@ Try again after some time</string>
                         <outlet property="status_label" destination="pcO-uT-bpV" id="1yz-c0-vAo"/>
                         <outlet property="subject_label" destination="gFO-Zu-ecT" id="e4r-1x-dmY"/>
                         <outlet property="time_label" destination="CaA-h1-reh" id="WEI-EC-c6S"/>
+                        <segue destination="3YV-BW-o0w" kind="presentation" identifier="sign_in_segue" id="SdP-oJ-PPa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ub-7g-Rzk" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -173,7 +174,7 @@ Try again after some time</string>
         <scene sceneID="SuV-ko-xyG">
             <objects>
                 <tableViewController id="36k-rA-Y3V" customClass="MonitorController" customModule="ATK_BLE_LECT" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="vrG-oH-cib">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="vrG-oH-cib">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -182,7 +183,13 @@ Try again after some time</string>
                             <outlet property="delegate" destination="36k-rA-Y3V" id="Vpv-98-2Lx"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="eWK-r9-Sdt"/>
+                    <navigationItem key="navigationItem" id="eWK-r9-Sdt">
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="1Rb-Ph-QC3">
+                            <connections>
+                                <action selector="refreshButtonPressed:" destination="36k-rA-Y3V" id="F0e-FR-bOo"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S5Y-Oo-ZX6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -535,7 +542,7 @@ Try again after some time</string>
                         </connections>
                     </tableView>
                     <connections>
-                        <segue destination="fEB-Zk-P3W" kind="show" identifier="history_day_segue" id="9HA-TX-8BD"/>
+                        <segue destination="oMy-tb-pRA" kind="show" identifier="history_day_segue" id="tPB-pf-126"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mQ3-mS-HmZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -543,41 +550,41 @@ Try again after some time</string>
             <point key="canvasLocation" x="1265" y="1660"/>
         </scene>
         <!--History Day Controller-->
-        <scene sceneID="Kbm-QK-DEz">
+        <scene sceneID="zfI-10-43d">
             <objects>
-                <tableViewController id="fEB-Zk-P3W" customClass="HistoryDayController" customModule="ATK_BLE_LECT" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Udu-ng-5hq">
+                <tableViewController id="oMy-tb-pRA" customClass="HistoryDayController" customModule="ATK_BLE_LECT" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="g03-Qa-ALn">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="h70-jZ-hxu">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="Zzg-Th-cQf">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="h70-jZ-hxu" id="j7o-NM-DWU">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Zzg-Th-cQf" id="gG2-pl-FFb">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
                         <connections>
-                            <outlet property="dataSource" destination="fEB-Zk-P3W" id="yMo-y4-CzR"/>
-                            <outlet property="delegate" destination="fEB-Zk-P3W" id="orQ-YZ-zva"/>
+                            <outlet property="dataSource" destination="oMy-tb-pRA" id="7ug-hN-agL"/>
+                            <outlet property="delegate" destination="oMy-tb-pRA" id="Fdt-MK-YMI"/>
                         </connections>
                     </tableView>
                     <connections>
-                        <segue destination="ueg-6n-fS4" kind="show" identifier="history_lesson_segue" id="mYT-7Y-8bn"/>
+                        <segue destination="ueg-6n-fS4" kind="show" identifier="history_lesson_segue" id="deL-Fu-mwU"/>
                     </connections>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="sIX-SE-W4G" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RV1-GV-TGo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1943" y="1658"/>
+            <point key="canvasLocation" x="1966" y="1657"/>
         </scene>
         <!--History Lesson Controller-->
         <scene sceneID="ath-R2-7Mr">
             <objects>
                 <tableViewController id="ueg-6n-fS4" customClass="HistoryLessonController" customModule="ATK_BLE_LECT" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="GsT-8b-ya8">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="GsT-8b-ya8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

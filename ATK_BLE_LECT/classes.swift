@@ -357,6 +357,27 @@ class alamofire{
         }
     }
     
+    static func updateStatus(lesson_date:LessonDate,student_id:Int,status:Int){
+        
+        let token = UserDefaults.standard.string(forKey: "token")
+        let headers:HTTPHeaders = [
+            "Authorization" : "Bearer " + token!,
+            "Content-Type" : "application/json"
+        ]
+        let parameters:[String:Any] = [
+            "lesson_date_id" : lesson_date.lesson_date_id!,
+            "student_id" : student_id,
+            "status" : status
+        ]
+        Alamofire.request(Constant.URLUpdateStatus, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
+            if response.response?.statusCode == 200{
+                NotificationCenter.default.post(name: Notification.Name(rawValue:"done updating status"), object: nil)
+                log.info("done updating status")
+            }
+        }
+        
+    }
+    
     static func loadWeeklyTimetable(){
         
         let token = UserDefaults.standard.string(forKey: "token")

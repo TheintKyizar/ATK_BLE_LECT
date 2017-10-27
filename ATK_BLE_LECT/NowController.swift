@@ -10,6 +10,7 @@ import UIKit
 import UserNotifications
 import CoreBluetooth
 import CoreLocation
+import Alamofire
 
 class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocationManagerDelegate, CBPeripheralManagerDelegate {
     
@@ -42,31 +43,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         setupImageView()
         checkTime()
         setupTimer() //Upcoming lessons
-        guard let statusBar = (UIApplication.shared.value(forKey: "statusBarWindow") as AnyObject).value(forKey: "statusBar") as? UIView
-            else {
-                return
-                
-        }
-        statusBar.backgroundColor = UIColor.white
-        statusBar.invalidateIntrinsicContentSize()
-        let frame = statusBar.alignmentRect(forFrame: CGRect(x: 70, y: 0.7, width: 30, height: 4))
-        let view = UIView(frame:frame )
-        let imageview = UIImageView(image: #imageLiteral(resourceName: "blue_11"))
-        imageview.animationImages = [
-            #imageLiteral(resourceName: "blue_11"),
-            #imageLiteral(resourceName: "blue_22"),
-            #imageLiteral(resourceName: "blue_33")
-        ]
-        imageview.animationDuration = 0.5
-        imageview.startAnimating()
-        //view.addSubview(imageview)
-        view.addSubview(imageview)
-        let textview = UILabel()
-        textview.text = "transmitting"
-        textview.layer.borderWidth = 0.5
-        textview.sizeToFit()
-        //view.addSubview(textview)
-        statusBar.addSubview(view)
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -76,6 +53,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     
     @objc private func checkTime(){
         
+        self.checkUserInBackground()
         if checkLesson.checkCurrentLesson() != false{
             
             lesson = GlobalData.currentLesson
@@ -94,6 +72,38 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             
         }
         updateLabels()
+        
+    }
+    
+    private func checkUserInBackground(){
+        
+        log.info("Checking user")
+        let parameters:[String:Any] = [
+            "username" : UserDefaults.standard.string(forKey: "username")!,
+            "password" : UserDefaults.standard.string(forKey: "password")!
+        ]
+        let spinnerIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        spinnerIndicator.center = CGPoint(x: self.view.frame.width/2,y: self.view.frame.height/2)
+        spinnerIndicator.color = UIColor.black
+        spinnerIndicator.startAnimating()
+        self.view.addSubview(spinnerIndicator)
+        Alamofire.request(Constant.URLLogin, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON { (response:DataResponse) in
+            let code = response.response?.statusCode
+            spinnerIndicator.removeFromSuperview()
+            log.info("Status code: " + String(describing: code))
+            if code == 200{
+                if let json = response.result.value as? [String:AnyObject]{
+                    UserDefaults.standard.set(json["token"], forKey: "token")
+                }
+            }else{
+                let alertView = UIAlertController(title: "Section time out", message: "Your sign in section is expired", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                    self.performSegue(withIdentifier: "sign_in_segue", sender: nil)
+                })
+                alertView.addAction(action)
+                self.present(alertView, animated: false, completion: nil)
+            }
+        }
         
     }
     
