@@ -35,8 +35,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     override func viewDidLoad() {
         super.viewDidLoad()
         UNUserNotificationCenter.current().delegate = self
-        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"update time"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(checkTime), name: Notification.Name(rawValue:"update time"), object: nil)
+        self.addObserver()
         locationManager.delegate = self
         bluetoothManager.delegate = self
         locationManager.requestAlwaysAuthorization()
@@ -51,12 +50,28 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         // Dispose of any resources that can be recreated.
     }
     
+    private func addObserver(){
+        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.addObserver(self, selector: #selector(checkTime), name: Notification.Name(rawValue:"update time"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(setupTimer), name: Notification.Name(rawValue:"stepper changed"), object: nil)
+    }
+    
     @objc private func checkTime(){
         
         self.checkUserInBackground()
         if checkLesson.checkCurrentLesson() != false{
             
             lesson = GlobalData.currentLesson
+            let lesson_id = (lesson?.lesson_id)!
+            if UserDefaults.standard.string(forKey: "currentLesson") != nil{
+                if UserDefaults.standard.string(forKey: "currentLesson")! != String(describing:lesson_id){
+                    print(UserDefaults.standard.string(forKey: "currentLesson")!)
+                    print(String(describing:lesson?.lesson_id!))
+                }
+            }else{
+                print("First lesson")
+                UserDefaults.standard.set(lesson?.lesson_id, forKey: "currentLesson")
+            }
             /*Timer.after(1, {
                 self.broadcast()
             })*/
@@ -195,18 +210,32 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     }
     
     @objc func setupTimer(){
-        UserDefaults.standard.set("10", forKey: "notification time")
-        let date = format.formateDate(format: "HH:mm:ss", date: Date())
+        if UserDefaults.standard.string(forKey: "norification time") == nil{
+            UserDefaults.standard.set("10", forKey: "notification time")
+        }
+        var date = format.formateDate(format: "HH:mm:ss", date: Date())
         let upcomingLesson = GlobalData.today.filter({$0.start_time! > date})
         for i in upcomingLesson{
             let start_time = format.formatTime(format: "HH:mm:ss", time: i.start_time!)
             let calendar = Calendar.current.dateComponents([.hour,.minute,.second], from: format.formatTime(format: "HH:mm:ss", time: date), to: start_time)
             let time = Int(UserDefaults.standard.string(forKey: "notification time")!)!
             let interval = Double(calendar.hour!*3600 + calendar.minute!*60 + calendar.second! - time*60)
-            if interval > 0 {
-                let notificationContent = notification.notiContent(title: "Upcoming lesson", body: "\(String(describing: i.catalog!)) \(String(describing: i.class_section!)) \(String(describing: i.location!))")
+            if interval > 0{
+                let notificationContent = notification.notiContent(title: "Upcoming lesson", body: "\(String(describing: i.catalog!)) \(String(describing: i.class_section!)) \(String(describing:i.location!))")
                 let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
                 notification.addNotification(trigger: trigger, content: notificationContent, identifier: String(describing:i.ldateid))
+            }
+        }
+        
+        for i in upcomingLesson{
+            date = format.formateDate(format: "HH:mm:ss", date: Date())
+            let start_time = format.formatTime(format: "HH:mm:ss", time: i.start_time!)
+            let calendar = Calendar.current.dateComponents([.hour,.minute,.second], from: format.formatTime(format: "HH:mm:ss", time: date), to: start_time)
+            let interval = Double(calendar.hour!*3600 + calendar.minute!*60 + calendar.second!)
+            if interval > 0 {
+                let notificationContent = notification.notiContent(title: "Lesson started", body: "Please open your app to take attendance")
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
+                notification.addNotification(trigger: trigger, content: notificationContent, identifier: "lesson start")
             }
             
         }

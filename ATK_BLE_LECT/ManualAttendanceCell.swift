@@ -12,6 +12,7 @@ class ManualAttendanceCell: UITableViewCell, UIPickerViewDelegate, UIPickerViewD
     
     @IBOutlet weak var student: UILabel!
     @IBOutlet weak var statusIcon: UIImageView!
+    @IBOutlet weak var statusTime: UILabel!
     @IBOutlet weak var picker: UIPickerView!
     @IBOutlet weak var view: UIView!
     
@@ -36,6 +37,12 @@ class ManualAttendanceCell: UITableViewCell, UIPickerViewDelegate, UIPickerViewD
     func commonInit(studentName:String,status:Int,student_id:Int){
         student.text = studentName
         statusIcon.image = checkStatus(status: status)
+        if status > 0 {
+            statusTime.text = String(describing: status) + " mins"
+            statusTime.isHidden = false 
+        }else{
+            statusTime.isHidden = true
+        }
         picker.delegate = self
         picker.dataSource = self
         self.student_id = student_id

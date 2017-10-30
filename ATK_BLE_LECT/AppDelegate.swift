@@ -12,10 +12,11 @@ import CoreLocation
 import CoreBluetooth
 import SwiftyTimer
 import SwiftyBeaver
+import UserNotifications
 let log = SwiftyBeaver.self
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
     
     var window: UIWindow?
     var backgroundTask:UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
@@ -23,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     let studentsLimit = 3
     var regionStatus = [String:String]()
     var flag = Bool()
+    var commonFlag = Bool()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -37,6 +39,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             }
         }
         self.stopMonitoring()
+        
+        UNUserNotificationCenter.current().delegate = self
+        UNUserNotificationCenter.current().requestAuthorization(options: .alert) { (success, error) in
+            if success{
+                log.info("granted noti")
+            }else{
+                log.info("denided noti")
+            }
+        }
         
         //add log destinations.
         let console = ConsoleDestination() // log to Xcode Console
@@ -89,8 +100,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             print("inside \(region.identifier)")
             regionStatus[region.identifier] = "inside"
             if region.identifier == "common"{
-                
+                commonFlag = true
+                Timer.after(2, {
+                    if self.commonFlag == true{
+                        self.requestStateForMonitoredRegions()                    }
+                })
             }else{
+                commonFlag = false
                 Constant.identifier = Int(region.identifier)!
                 print("Entered specific")
                 takeAttendance()
@@ -114,13 +130,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             //Currently has lesson
             loadLateStudents()
             
-        }else if checkLesson.checkNextLesson() != false{
-            
-            //No lesson currently, show next lesson
-            
         }else{
             
-            //Today no lesson
+            endBackgroundTask()
             
         }
         
@@ -154,6 +166,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             
             if self.flag == true && self.regionStatus[self.regionStatus.keys.filter({$0 == "common"}).first!] == "inside"{
                 self.refreshStudents()
+                Timer.after(5){
+                    self.requestStateForMonitoredRegions()
+                }
                 print("refreshHere")
             }
         }
@@ -194,6 +209,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
         
     }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        if UIApplication.shared.applicationState == .active{
+            completionHandler([])
+        }else{
+            completionHandler([.alert,.badge,.sound])
+        }
+    }
+    
     func loadLateStudents() {
         GlobalData.lateStudents.removeAll()
         GlobalData.studentStatus.removeAll()
@@ -229,7 +253,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             var count = 0
             locationManager.startMonitoring(for: newRegion)
             
-            Constant.studentGroup = GlobalData.lateStudents.count/studentsLimit
+            if (GlobalData.lateStudents.count % 3) > 0{
+                Constant.studentGroup = (GlobalData.lateStudents.count/studentsLimit) + 1
+            }else{
+                Constant.studentGroup = (GlobalData.lateStudents.count/studentsLimit)
+            }
+            
             Constant.currentGroup = 1
             for i in 0...GlobalData.lateStudents.count-1{
                 if count < studentsLimit{
@@ -245,7 +274,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 count += 1
             }
         }
-        
+       // endBackgroundTask()
     }
     
     private func refreshStudents(){
@@ -270,16 +299,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
         print("Next group \(Constant.currentGroup)")
         let uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!)as UUID?
-        let start = (Constant.currentGroup - 1)*studentsLimit-1
-        if (GlobalData.lateStudents.count - start) > studentsLimit-1 {
+        let start = (Constant.currentGroup - 1)*studentsLimit
+        if (GlobalData.lateStudents.count - start) > studentsLimit{
             for i in 0...studentsLimit-1{
                 let newRegion = CLBeaconRegion(proximityUUID: uuid!, major:UInt16(GlobalData.lateStudents[i+start].major!), minor: UInt16(GlobalData.lateStudents[i+start].minor!), identifier: String(GlobalData.lateStudents[i+start].student_id!))
                 locationManager.startMonitoring(for: newRegion)
                 GlobalData.regions.append(newRegion)
             }
+        }else{
+            for i in 0...(GlobalData.lateStudents.count - start) - 1{
+                let newRegion = CLBeaconRegion(proximityUUID: uuid!, major:UInt16(GlobalData.lateStudents[i+start].major!), minor: UInt16(GlobalData.lateStudents[i+start].minor!), identifier: String(GlobalData.lateStudents[i+start].student_id!))
+                locationManager.startMonitoring(for: newRegion)
+                GlobalData.regions.append(newRegion)
+            }
         }
-        let newRegion = CLBeaconRegion(proximityUUID: uuid!, identifier: "common")
-        locationManager.startMonitoring(for: newRegion)
         //locationManager.requestState(for: newRegion)
     }
     func takeAttendance() {
@@ -326,12 +359,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         print("will!!!!1")
     }
     func applicationDidEnterBackground(_ application: UIApplication) {
-        print("schculed timer")
         registerBackgroundTask()
         checkTime()
     }
     
+    @objc func abc(){
+        print("Yes!!")
+    }
+    
     func registerBackgroundTask() {
+        log.info("registered backgroundTask")
         backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
             self?.endBackgroundTask()
         }
@@ -339,7 +376,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     func endBackgroundTask() {
-        print("Background task ended.")
+        log.info("Background task ended.")
         UIApplication.shared.endBackgroundTask(backgroundTask)
         backgroundTask = UIBackgroundTaskInvalid
     }
