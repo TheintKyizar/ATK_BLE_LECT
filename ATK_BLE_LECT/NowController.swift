@@ -43,10 +43,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         setupImageView()
         checkTime()
         setupTimer() //Upcoming lessons
-<<<<<<< HEAD
-=======
-        
->>>>>>> 36b36bb988644e79e0396d8d2f5d9a55c86f12e8
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -192,10 +189,6 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
 
         if GlobalData.currentLesson.lesson_id != nil {
             broadcast()
-<<<<<<< HEAD
-=======
-
->>>>>>> 36b36bb988644e79e0396d8d2f5d9a55c86f12e8
         }
         
     }
@@ -253,10 +246,9 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             imageview1.animationDuration = 0.5
             imageview1.startAnimating()
             //view.addSubview(imageview)
-<<<<<<< HEAD
-            view.addSubview(imageview)
+            view.addSubview(imageview1)
             statusBar.addSubview(view)
-            //broadcast()
+            broadcast()
             }
             else {
                 let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
@@ -269,9 +261,6 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
                 self.present(alert, animated: true, completion: nil)
                 
             }
-=======
-            view.addSubview(imageview1)
-            statusBar.addSubview(view)
             
             imageView.animationImages = [
                 #imageLiteral(resourceName: "blue_1"),
@@ -280,7 +269,6 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             ]
             imageView.animationDuration = 0.5
             imageView.startAnimating()
->>>>>>> 36b36bb988644e79e0396d8d2f5d9a55c86f12e8
             
             let major = UInt16(Int(UserDefaults.standard.string(forKey: "major")!)!)as CLBeaconMajorValue
             let minor = UInt16(Int(UserDefaults.standard.string(forKey: "minor")!)!)as CLBeaconMinorValue
