@@ -184,15 +184,9 @@ Try again after some time</string>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="eWK-r9-Sdt">
-<<<<<<< HEAD
                         <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="kcL-4j-sf3">
                             <connections>
                                 <action selector="refreshButtonn:" destination="36k-rA-Y3V" id="nIw-VC-GAo"/>
-=======
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="1Rb-Ph-QC3">
-                            <connections>
-                                <action selector="refreshButtonPressed:" destination="36k-rA-Y3V" id="F0e-FR-bOo"/>
->>>>>>> 36b36bb988644e79e0396d8d2f5d9a55c86f12e8
                             </connections>
                         </barButtonItem>
                     </navigationItem>
