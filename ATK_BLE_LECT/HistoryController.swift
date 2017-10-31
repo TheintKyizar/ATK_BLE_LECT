@@ -59,7 +59,7 @@ class HistoryController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? HistoryCell
         cell?.className.text = classes[indexPath.row].class_section
-        cell?.subject.text = classes[indexPath.row].subject
+        cell?.subject.text = classes[indexPath.row].catalog
         return cell!
     }
     

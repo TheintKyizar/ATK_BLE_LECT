@@ -12,7 +12,7 @@ class MoreController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var imageView: UIImageView!
-    var label = ["Name:","Email:","Phone:","Office:"]
+    var label = ["Name:","Email:","Phone:","Office:","Notification:"]
     var value = [String]()
     
     override func viewDidLoad() {
@@ -50,6 +50,9 @@ class MoreController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if let office = UserDefaults.standard.string(forKey: "office"){
             value.append(office)
         }
+        if let notificationTime = UserDefaults.standard.string(forKey: "notification time"){
+            value.append("before \(notificationTime) mins")
+        }
         
     }
     
@@ -62,7 +65,11 @@ class MoreController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UserInfoCell
-        cell.commonInit(labelText: label[indexPath.row], valueText: value[indexPath.row])
+        if indexPath.row != 4{
+            cell.commonInit(labelText: label[indexPath.row], valueText: value[indexPath.row], stepperBool: false)
+        }else{
+            cell.commonInit(labelText: label[indexPath.row], valueText: value[indexPath.row], stepperBool: true)
+        }
         return cell
     }
     

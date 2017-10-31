@@ -223,7 +223,7 @@ Try again after some time</string>
                                         </constraints>
                                     </imageView>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="XZW-Lh-Xiu">
-                                        <rect key="frame" x="36" y="197" width="283" height="201"/>
+                                        <rect key="frame" x="0.0" y="197" width="355" height="201"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="283" id="25r-EW-AWm"/>
@@ -249,6 +249,10 @@ Try again after some time</string>
                                         </connections>
                                     </button>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="XZW-Lh-Xiu" secondAttribute="trailing" id="ORC-c3-RUh"/>
+                                    <constraint firstItem="XZW-Lh-Xiu" firstAttribute="leading" secondItem="cVr-fC-cl3" secondAttribute="leading" id="tYN-hN-sjx"/>
+                                </constraints>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

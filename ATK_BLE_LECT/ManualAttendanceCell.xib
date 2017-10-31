@@ -19,14 +19,23 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="136.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="piW-Ny-xFp">
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="tGz-S4-lut">
                         <rect key="frame" x="15" y="8" width="290" height="120.5"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rN5-Fb-mXe">
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="Jmu-Q7-zzk">
                                 <rect key="frame" x="0.0" y="0.0" width="290" height="30"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dox-yN-Da9">
-                                        <rect key="frame" x="0.0" y="0.0" width="260" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="150" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="ZS3-aF-ls3"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="30 mins" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ku-gQ-fQQ">
+                                        <rect key="frame" x="188.5" y="0.0" width="61.5" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -39,6 +48,9 @@
                                         </constraints>
                                     </imageView>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="VnD-Dt-8vA" firstAttribute="leading" relation="lessThanOrEqual" secondItem="7ku-gQ-fQQ" secondAttribute="trailing" constant="10" id="JQW-we-HfR"/>
+                                </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vxq-dz-4dL">
                                 <rect key="frame" x="0.0" y="30" width="290" height="90.5"/>
@@ -57,24 +69,23 @@
                             </view>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="vxq-dz-4dL" firstAttribute="leading" secondItem="piW-Ny-xFp" secondAttribute="leading" id="5s2-zV-ajx"/>
-                            <constraint firstAttribute="trailing" secondItem="vxq-dz-4dL" secondAttribute="trailing" id="9Ft-7Z-opL"/>
-                            <constraint firstAttribute="trailing" secondItem="rN5-Fb-mXe" secondAttribute="trailing" id="CWb-Il-9in"/>
-                            <constraint firstItem="rN5-Fb-mXe" firstAttribute="leading" secondItem="piW-Ny-xFp" secondAttribute="leading" id="drO-Fd-GtZ"/>
+                            <constraint firstAttribute="trailing" secondItem="Jmu-Q7-zzk" secondAttribute="trailing" id="Bgh-jW-Q97"/>
+                            <constraint firstItem="Jmu-Q7-zzk" firstAttribute="leading" secondItem="tGz-S4-lut" secondAttribute="leading" id="yB9-SJ-tLo"/>
                         </constraints>
                     </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="piW-Ny-xFp" secondAttribute="bottom" constant="8" id="Lg7-KK-Tsq"/>
-                    <constraint firstItem="piW-Ny-xFp" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="YXT-qL-dZr"/>
-                    <constraint firstItem="piW-Ny-xFp" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="gD4-rd-gHk"/>
-                    <constraint firstAttribute="trailing" secondItem="piW-Ny-xFp" secondAttribute="trailing" constant="15" id="rhM-tm-Z41"/>
+                    <constraint firstItem="tGz-S4-lut" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="BtE-YP-bIx"/>
+                    <constraint firstAttribute="bottom" secondItem="tGz-S4-lut" secondAttribute="bottom" constant="8" id="ELN-Wm-t4X"/>
+                    <constraint firstItem="tGz-S4-lut" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="Wda-Ad-LVI"/>
+                    <constraint firstAttribute="trailing" secondItem="tGz-S4-lut" secondAttribute="trailing" constant="15" id="vcN-bU-eO5"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="picker" destination="Iol-Kp-CDn" id="VOu-XH-TEH"/>
                 <outlet property="statusIcon" destination="VnD-Dt-8vA" id="J8y-eu-SSM"/>
+                <outlet property="statusTime" destination="7ku-gQ-fQQ" id="mZY-gF-jsC"/>
                 <outlet property="student" destination="dox-yN-Da9" id="0nj-tf-sjw"/>
                 <outlet property="view" destination="vxq-dz-4dL" id="wUs-SE-JEN"/>
             </connections>

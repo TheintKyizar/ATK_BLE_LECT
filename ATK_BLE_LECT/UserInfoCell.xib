@@ -19,33 +19,40 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phone:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pLx-h5-QOd">
-                        <rect key="frame" x="8" y="11" width="54" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pLx-h5-QOd">
+                        <rect key="frame" x="8" y="11" width="93" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I39-3r-U5c">
-                        <rect key="frame" x="88" y="11" width="232" height="21"/>
+                        <rect key="frame" x="105" y="0.0" width="215" height="44"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minimumValue="5" maximumValue="20" stepValue="5" translatesAutoresizingMaskIntoConstraints="NO" id="cmp-QQ-INy">
+                        <rect key="frame" x="226" y="7" width="94" height="29"/>
+                    </stepper>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="I39-3r-U5c" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="8sS-VE-X5A"/>
-                    <constraint firstAttribute="trailing" secondItem="I39-3r-U5c" secondAttribute="trailing" id="Z9T-S7-cr9"/>
-                    <constraint firstItem="pLx-h5-QOd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="eX0-FR-VaT"/>
-                    <constraint firstItem="I39-3r-U5c" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="88" id="l4E-ff-MmQ"/>
-                    <constraint firstItem="pLx-h5-QOd" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="qOP-x9-Uqf"/>
+                    <constraint firstAttribute="trailing" secondItem="cmp-QQ-INy" secondAttribute="trailing" id="K6q-Vt-LHr"/>
+                    <constraint firstItem="pLx-h5-QOd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="NNt-0Y-UK4"/>
+                    <constraint firstItem="cmp-QQ-INy" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="ZFx-Ec-cjQ"/>
+                    <constraint firstAttribute="trailing" secondItem="I39-3r-U5c" secondAttribute="trailing" id="a9q-Qn-bXz"/>
+                    <constraint firstAttribute="bottom" secondItem="I39-3r-U5c" secondAttribute="bottom" constant="-0.5" id="hqY-W1-jO4"/>
+                    <constraint firstItem="I39-3r-U5c" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="105" id="p0g-v6-RLd"/>
+                    <constraint firstItem="I39-3r-U5c" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="py0-vB-OK4"/>
+                    <constraint firstItem="pLx-h5-QOd" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="yXg-z5-RJs"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="label" destination="pLx-h5-QOd" id="8ps-yv-zF8"/>
+                <outlet property="stepper" destination="cmp-QQ-INy" id="N0y-SK-ley"/>
                 <outlet property="value" destination="I39-3r-U5c" id="vcN-9A-PgY"/>
             </connections>
-            <point key="canvasLocation" x="-137" y="0.0"/>
+            <point key="canvasLocation" x="-267" y="-467"/>
         </tableViewCell>
     </objects>
 </document>
