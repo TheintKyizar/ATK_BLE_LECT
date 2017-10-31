@@ -202,7 +202,13 @@ Try again after some time</string>
                             <outlet property="delegate" destination="36k-rA-Y3V" id="Vpv-98-2Lx"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="eWK-r9-Sdt"/>
+                    <navigationItem key="navigationItem" id="eWK-r9-Sdt">
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="kcL-4j-sf3">
+                            <connections>
+                                <action selector="refreshButtonn:" destination="36k-rA-Y3V" id="nIw-VC-GAo"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S5Y-Oo-ZX6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -359,7 +365,13 @@ Try again after some time</string>
                             <outlet property="delegate" destination="xmX-V9-bBg" id="04c-NW-4WL"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="PHw-dT-Na4"/>
+                    <navigationItem key="navigationItem" id="PHw-dT-Na4">
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="IMr-1g-IHa">
+                            <connections>
+                                <action selector="refreshButton:" destination="xmX-V9-bBg" id="gZa-0M-v2R"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <segue destination="OzL-SP-kL3" kind="show" identifier="lesson_detail_segue" id="yzf-MB-MsY"/>
                     </connections>
