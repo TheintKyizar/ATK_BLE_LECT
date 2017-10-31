@@ -15,6 +15,7 @@ class HistoryController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        tableView.tableFooterView = UIView(frame:.zero)
         self.title = "History"
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false

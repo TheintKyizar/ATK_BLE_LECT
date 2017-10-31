@@ -8,18 +8,25 @@
 
 import UIKit
 
-class MoreController: UIViewController {
+class MoreController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var name_label: UILabel!
-    @IBOutlet weak var email_label: UILabel!
-    @IBOutlet weak var phone_label: UILabel!
-    @IBOutlet weak var office_label: UILabel!
+    var label = ["Name:","Email:","Phone:","Office:"]
+    var value = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
         setupLabels()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.tableFooterView = UIView(frame: .zero)
+        tableView.allowsSelection = false
+        
+        let nib = UINib(nibName: "UserInfoCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: "cell")
 
         // Do any additional setup after loading the view.
     }
@@ -32,16 +39,16 @@ class MoreController: UIViewController {
     private func setupLabels(){
         
         if let name = UserDefaults.standard.string(forKey: "name"){
-            name_label.text = name
+            value.append(name)
         }
         if let email = UserDefaults.standard.string(forKey: "email"){
-            email_label.text = email
+            value.append(email)
         }
         if let phone = UserDefaults.standard.string(forKey: "phone"){
-            phone_label.text = phone
+            value.append(phone)
         }
         if let office = UserDefaults.standard.string(forKey: "office"){
-            office_label.text = office
+            value.append(office)
         }
         
     }
@@ -52,6 +59,26 @@ class MoreController: UIViewController {
         self.performSegue(withIdentifier: "login_segue", sender: nil)
         
     }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UserInfoCell
+        cell.commonInit(labelText: label[indexPath.row], valueText: value[indexPath.row])
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return label.count
+    }
+    
+    
 
     /*
     // MARK: - Navigation

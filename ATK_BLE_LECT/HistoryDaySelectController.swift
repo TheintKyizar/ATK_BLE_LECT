@@ -16,7 +16,8 @@ class HistoryDaySelectController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        self.title = "\(String(describing: (lesson?.class_section)!))(\(String(describing: (lesson?.subject)!)) \(String(describing: (lesson?.catalog)!))))"
+        tableView.tableFooterView = UIView(frame:.zero)
+        self.title = "\(String(describing: (lesson?.class_section)!))(\(String(describing: (lesson?.subject)!)) \(String(describing: (lesson?.catalog)!)))"
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -31,7 +32,7 @@ class HistoryDaySelectController: UITableViewController {
     
     private func setup(){
         
-        classes = GlobalData.timetable.filter({$0.module_id == lesson?.module_id})
+        classes = GlobalData.timetable.filter({($0.module_id == lesson?.module_id) && ($0.class_section == lesson?.class_section)})
         classes.sort(by: {$0.weekday! < $1.weekday!})
     }
 

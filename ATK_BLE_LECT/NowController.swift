@@ -10,6 +10,7 @@ import UIKit
 import UserNotifications
 import CoreBluetooth
 import CoreLocation
+import Alamofire
 
 class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocationManagerDelegate, CBPeripheralManagerDelegate {
     
@@ -34,6 +35,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     override func viewDidLoad() {
         super.viewDidLoad()
         UNUserNotificationCenter.current().delegate = self
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"update time"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(checkTime), name: Notification.Name(rawValue:"update time"), object: nil)
         locationManager.delegate = self
         bluetoothManager.delegate = self
@@ -41,6 +43,10 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         setupImageView()
         checkTime()
         setupTimer() //Upcoming lessons
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 36b36bb988644e79e0396d8d2f5d9a55c86f12e8
     }
     
     override func didReceiveMemoryWarning() {
@@ -50,10 +56,13 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     
     @objc private func checkTime(){
         
+        self.checkUserInBackground()
         if checkLesson.checkCurrentLesson() != false{
             
-            //Currently has lesson
             lesson = GlobalData.currentLesson
+            /*Timer.after(1, {
+                self.broadcast()
+            })*/
             
         }else if checkLesson.checkNextLesson() != false{
             
@@ -69,6 +78,38 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         
     }
     
+    private func checkUserInBackground(){
+        
+        log.info("Checking user")
+        let parameters:[String:Any] = [
+            "username" : UserDefaults.standard.string(forKey: "username")!,
+            "password" : UserDefaults.standard.string(forKey: "password")!
+        ]
+        let spinnerIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        spinnerIndicator.center = CGPoint(x: self.view.frame.width/2,y: self.view.frame.height/2)
+        spinnerIndicator.color = UIColor.black
+        spinnerIndicator.startAnimating()
+        self.view.addSubview(spinnerIndicator)
+        Alamofire.request(Constant.URLLogin, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON { (response:DataResponse) in
+            let code = response.response?.statusCode
+            spinnerIndicator.removeFromSuperview()
+            log.info("Status code: " + String(describing: code))
+            if code == 200{
+                if let json = response.result.value as? [String:AnyObject]{
+                    UserDefaults.standard.set(json["token"], forKey: "token")
+                }
+            }else{
+                let alertView = UIAlertController(title: "Section time out", message: "Your sign in section is expired", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                    self.performSegue(withIdentifier: "sign_in_segue", sender: nil)
+                })
+                alertView.addAction(action)
+                self.present(alertView, animated: false, completion: nil)
+            }
+        }
+        
+    }
+    
     private func updateLabels(){
         
         if GlobalData.currentLesson.lesson_id != nil{
@@ -81,6 +122,12 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             imageView.isUserInteractionEnabled = true
             status_label.text = ""
             broadcast_label.text = "Broadcast My Beacon"
+            subject_label.isHidden = false
+            class_section_label.isHidden = false
+            time_label.isHidden = false
+            location_label.isHidden = false
+            broadcast_label.isHidden = false
+            status_label.isHidden = false
             
         }else if GlobalData.nextLesson.lesson_id != nil{
             
@@ -91,6 +138,11 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             imageView.image = #imageLiteral(resourceName: "bluetooth_off")
             status_label.text = GlobalData.nextLessonTime
             broadcast_label.isHidden = true
+            subject_label.isHidden = false
+            class_section_label.isHidden = false
+            time_label.isHidden = false
+            location_label.isHidden = false
+            status_label.isHidden = false
             
         }else{
             
@@ -101,6 +153,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             status_label.font = UIFont.systemFont(ofSize: 24)
             status_label.text = "No lesson today"
             broadcast_label.isHidden = true
+            imageView.isHidden = true
             
         }
         
@@ -123,16 +176,26 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     @objc private func broadcastSignal() {
         guard let statusBar = (UIApplication.shared.value(forKey: "statusBarWindow") as AnyObject).value(forKey: "statusBar") as? UIView
             else { return }
+        
+        if statusBar.subviews.count >= 3{
+            statusBar.subviews[2].removeFromSuperview()
+        }
+        
         if imageView.isAnimating{
             imageView.stopAnimating()
             statusBar.backgroundColor = UIColor.clear
             imageView.image = #imageLiteral(resourceName: "bluetooth_on")
-            //bluetoothManager.stopAdvertising()
+            bluetoothManager.stopAdvertising()
+            print("Stop broadcasting...")
             return
         }
 
         if GlobalData.currentLesson.lesson_id != nil {
             broadcast()
+<<<<<<< HEAD
+=======
+
+>>>>>>> 36b36bb988644e79e0396d8d2f5d9a55c86f12e8
         }
         
     }
@@ -181,15 +244,16 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             statusBar.backgroundColor = UIColor.white
             statusBar.invalidateIntrinsicContentSize()
             let view = UIView(frame: CGRect(x: 70, y: 0.7, width: 30, height: 4))
-            let imageview = UIImageView(image: #imageLiteral(resourceName: "blue_11"))
-            imageview.animationImages = [
+            let imageview1 = UIImageView(image: #imageLiteral(resourceName: "blue_11"))
+            imageview1.animationImages = [
                 #imageLiteral(resourceName: "blue_11"),
                 #imageLiteral(resourceName: "blue_22"),
                 #imageLiteral(resourceName: "blue_33")
             ]
-            imageview.animationDuration = 0.5
-            imageview.startAnimating()
+            imageview1.animationDuration = 0.5
+            imageview1.startAnimating()
             //view.addSubview(imageview)
+<<<<<<< HEAD
             view.addSubview(imageview)
             statusBar.addSubview(view)
             //broadcast()
@@ -205,7 +269,26 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
                 self.present(alert, animated: true, completion: nil)
                 
             }
+=======
+            view.addSubview(imageview1)
+            statusBar.addSubview(view)
             
+            imageView.animationImages = [
+                #imageLiteral(resourceName: "blue_1"),
+                #imageLiteral(resourceName: "blue_2"),
+                #imageLiteral(resourceName: "blue_3")
+            ]
+            imageView.animationDuration = 0.5
+            imageView.startAnimating()
+>>>>>>> 36b36bb988644e79e0396d8d2f5d9a55c86f12e8
+            
+            let major = UInt16(Int(UserDefaults.standard.string(forKey: "major")!)!)as CLBeaconMajorValue
+            let minor = UInt16(Int(UserDefaults.standard.string(forKey: "minor")!)!)as CLBeaconMinorValue
+            uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!) as UUID?
+            let beaconRegion = CLBeaconRegion(proximityUUID: uuid!, major: major, minor: minor, identifier: "\(String(describing: UserDefaults.standard.string(forKey: "lecturer_id")!))")
+            dataDictionary = beaconRegion.peripheralData(withMeasuredPower: nil)
+            bluetoothManager.startAdvertising(dataDictionary as?[String: Any])
+            print("broadcasting...")
         }
         else {
             let alert = UIAlertController(title: "Bluetooth Turn on Request", message: " Please turn on your bluetooth!", preferredStyle: UIAlertControllerStyle.alert)
