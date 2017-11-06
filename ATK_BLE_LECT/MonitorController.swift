@@ -16,6 +16,7 @@ class MonitorController: UITableViewController {
     var currentTag = Int()
     var selectedIndexPath = [IndexPath]()
     let spinnerController = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+    var students = [Student]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +24,7 @@ class MonitorController: UITableViewController {
         spinnerController.center = CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height/2)
         spinnerController.color = UIColor.black
         
-        GlobalData.students.removeAll()
+        students.removeAll()
         self.checkLessons()
         tableView.tableFooterView = UIView(frame: .zero)
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -39,7 +40,7 @@ class MonitorController: UITableViewController {
     
     @IBAction func refreshButtonPressed(_ sender: UIBarButtonItem) {
         self.checkLessons()
-        GlobalData.students.removeAll()
+        students.removeAll()
         self.tableView.reloadData()
     }
     
@@ -84,7 +85,7 @@ class MonitorController: UITableViewController {
     @objc private func refreshTable(){
         self.spinnerController.removeFromSuperview()
         self.spinnerController.stopAnimating()
-        //self.tableView.reloadData()
+        self.students = GlobalData.students
         UIView.transition(with: self.tableView, duration: 0.3, options: .transitionCrossDissolve, animations: {self.tableView.reloadData()}, completion: nil)
 
     }
@@ -98,12 +99,12 @@ class MonitorController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return GlobalData.students.count
+        return students.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ManualAttendanceCell
-        cell.commonInit(studentName: GlobalData.students[indexPath.row].name!, status: (GlobalData.studentStatus.filter({$0.student_id == GlobalData.students[indexPath.row].student_id}).first?.status)!, student_id: GlobalData.students[indexPath.row].student_id!)
+        cell.commonInit(studentName: students[indexPath.row].name!, status: (GlobalData.studentStatus.filter({$0.student_id == students[indexPath.row].student_id}).first?.status)!, student_id: students[indexPath.row].student_id!)
         
         let toolbar = UIToolbar()
         toolbar.sizeToFit()

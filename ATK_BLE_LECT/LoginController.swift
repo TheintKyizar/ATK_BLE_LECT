@@ -17,6 +17,11 @@ class LoginController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
+        
+        if let username = UserDefaults.standard.string(forKey: "username"){
+            usernameTxt.text = username
+        }
+        
         // Do any additional setup after loading the view.
     }
     
@@ -78,7 +83,7 @@ class LoginController: UIViewController {
                     Constant.major = JSON["major"] as! UInt16
                     Constant.minor = JSON["minor"] as! UInt16
                 
-                    UserDefaults.standard.set(Constant.lecturer_id, forKey: "lecturer_id")
+                    UserDefaults.standard.set(Constant.lecturer_id, forKey: "id")
                     UserDefaults.standard.set(Constant.name, forKey: "name")
                     UserDefaults.standard.set(Constant.token, forKey: "token")
                     UserDefaults.standard.set(Constant.major, forKey: "major")

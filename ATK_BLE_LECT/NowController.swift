@@ -58,6 +58,9 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     
     @objc private func checkTime(){
         
+        let date = Date()
+        self.title = format.formateDate(format: "EEE(dd MMM)", date: date)
+        
         self.checkUserInBackground()
         if checkLesson.checkCurrentLesson() != false{
             
