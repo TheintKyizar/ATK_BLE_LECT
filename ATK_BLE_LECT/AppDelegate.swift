@@ -88,10 +88,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             readString = try String(contentsOf: fileURL)
         }
         catch let error as NSError {
-            print("Failed to read file")
-            print(error)
+            log.info("Failed to read file")
+            log.info(error)
         }
-        print("@@@@@@@contents of the file \(readString)")
+        log.info("@@@@@@@contents of the file \(readString)")
         
         return true
     }
@@ -99,7 +99,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
         switch state {
         case .inside:
-            print("inside \(region.identifier)")
+            log.info("inside \(region.identifier)")
             regionStatus[region.identifier] = "inside"
             if region.identifier == "common"{
                 commonFlag = true
@@ -110,17 +110,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             }else{
                 commonFlag = false
                 Constant.identifier = Int(region.identifier)!
-                print("Entered specific")
+                log.info("Entered specific")
                 takeAttendance()
                 NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"taken+\(Constant.identifier)"), object: nil)
                 NotificationCenter.default.addObserver(self, selector: #selector(takensuccess(region:)), name: Notification.Name(rawValue: "taken+\(Constant.identifier)"), object: region)
                 
             }
         case .outside:
-            print("Outside bg \(region.identifier)")
+            log.info("Outside bg \(region.identifier)")
             regionStatus[region.identifier] = "outside"
         case .unknown:
-            print("UNKNOWN")
+            log.info("UNKNOWN")
             
         }
     }
@@ -166,8 +166,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             locationManager.stopMonitoring(for: i)
         }
         
-        print("stop monitoring")
-        print(locationManager.monitoredRegions.count)
+        log.info("stop monitoring")
+        log.info(locationManager.monitoredRegions.count)
     }
     
     func requestStateForMonitoredRegions() {
@@ -192,7 +192,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 Timer.after(5){
                     self.requestStateForMonitoredRegions()
                 }
-                print("refreshHere")
+                log.info("refreshHere")
             }
         }
     }
@@ -206,16 +206,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
-        print("Started monitoring \(region.identifier) region")
+        log.info("Started monitoring \(region.identifier) region")
     }
     func locationManager(_ manager: CLLocationManager, didStopMonitoringFor region: CLRegion) {
         
-        print("Stop monitoring \(region.identifier) region")
+        log.info("Stop monitoring \(region.identifier) region")
         
     }
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         if (region is CLBeaconRegion) {
-            print("did exit region!!! \(region.identifier)")
+            log.info("did exit region!!! \(region.identifier)")
             if region.identifier != "common"{
                 if regionStatus[region.identifier] == "inside"{
                     regionStatus[region.identifier] = "outside"
@@ -228,7 +228,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         if (region is CLBeaconRegion) {
-            print("did enter region!!! \(region.identifier)")
+            log.info("did enter region!!! \(region.identifier)")
         }
         
     }
@@ -285,9 +285,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             Constant.currentGroup = 1
             for i in 0...GlobalData.lateStudents.count-1{
                 if count < studentsLimit{
-                    print(uuid ?? "")
-                    print(GlobalData.lateStudents[i].minor ?? "")
-                    print(GlobalData.lateStudents[i].major ?? "")
+                    log.info(uuid ?? "")
+                    log.info(GlobalData.lateStudents[i].minor ?? "")
+                    log.info(GlobalData.lateStudents[i].major ?? "")
                     let newRegion = CLBeaconRegion(proximityUUID: uuid!, major:UInt16(GlobalData.lateStudents[i].major!), minor: UInt16(GlobalData.lateStudents[i].minor!), identifier: String(GlobalData.lateStudents[i].student_id!))
                     if i<19{
                         locationManager.startMonitoring(for: newRegion)
@@ -301,9 +301,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     private func refreshStudents(){
-        print("Refreshing")
-        print("Current group \(Constant.currentGroup)")
-        print(Constant.studentGroup)
+        log.info("Refreshing")
+        log.info("Current group \(Constant.currentGroup)")
+        log.info(Constant.studentGroup)
         self.stopMonitoring()
         let state = Constant.studentGroup
         var check = Bool()
@@ -320,7 +320,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 }
             }
         }
-        print("Next group \(Constant.currentGroup)")
+        log.info("Next group \(Constant.currentGroup)")
         let uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!)as UUID?
         let start = (Constant.currentGroup - 1)*studentsLimit
         if (GlobalData.lateStudents.count - start) > studentsLimit{
@@ -339,7 +339,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         //locationManager.requestState(for: newRegion)
     }
     func takeAttendance() {
-        print(" bg Inside \(Constant.identifier)");
+        log.info(" bg Inside \(Constant.identifier)");
         Constant.token = UserDefaults.standard.string(forKey: "token")!
         Constant.lecturer_id = UserDefaults.standard.integer(forKey: "lecturer_id")
         
@@ -350,7 +350,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             ]
         let parameters: [String: Any] = ["data": [para1]]
         
-        print(parameters)
+        log.info(parameters)
         let headers: HTTPHeaders = [
             "Authorization": "Bearer " + Constant.token,
             "Content-Type": "application/json"
@@ -360,11 +360,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             
             let statusCode = response.response?.statusCode
             if (statusCode == 200){
-                print("Attendance taken successful")
+                log.info("Attendance taken successful")
             }
             if let data = response.result.value{
-                print("///////////////result below////////////")
-                print(data)
+                log.info("///////////////result below////////////")
+                log.info(data)
             }
             
         }
@@ -374,12 +374,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     
     func applicationWillResignActive(_ application: UIApplication) {
-        print("application will resign active")
+        log.info("application will resign active")
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
     }
     func applicationWillEnterBackground(_ application: UIApplication) {
-        print("will!!!!1")
+        log.info("will!!!!1")
     }
     func applicationDidEnterBackground(_ application: UIApplication) {
         registerBackgroundTask()
@@ -387,7 +387,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     @objc func abc(){
-        print("Yes!!")
+        log.info("Yes!!")
     }
     
     func registerBackgroundTask() {
@@ -416,7 +416,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        print("application will terminate")
+        log.info("application will terminate")
     }
     
     private func loadData(){

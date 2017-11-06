@@ -101,7 +101,7 @@ class HistoryLessonController: UITableViewController {
         if let cell = tableView.cellForRow(at: indexPath) as? ManualAttendanceCell{
             /*cell.view.isHidden = true
             status.filter({$0.student_id! == students[row].student_id!}).first?.status = checkStatus(status: cell.selectedValue)
-            print(cell.student_id)*/
+            log.info(cell.student_id)*/
             self.view.addSubview(spinnerController)
             spinnerController.startAnimating()
             tableView.allowsSelection = false

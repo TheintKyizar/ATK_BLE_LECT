@@ -47,17 +47,17 @@ class MonitorController: UITableViewController {
         if checkLesson.checkCurrentLesson() == false{
             if checkLesson.checkNextLesson() == false{
                 //No lesson today
-                print("No lesson today")
+                log.info("No lesson today")
                 self.title = "No lesson today"
             }else{
                 //Display next lesson infos
-                print("Next lesson")
+                log.info("Next lesson")
                 self.title = "Next Lesson"
                 lesson = GlobalData.nextLesson
             }
         }else{
             //current lesson
-            print("Current lesson")
+            log.info("Current lesson")
             lesson = GlobalData.currentLesson
             self.title = (lesson?.subject)! + " " + (lesson?.catalog)!
             let nlesson = GlobalData.weeklyTimetable.filter({$0.lesson_id! == lesson?.lesson_id!}).first
@@ -187,7 +187,7 @@ class MonitorController: UITableViewController {
         if let cell = tableView.cellForRow(at: indexPath) as? ManualAttendanceCell{
             /*cell.view.isHidden = true
              status.filter({$0.student_id! == students[row].student_id!}).first?.status = checkStatus(status: cell.selectedValue)
-             print(cell.student_id)*/
+             log.info(cell.student_id)*/
             self.view.addSubview(spinnerController)
             spinnerController.startAnimating()
             tableView.allowsSelection = false

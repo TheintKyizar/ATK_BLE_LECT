@@ -66,7 +66,7 @@ class LoginController: UIViewController {
             let code = response.response?.statusCode
             if code == 200{
                 
-                print("Successfully logged in")
+                log.info("Successfully logged in")
                 UserDefaults.standard.set(self.usernameTxt.text!, forKey: "username")
                 UserDefaults.standard.set(self.passwordTxt.text!, forKey: "password")
                 
@@ -109,10 +109,10 @@ class LoginController: UIViewController {
                 
             }else if code == 400{
                 alertController.dismiss(animated: false, completion: nil)
-                print("Login failed")
+                log.info("Login failed")
             }else{
                 alertController.dismiss(animated: false, completion: nil)
-                print("Server busy...")
+                log.info("Server busy...")
             }
             
         }
@@ -163,7 +163,7 @@ class LoginController: UIViewController {
                     GlobalData.timetable.append(newLesson)
                 }
                 NSKeyedArchiver.archiveRootObject(GlobalData.timetable, toFile: filePath.timetablePath)
-                print("Done loading timetable")
+                log.info("Done loading timetable")
                 alamofire.loadWeeklyTimetable()
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshTable"), object: nil)
                 self.dismiss(animated: false, completion: nil)

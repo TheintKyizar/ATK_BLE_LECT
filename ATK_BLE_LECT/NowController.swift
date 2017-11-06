@@ -65,11 +65,11 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             let lesson_id = (lesson?.lesson_id)!
             if UserDefaults.standard.string(forKey: "currentLesson") != nil{
                 if UserDefaults.standard.string(forKey: "currentLesson")! != String(describing:lesson_id){
-                    print(UserDefaults.standard.string(forKey: "currentLesson")!)
-                    print(String(describing:lesson?.lesson_id!))
+                    log.info(UserDefaults.standard.string(forKey: "currentLesson")!)
+                    log.info(String(describing:lesson?.lesson_id!))
                 }
             }else{
-                print("First lesson")
+                log.info("First lesson")
                 UserDefaults.standard.set(lesson?.lesson_id, forKey: "currentLesson")
             }
             /*Timer.after(1, {
@@ -198,7 +198,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             statusBar.backgroundColor = UIColor.clear
             imageView.image = #imageLiteral(resourceName: "bluetooth_on")
             bluetoothManager.stopAdvertising()
-            print("Stop broadcasting...")
+            log.info("Stop broadcasting...")
             return
         }
 
@@ -251,7 +251,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         case .unsupported: status = "Bluetooth Status: \n Not Supported"
         default: status = "Bluetooth Status: \n Unknown"
         }
-        print(status)
+        log.info(status)
     }
     
     func broadcast() {
@@ -305,7 +305,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             let beaconRegion = CLBeaconRegion(proximityUUID: uuid!, major: major, minor: minor, identifier: "\(String(describing: UserDefaults.standard.string(forKey: "lecturer_id")!))")
             dataDictionary = beaconRegion.peripheralData(withMeasuredPower: nil)
             bluetoothManager.startAdvertising(dataDictionary as?[String: Any])
-            print("broadcasting...")
+            log.info("broadcasting...")
         }
         else {
             let alert = UIAlertController(title: "Bluetooth Turn on Request", message: " Please turn on your bluetooth!", preferredStyle: UIAlertControllerStyle.alert)
@@ -333,7 +333,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     }
     
     deinit {
-        print("deinit is called")
+        log.info("deinit is called")
         NotificationCenter.default.removeObserver(self)
     }
     
