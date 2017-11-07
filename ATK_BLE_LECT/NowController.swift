@@ -213,7 +213,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     }
     
     @objc func setupTimer(){
-        if UserDefaults.standard.string(forKey: "norification time") == nil{
+        if UserDefaults.standard.string(forKey: "notification time") == nil{
             UserDefaults.standard.set("10", forKey: "notification time")
         }
         var date = format.formateDate(format: "HH:mm:ss", date: Date())
@@ -291,7 +291,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             let major = UInt16(Int(UserDefaults.standard.string(forKey: "major")!)!)as CLBeaconMajorValue
             let minor = UInt16(Int(UserDefaults.standard.string(forKey: "minor")!)!)as CLBeaconMinorValue
             uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!) as UUID?
-            let beaconRegion = CLBeaconRegion(proximityUUID: uuid!, major: major, minor: minor, identifier: "\(String(describing: UserDefaults.standard.string(forKey: "lecturer_id")!))")
+            let beaconRegion = CLBeaconRegion(proximityUUID: uuid!, major: major, minor: minor, identifier: "\(String(describing: UserDefaults.standard.string(forKey: "id")!))")
             dataDictionary = beaconRegion.peripheralData(withMeasuredPower: nil)
             bluetoothManager.startAdvertising(dataDictionary as?[String: Any])
             print("broadcasting...")

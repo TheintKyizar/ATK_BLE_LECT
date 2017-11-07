@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-class ChangePasswordController: UIViewController {
+class ChangePasswordController: UIViewController{
 
     @IBOutlet weak var oldTF: UITextField!
     @IBOutlet weak var newTF: UITextField!
@@ -20,12 +20,68 @@ class ChangePasswordController: UIViewController {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
         trackPasswordLabel.isHidden = true
+        setupTextFields()
         // Do any additional setup after loading the view.
+    }
+    
+    private func setupTextFields(){
+        oldTF.delegate = self
+        newTF.delegate = self
+        confirmTF.delegate = self
+        
+        oldTF.returnKeyType = .done
+        newTF.returnKeyType = .done
+        confirmTF.returnKeyType = .done
+        
+        oldTF.addTarget(self, action: #selector(oldTFDonePressed), for: .editingDidEnd)
+        newTF.addTarget(self, action: #selector(newTFDonePressed), for: .editingDidEnd)
+        
+    }
+    
+    @objc private func oldTFDonePressed(){
+        newTF.becomeFirstResponder()
+    }
+    
+    @objc private func newTFDonePressed(){
+        confirmTF.becomeFirstResponder()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    @objc func keyboardNotification(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            let endFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+            let duration:TimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+            let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
+            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
+            let animationCurve:UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
+            if (endFrame?.origin.y)! >= UIScreen.main.bounds.size.height {
+                self.keyboardHeightLayoutConstraint?.constant = 30
+            } else {
+                self.keyboardHeightLayoutConstraint?.constant = endFrame?.size.height ?? 0.0
+            }
+            UIView.animate(withDuration: duration,
+                           delay: TimeInterval(0),
+                           options: animationCurve,
+                           animations: { self.view.layoutIfNeeded() },
+                           completion: nil)
+        }
+    }
+    
+    private func removeKeyBoardNotification(){
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+    }
+    
+    private func registerKeyBoardNotification(){
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
     
     @IBAction func confirmPressed(_ sender: UIButton) {

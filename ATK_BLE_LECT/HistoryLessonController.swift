@@ -93,27 +93,43 @@ class HistoryLessonController: UITableViewController {
     
     @objc func doneButtonPressed(_ sender:UIButton){
         
-        self.view.addSubview(spinnerController)
-        spinnerController.startAnimating()
         let row = sender.tag
         currentTag = row
         let indexPath = IndexPath(row: sender.tag, section: 0)
         if let cell = tableView.cellForRow(at: indexPath) as? ManualAttendanceCell{
-            /*cell.view.isHidden = true
-            status.filter({$0.student_id! == students[row].student_id!}).first?.status = checkStatus(status: cell.selectedValue)
-            print(cell.student_id)*/
-            self.view.addSubview(spinnerController)
-            spinnerController.startAnimating()
-            tableView.allowsSelection = false
             NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done updating status"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(doneUpdatingStatus), name: Notification.Name(rawValue:"done updating status"), object: nil)
-            alamofire.updateStatus(lesson_date: self.lesson_date!, student_id: students[sender.tag].student_id!, status: checkStatus(status: cell.selectedValue))
+            NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"cancel updating status"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(cancelUpdatingStatus), name: Notification.Name(rawValue:"cancel updating status"), object: nil)
+            if cell.selectedValue != "Present"{
+                let popOverVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ReasonPopUp") as! PopupController
+                popOverVC.lesson_date = self.lesson_date!
+                popOverVC.student_id = students[sender.tag].student_id!
+                popOverVC.status = checkStatus(status: cell.selectedValue)
+                self.present(popOverVC, animated: true, completion: nil)
+            }else{
+                self.view.addSubview(spinnerController)
+                spinnerController.startAnimating()
+                alamofire.updateStatus(lesson_date: self.lesson_date!, student_id: students[sender.tag].student_id!, status: checkStatus(status: cell.selectedValue))
+            }
+        }
+    }
+    
+    @objc func cancelUpdatingStatus(){
+        spinnerController.removeFromSuperview()
+        spinnerController.stopAnimating()
+        let indexPath = IndexPath(row: currentTag, section: 0)
+        if let cell = tableView.cellForRow(at: indexPath) as? ManualAttendanceCell{
+            cell.view.isHidden = true
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.tableView.reloadData()
         }
     }
     
     @objc func doneUpdatingStatus(){
-        self.spinnerController.removeFromSuperview()
-        tableView.allowsSelection = true
+        spinnerController.removeFromSuperview()
+        spinnerController.stopAnimating()
         let indexPath = IndexPath(row: currentTag, section: 0)
         if let cell = tableView.cellForRow(at: indexPath) as? ManualAttendanceCell{
             cell.view.isHidden = true

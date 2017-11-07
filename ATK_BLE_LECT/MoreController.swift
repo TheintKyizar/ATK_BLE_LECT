@@ -16,6 +16,7 @@ class MoreController: UITableViewController {
     @IBOutlet weak var office: UILabel!
     @IBOutlet weak var notification: UILabel!
     @IBOutlet weak var stepper: UIStepper!
+    @IBOutlet weak var mView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,41 +34,66 @@ class MoreController: UITableViewController {
     }
 
     // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let header = view as? UITableViewHeaderFooterView else {return}
+        header.textLabel?.textColor = UIColor.darkGray
+        header.backgroundView?.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1)
+        header.textLabel?.font = UIFont.systemFont(ofSize: 15)
+        // header.backgroundColor = UIColor.white
+        
+        let borderTop = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 0.5))
+        borderTop.backgroundColor = UIColor.lightGray
+        
+        let borderBottom = UIView(frame: CGRect(x: 0, y: header.bounds.height, width: tableView.bounds.size.width, height: 0.5))
+        borderBottom.backgroundColor = UIColor.lightGray
+        header.addSubview(borderBottom)
+        
+        if section > 0 {
+            header.addSubview(borderTop)
+        }
     }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        if indexPath.row == 1{
+            cell.separatorInset = UIEdgeInsets.zero
+        }
+        
     }
     
     private func setup(){
+        self.tableView.sectionHeaderHeight = 40
+        self.tableView.allowsSelection = false
+        tableView.tableFooterView = UIView(frame: .zero)
+        tableView.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1)
+        mView.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1)
+        
         let stepperValue = UserDefaults.standard.string(forKey: "notification time")
+        stepper.addTarget(self, action: #selector(stepperValueChanged(_:)), for: .valueChanged)
         notification.text = stepperValue! + " mins"
         stepper.value = Double(stepperValue!)!
         stepper.minimumValue = 5
         stepper.maximumValue = 20
         stepper.stepValue = 5
-        if let name = UserDefaults.standard.string(forKey: "username"){
-            self.name.text = name
+        
+        if let username = UserDefaults.standard.string(forKey: "username"){
+            self.name.text = username
         }else{
             self.name.text = "Not set"
         }
-        if let email = UserDefaults.standard.string(forKey: "email"){
-            self.email.text = email
+        if UserDefaults.standard.string(forKey: "email") != nil{
+            self.email.text = UserDefaults.standard.string(forKey: "email")
         }else{
             self.email.text = "Not set"
         }
-        if let phone = UserDefaults.standard.string(forKey: "phone"){
-            self.phone.text = phone
+        if UserDefaults.standard.string(forKey: "phone") != nil{
+            self.phone.text = UserDefaults.standard.string(forKey: "phone")
         }else{
             self.phone.text = "Not set"
         }
-        if let office = UserDefaults.standard.string(forKey: "office"){
-            self.office.text = office
+        if UserDefaults.standard.string(forKey: "office") != nil{
+            self.office.text = UserDefaults.standard.string(forKey: "office")
         }else{
             self.office.text = "Not set"
         }
@@ -78,10 +104,6 @@ class MoreController: UITableViewController {
         notification.text = "\(stepperValue) mins"
         UserDefaults.standard.set(stepperValue, forKey: "notification time")
         NotificationCenter.default.post(name: Notification.Name(rawValue:"stepper changed"), object: nil)
-    }
-    
-    @IBAction func changePasswordPressed(_ sender: UIButton) {
-        
     }
     
     @IBAction func signOutPressed(_ sender: UIButton) {
