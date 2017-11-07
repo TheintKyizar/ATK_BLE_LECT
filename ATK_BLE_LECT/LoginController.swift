@@ -80,15 +80,19 @@ class LoginController: UIViewController, UITextFieldDelegate {
     
     
     @IBAction func LoginPressed(_ sender: UIButton) {
-        
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
         if !(usernameTxt.text?.isEmpty)! && !(passwordTxt.text?.isEmpty)!{
-            
             //Login
-            self.login()
+            if appdelegate.isInternetAvailable() == true {
+                self.login()
+            }
+            else {
+                displayAlert(title: "LOGIN FAILED", message: "Please make sure that your phone has internet connection")
+            }
             
         }else{
-            
             //Text fields empty
+             displayAlert(title: "Missing infomations", message: "Both username and password are required")
             
         }
         
@@ -249,4 +253,10 @@ extension UIViewController {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
-}
+    func displayAlert(title:String,message:String){
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+        
+    }}

@@ -259,7 +259,9 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     }
     
     func broadcast() {
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
         if bluetoothManager.state == .poweredOn {
+            if appdelegate.isInternetAvailable() == true {
             guard let statusBar = (UIApplication.shared.value(forKey: "statusBarWindow") as AnyObject).value(forKey: "statusBar") as? UIView
                 else {
                     return
@@ -295,16 +297,15 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             dataDictionary = beaconRegion.peripheralData(withMeasuredPower: nil)
             bluetoothManager.startAdvertising(dataDictionary as?[String: Any])
             print("broadcasting...")
+            }
+            else {
+                 displayAlert(title: "Internet turn on request", message: "Please make sure that your phone has internet connection")
+            }
         }
         else {
             let alert = UIAlertController(title: "Bluetooth Turn on Request", message: " AME would like to turn on your bluetooth!", preferredStyle: UIAlertControllerStyle.alert)
             // add the actions (buttons)
-            alert.addAction(UIAlertAction(title: "Allow", style: UIAlertActionStyle.default, handler: { action in
-                self.turnOnBlt()
-                self.broadcast()
-                self.dismiss(animated: true, completion: nil)
-            }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
             
         }

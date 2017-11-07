@@ -14,6 +14,8 @@ import SwiftyTimer
 import SwiftyBeaver
 import UserNotifications
 let log = SwiftyBeaver.self
+import Foundation
+import SystemConfiguration
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
@@ -132,7 +134,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             
         }else{
             
-            endBackgroundTask()
+           // endBackgroundTask()
             
         }
         
@@ -219,6 +221,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     func loadLateStudents() {
+        print("loading late students")
         GlobalData.lateStudents.removeAll()
         GlobalData.studentStatus.removeAll()
         let lesson_date = LessonDate()
@@ -235,6 +238,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
 
     private func getLateStudents() {
+        print("getting late students")
         if GlobalData.studentStatus.count > 0 {
             for i in 0...GlobalData.studentStatus.count-1 {
                 if GlobalData.students[i].student_id != nil{
@@ -354,7 +358,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     func applicationWillResignActive(_ application: UIApplication) {
         print("application will resign active")
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+          // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
     }
     func applicationWillEnterBackground(_ application: UIApplication) {
@@ -376,7 +380,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
         assert(backgroundTask != UIBackgroundTaskInvalid)
     }
-    
+    func isInternetAvailable() -> Bool
+    {
+        var zeroAddress = sockaddr_in()
+        zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
+        zeroAddress.sin_family = sa_family_t(AF_INET)
+        
+        let defaultRouteReachability = withUnsafePointer(to: &zeroAddress) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {zeroSockAddress in
+                SCNetworkReachabilityCreateWithAddress(nil, zeroSockAddress)
+            }
+        }
+        
+        var flags = SCNetworkReachabilityFlags()
+        if !SCNetworkReachabilityGetFlags(defaultRouteReachability!, &flags) {
+            return false
+        }
+        let isReachable = flags.contains(.reachable)
+        let needsConnection = flags.contains(.connectionRequired)
+        return (isReachable && !needsConnection)
+    }
     func endBackgroundTask() {
         log.info("Background task ended.")
         UIApplication.shared.endBackgroundTask(backgroundTask)

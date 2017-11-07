@@ -39,9 +39,15 @@ class MonitorController: UITableViewController {
     }
     
     @IBAction func refreshButtonPressed(_ sender: UIBarButtonItem) {
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        if appdelegate.isInternetAvailable() == true {
         self.checkLessons()
         students.removeAll()
         self.tableView.reloadData()
+        }
+        else {
+            displayAlert(title: "Internet turn on request", message: "Please make sure that your phone has internet connection")
+        }
     }
     
     private func checkLessons(){
