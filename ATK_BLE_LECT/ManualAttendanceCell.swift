@@ -38,7 +38,7 @@ class ManualAttendanceCell: UITableViewCell, UIPickerViewDelegate, UIPickerViewD
         student.text = studentName
         statusIcon.image = checkStatus(status: status)
         if status > 0 {
-            statusTime.text = String(describing: status) + " mins"
+            statusTime.text = String(describing: status/60) + " mins"
             statusTime.isHidden = false 
         }else{
             statusTime.isHidden = true

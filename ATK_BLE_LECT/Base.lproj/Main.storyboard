@@ -495,7 +495,7 @@ Try again after some time</string>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
                                     <navigationItem title="Title" id="jkZ-59-KHH">
-                                        <barButtonItem key="leftBarButtonItem" style="plain" systemItem="cancel" id="9mq-ra-2sV">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="9mq-ra-2sV">
                                             <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
                                                 <action selector="cancelButtonPressed:" destination="fA9-DN-p8Q" id="AxL-Th-ONi"/>

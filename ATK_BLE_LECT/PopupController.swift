@@ -39,6 +39,8 @@ class PopupController: UIViewController {
     @IBAction func submitButtonPressed(_ sender: UIButton) {
         NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done updating status"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(doneUpdatingStatus), name: Notification.Name(rawValue:"done updating status"), object: nil)
+        //change mins to seconds
+        status = status! * 60
         alamofire.updateStatus(lesson_date: self.lesson_date!, student_id: student_id!, status: status!)
         
     }

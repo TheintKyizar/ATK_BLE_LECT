@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 class MoreController: UITableViewController {
 
@@ -107,6 +108,7 @@ class MoreController: UITableViewController {
     }
     
     @IBAction func signOutPressed(_ sender: UIButton) {
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         UserDefaults.standard.removeObject(forKey: "id")
         self.performSegue(withIdentifier: "login_segue", sender: nil)
     }

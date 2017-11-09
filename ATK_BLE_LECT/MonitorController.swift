@@ -17,6 +17,8 @@ class MonitorController: UITableViewController {
     var selectedIndexPath = [IndexPath]()
     let spinnerController = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     var students = [Student]()
+    var timer:Timer?
+    var lastStatus:[Status]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,9 +73,9 @@ class MonitorController: UITableViewController {
             self.view.addSubview(spinnerController)
             spinnerController.startAnimating()
             
-            alamofire.loadStudentsAndStatus(lesson: lesson!, lesson_date: mlesson_date)
-            NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "done loading students and status"), object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading students and status"), object: nil)
+            alamofire.loadStudentsAndStatus(lesson: lesson!, lesson_date: mlesson_date, returnString: "checkLesson")
+            NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "checkLesson"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "checkLesson"), object: nil)
         }
     }
 
@@ -83,6 +85,7 @@ class MonitorController: UITableViewController {
     }
     
     @objc private func refreshTable(){
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "checkLesson"), object: nil)
         self.spinnerController.removeFromSuperview()
         self.spinnerController.stopAnimating()
         self.students = GlobalData.students
@@ -161,6 +164,44 @@ class MonitorController: UITableViewController {
                 spinnerController.startAnimating()
                 alamofire.updateStatus(lesson_date: self.lesson_date!, student_id: students[sender.tag].student_id!, status: checkStatus(status: cell.selectedValue))
             }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.startRefreshing()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.stopRefreshing()
+    }
+    
+    @objc func refreshTableLoop(){
+        for i in 0...GlobalData.studentStatus.count-1{
+            if lastStatus?.filter({$0.student_id == GlobalData.studentStatus[i].student_id}).first?.status != GlobalData.studentStatus[i].status{
+                let indexPath = IndexPath(row: i, section: 0)
+                tableView.reloadRows(at: [indexPath], with: .automatic)
+            }
+        }
+        lastStatus = GlobalData.studentStatus
+    }
+    
+    private func startRefreshing(){
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "refreshLoop"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshTableLoop), name: Notification.Name(rawValue: "refreshLoop"), object: nil)
+        if timer == nil{
+            timer = Timer.every(3, {
+                //refresh status here
+                self.lastStatus = GlobalData.studentStatus
+                alamofire.loadStudentsAndStatus(lesson: self.lesson!, lesson_date: self.lesson_date!, returnString: "refreshLoop")
+            })
+        }
+    }
+    
+    private func stopRefreshing(){
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "refreshLoop"), object: nil)
+        if timer != nil{
+            timer?.invalidate()
+            timer = nil
         }
     }
     
