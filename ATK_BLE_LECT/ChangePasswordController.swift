@@ -88,7 +88,7 @@ class ChangePasswordController: UIViewController{
             self.present(alertController, animated: false, completion: nil)
             Alamofire.request(Constant.URLchangepass, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON(completionHandler: { (response:DataResponse) in
                 let code = (response.response?.statusCode)!
-                log.info(code)
+                log.info("Change Password Status Code: \(code)")
                 alertController.dismiss(animated: false, completion: nil)
                 switch code{
                 case 200:

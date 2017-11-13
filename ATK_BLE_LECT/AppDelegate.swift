@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     var window: UIWindow?
     var backgroundTask:UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
     var locationManager = CLLocationManager()
-    let studentsLimit = 2
+    let studentsLimit = 19
     var regionStatus = [String:String]()
     var flag = Bool()
     var commonFlag = Bool()
@@ -64,20 +64,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         log.addDestination(console)
         log.addDestination(file)
         log.addDestination(cloud)
-        //Do log
-        /*log.verbose("not so important")  // prio 1, VERBOSE in silver
-        log.debug("something to debug")  // prio 2, DEBUG in green
-        log.info("a nice information")   // prio 3, INFO in blue
-        log.warning("oh no, that won’t be good")  // prio 4, WARNING in yellow
-        log.error("ouch, an error did occur!")  // prio 5, ERROR in red
-        
-        // log anything!
-        log.verbose(123)
-        log.info(-123.45678)
-        log.warning(Date())
-        log.error(["I", "like", "logs!"])
-        log.error(["name": "Mr Beaver", "address": "7 Beaver Lodge"])*/
-        
         //read the swiftybeaver.log file 
         var readString = ""
         //var fileURL = "~/Library/Caches/swiftybeaver.log"
@@ -181,7 +167,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
         
         log.info("stop monitoring")
-        log.info("monnitored regions: \(locationManager.monitoredRegions.count)")
+        log.info("monitored regions: \(locationManager.monitoredRegions.count)")
     }
     
     func requestStateForMonitoredRegions() {
@@ -224,11 +210,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
-        log.info("Started monitoring \(region.identifier) region")
+        log.debug("Started monitoring \(region.identifier) region")
     }
     func locationManager(_ manager: CLLocationManager, didStopMonitoringFor region: CLRegion) {
         
-        log.info("Stop monitoring \(region.identifier) region")
+        log.debug("Stop monitoring \(region.identifier) region")
         
     }
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
@@ -296,6 +282,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     func monitor() {
         let uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!)as UUID?
         if GlobalData.lateStudents.count > 0{
+            log.info("Lesson uuid: " + String(describing: uuid!))
             let newRegion = CLBeaconRegion(proximityUUID: uuid!, identifier: "common")
             var count = 0
             locationManager.startMonitoring(for: newRegion)
@@ -309,9 +296,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             Constant.currentGroup = 1
             for i in 0...GlobalData.lateStudents.count-1{
                 if count < studentsLimit{
-                    log.info("uuid: " + String(describing: uuid))
-                    log.info("minor: " + String(describing: GlobalData.lateStudents[i].minor))
-                    log.info("major: " + String(describing: GlobalData.lateStudents[i].major))
+                    log.info("Student Name: " + String(describing: GlobalData.lateStudents[i].name!))
+                    log.info("Student Id: " + String(describing: GlobalData.lateStudents[i].student_id!))
+                    log.info("minor: " + String(describing: GlobalData.lateStudents[i].minor!))
+                    log.info("major: " + String(describing: GlobalData.lateStudents[i].major!))
+                  
                     let newRegion = CLBeaconRegion(proximityUUID: uuid!, major:UInt16(GlobalData.lateStudents[i].major!), minor: UInt16(GlobalData.lateStudents[i].minor!), identifier: String(GlobalData.lateStudents[i].student_id!))
                     if i<19{
                         locationManager.startMonitoring(for: newRegion)
@@ -325,7 +314,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     private func refreshStudents(){
-        log.info("Refreshing")
+        log.info("Refreshing Student lists")
         log.info("Current group: \(Constant.currentGroup)")
         log.info("Total group: \(Constant.studentGroup)")
         self.stopMonitoring()
@@ -397,7 +386,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     
     func applicationWillResignActive(_ application: UIApplication) {
-        log.info("application will resign active")
+        log.debug("application will resign active")
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
     }
@@ -405,13 +394,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         log.info("will enter background")
     }
     func applicationDidEnterBackground(_ application: UIApplication) {
-        log.info("did enter background")
+        log.debug("did enter background")
         registerBackgroundTask()
         checkTime()
     }
     
     func registerBackgroundTask() {
-        log.info("registered backgroundTask")
+        log.debug("registered backgroundTask")
         backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
             self?.endBackgroundTask()
         }

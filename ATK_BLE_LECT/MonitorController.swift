@@ -73,7 +73,7 @@ class MonitorController: UITableViewController {
             }
         }else{
             //current lesson
-            log.info("Current lesson")
+            log.info("Currently have lesson")
             lesson = GlobalData.currentLesson
             self.title = (lesson?.subject)! + " " + (lesson?.catalog)!
             let nlesson = GlobalData.weeklyTimetable.filter({$0.lesson_id! == lesson?.lesson_id!}).first

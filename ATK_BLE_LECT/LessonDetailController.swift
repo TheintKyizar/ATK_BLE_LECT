@@ -43,7 +43,7 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
     }
     
     @objc private func refreshTable(){
-        log.info("refreshing")
+        log.info("refreshing table")
         self.tableView.reloadData()
     }
     

@@ -100,7 +100,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     
     private func checkUserInBackground(){
         
-        log.info("Checking user")
+        log.info("Checking user in Background")
         let parameters:[String:Any] = [
             "username" : UserDefaults.standard.string(forKey: "username")!,
             "password" : UserDefaults.standard.string(forKey: "password")!
@@ -113,10 +113,16 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         Alamofire.request(Constant.URLLogin, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON { (response:DataResponse) in
             let code = response.response?.statusCode
             spinnerIndicator.removeFromSuperview()
-            log.info("Status code: " + String(describing: code))
+            log.info("Login Status code: " + String(describing: code!))
             if code == 200{
                 if let json = response.result.value as? [String:AnyObject]{
                     UserDefaults.standard.set(json["token"], forKey: "token")
+                    log.info("current lesson: \(UserDefaults.standard.string(forKey: "currentLesson")!)")
+                    log.info("My name: \(String(describing: UserDefaults.standard.string(forKey: "name")))")
+                    log.info("Lesson Date Id: \(String(describing: UserDefaults.standard.string(forKey: "current lesson")))")
+                    log.info("My major: \(String(describing: UserDefaults.standard.string(forKey: "major")))")
+                    log.info("My minor: \(String(describing: UserDefaults.standard.string(forKey: "minor")))")
+                    
                 }
             }else{
                 let alertView = UIAlertController(title: "Section time out", message: "Your sign in section is expired", preferredStyle: .alert)
@@ -206,7 +212,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             statusBar.backgroundColor = UIColor.clear
             imageView.image = #imageLiteral(resourceName: "bluetooth_on")
             bluetoothManager.stopAdvertising()
-            log.info("Stop broadcasting...")
+            log.debug("Stop broadcasting...")
             return
         }
 
@@ -252,12 +258,12 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         var status = ""
         switch peripheral.state {
-        case .poweredOff: status = "Bluetooth Status: \n Turned Off"
-        case .poweredOn: status = "Bluetooth Status: \n Turned On"
-        case .resetting: status = "Bluetooth Status: \n Resetting"
-        case .unauthorized: status = "BLuetooth Status: \n Not Authorized"
-        case .unsupported: status = "Bluetooth Status: \n Not Supported"
-        default: status = "Bluetooth Status: \n Unknown"
+        case .poweredOff: status = "Bluetooth Status: Turned Off"
+        case .poweredOn: status = "Bluetooth Status: Turned On"
+        case .resetting: status = "Bluetooth Status: Resetting"
+        case .unauthorized: status = "BLuetooth Status: Not Authorized"
+        case .unsupported: status = "Bluetooth Status: Not Supported"
+        default: status = "Bluetooth Status: Unknown"
         }
         log.info(status)
     }
@@ -266,25 +272,6 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         if bluetoothManager.state == .poweredOn {
             let appdelegate = UIApplication.shared.delegate as! AppDelegate
             if appdelegate.isInternetAvailable() == true {
-                guard let statusBar = (UIApplication.shared.value(forKey: "statusBarWindow") as AnyObject).value(forKey: "statusBar") as? UIView
-                    else {
-                        return
-                        
-                }
-                statusBar.backgroundColor = UIColor.white
-                statusBar.invalidateIntrinsicContentSize()
-                let view = UIView(frame: CGRect(x: 70, y: 0.7, width: 30, height: 4))
-                let imageview1 = UIImageView(image: #imageLiteral(resourceName: "blue_11"))
-                imageview1.animationImages = [
-                    #imageLiteral(resourceName: "blue_11"),
-                    #imageLiteral(resourceName: "blue_22"),
-                    #imageLiteral(resourceName: "blue_33")
-                ]
-                imageview1.animationDuration = 0.5
-                imageview1.startAnimating()
-                //view.addSubview(imageview)
-                view.addSubview(imageview1)
-                statusBar.addSubview(view)
                 imageView.animationImages = [
                     #imageLiteral(resourceName: "blue_1"),
                     #imageLiteral(resourceName: "blue_2"),
@@ -299,7 +286,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
                 let beaconRegion = CLBeaconRegion(proximityUUID: uuid!, major: major, minor: minor, identifier: "\(String(describing: UserDefaults.standard.string(forKey: "id")!))")
                 dataDictionary = beaconRegion.peripheralData(withMeasuredPower: nil)
                 bluetoothManager.startAdvertising(dataDictionary as?[String: Any])
-                log.info("broadcasting...")
+                log.debug("broadcasting...")
             }
             else {
                 let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
