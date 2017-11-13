@@ -42,7 +42,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         setupImageView()
         checkTime()
         setupTimer() //Upcoming lessons
-        
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -68,11 +68,11 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             let lesson_id = (lesson?.lesson_id)!
             if UserDefaults.standard.string(forKey: "currentLesson") != nil{
                 if UserDefaults.standard.string(forKey: "currentLesson")! != String(describing:lesson_id){
-                    print(UserDefaults.standard.string(forKey: "currentLesson")!)
-                    print(String(describing:lesson?.lesson_id!))
+                    log.info(UserDefaults.standard.string(forKey: "currentLesson")!)
+                    log.info(String(describing:lesson?.lesson_id!))
                 }
             }else{
-                print("First lesson")
+                log.info("First lesson")
                 UserDefaults.standard.set(lesson?.lesson_id, forKey: "currentLesson")
             }
             /*Timer.after(1, {
@@ -201,13 +201,12 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             statusBar.backgroundColor = UIColor.clear
             imageView.image = #imageLiteral(resourceName: "bluetooth_on")
             bluetoothManager.stopAdvertising()
-            print("Stop broadcasting...")
+            log.info("Stop broadcasting...")
             return
         }
 
         if GlobalData.currentLesson.lesson_id != nil {
             broadcast()
-
         }
         
     }
@@ -255,11 +254,13 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         case .unsupported: status = "Bluetooth Status: \n Not Supported"
         default: status = "Bluetooth Status: \n Unknown"
         }
-        print(status)
+        log.info(status)
     }
     
     func broadcast() {
         if bluetoothManager.state == .poweredOn {
+            let appdelegate = UIApplication.shared.delegate as! AppDelegate
+            if appdelegate.isInternetAvailable() == true {
             guard let statusBar = (UIApplication.shared.value(forKey: "statusBarWindow") as AnyObject).value(forKey: "statusBar") as? UIView
                 else {
                     return
@@ -279,6 +280,14 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             //view.addSubview(imageview)
             view.addSubview(imageview1)
             statusBar.addSubview(view)
+            broadcast()
+            }
+            else {
+                let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                
+            }
             
             imageView.animationImages = [
                 #imageLiteral(resourceName: "blue_1"),
@@ -294,12 +303,12 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             let beaconRegion = CLBeaconRegion(proximityUUID: uuid!, major: major, minor: minor, identifier: "\(String(describing: UserDefaults.standard.string(forKey: "id")!))")
             dataDictionary = beaconRegion.peripheralData(withMeasuredPower: nil)
             bluetoothManager.startAdvertising(dataDictionary as?[String: Any])
-            print("broadcasting...")
+            log.info("broadcasting...")
         }
         else {
-            let alert = UIAlertController(title: "Bluetooth Turn on Request", message: " AME would like to turn on your bluetooth!", preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: "Bluetooth Turn on Request", message: " Please turn on your bluetooth!", preferredStyle: UIAlertControllerStyle.alert)
             // add the actions (buttons)
-            alert.addAction(UIAlertAction(title: "Allow", style: UIAlertActionStyle.default, handler: { action in
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
                 self.turnOnBlt()
                 self.broadcast()
                 self.dismiss(animated: true, completion: nil)
@@ -309,6 +318,11 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             
         }
     }
+    private func turnOnData() {
+        let url = URL(string: "App-Prefs:root=WIFI") //for bluetooth setting
+        let app = UIApplication.shared
+        app.open(url!, options: ["string":""], completionHandler: nil)
+    }
     
     func turnOnBlt() {
         let url = URL(string: "App-Prefs:root=Bluetooth") //for bluetooth setting
@@ -317,7 +331,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     }
     
     deinit {
-        print("deinit is called")
+        log.info("deinit is called")
         NotificationCenter.default.removeObserver(self)
     }
     

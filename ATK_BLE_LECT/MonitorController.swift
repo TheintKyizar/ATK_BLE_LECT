@@ -50,17 +50,17 @@ class MonitorController: UITableViewController {
         if checkLesson.checkCurrentLesson() == false{
             if checkLesson.checkNextLesson() == false{
                 //No lesson today
-                print("No lesson today")
+                log.info("No lesson today")
                 self.title = "No lesson today"
             }else{
                 //Display next lesson infos
-                print("Next lesson")
+                log.info("Next lesson")
                 self.title = "Next Lesson"
                 lesson = GlobalData.nextLesson
             }
         }else{
             //current lesson
-            print("Current lesson")
+            log.info("Current lesson")
             lesson = GlobalData.currentLesson
             self.title = (lesson?.subject)! + " " + (lesson?.catalog)!
             let nlesson = GlobalData.weeklyTimetable.filter({$0.lesson_id! == lesson?.lesson_id!}).first
@@ -79,17 +79,45 @@ class MonitorController: UITableViewController {
         }
     }
 
+    @IBAction func refreshButtonn(_ sender: Any) {
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        if appdelegate.isInternetAvailable() == true {
+            self.tableView.reloadData()
+        }
+        else {
+            let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+        
+    }
+    private func turnOnData() {
+        let url = URL(string: "App-Prefs:root=WIFI") //for bluetooth setting
+        let app = UIApplication.shared
+        app.open(url!, options: ["string":""], completionHandler: nil)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     @objc private func refreshTable(){
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        if appdelegate.isInternetAvailable() == true {
         NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "checkLesson"), object: nil)
         self.spinnerController.removeFromSuperview()
         self.spinnerController.stopAnimating()
         self.students = GlobalData.students
         UIView.transition(with: self.tableView, duration: 0.3, options: .transitionCrossDissolve, animations: {self.tableView.reloadData()}, completion: nil)
+        self.tableView.reloadData()
+        }
+        else {
+            let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            
+        }
 
     }
 

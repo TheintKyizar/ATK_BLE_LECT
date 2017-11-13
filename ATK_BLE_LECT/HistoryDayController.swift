@@ -61,7 +61,7 @@ class HistoryDayController: UITableViewController {
                     newDate.lesson_id = json["lesson_id"] as? Int
                     self.lessonDates.append(newDate)
                 }
-                print("Done loading dates")
+                log.info("Done loading dates")
                 self.lessonDates.sort(by: {$0.lesson_date! > $1.lesson_date!})
                 let date = Date()
                 let today = format.formateDate(format: "yyyy-MM-dd", date: date)

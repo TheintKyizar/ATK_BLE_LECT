@@ -45,8 +45,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#07-01-01" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0vp-j1-JVJ">
-                                        <rect key="frame" x="0.0" y="134.5" width="355" height="23"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <rect key="frame" x="0.0" y="134.5" width="355" height="23"/>                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -65,7 +64,7 @@ Try again after some time</string>
                                             <constraint firstAttribute="width" secondItem="hI4-WJ-RrD" secondAttribute="height" multiplier="1:1" id="dTF-AJ-7fT"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Broadcast My Beacon" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zhq-kz-ZBH">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Broadcast My Beacon" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zhq-kz-ZBH">
                                         <rect key="frame" x="84.5" y="461" width="186" height="23"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <nil key="textColor"/>
@@ -184,9 +183,9 @@ Try again after some time</string>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="eWK-r9-Sdt">
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="1Rb-Ph-QC3">
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="kcL-4j-sf3">
                             <connections>
-                                <action selector="refreshButtonPressed:" destination="36k-rA-Y3V" id="F0e-FR-bOo"/>
+                                <action selector="refreshButtonn:" destination="36k-rA-Y3V" id="nIw-VC-GAo"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -564,7 +563,13 @@ Try again after some time</string>
                             <outlet property="delegate" destination="xmX-V9-bBg" id="04c-NW-4WL"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="PHw-dT-Na4"/>
+                    <navigationItem key="navigationItem" id="PHw-dT-Na4">
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="IMr-1g-IHa">
+                            <connections>
+                                <action selector="refreshButton:" destination="xmX-V9-bBg" id="gZa-0M-v2R"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <segue destination="OzL-SP-kL3" kind="show" identifier="lesson_detail_segue" id="yzf-MB-MsY"/>
                     </connections>
@@ -686,7 +691,7 @@ Try again after some time</string>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="C3H-Yl-sV7">
-                                                        <rect key="frame" x="80" y="0.0" width="275" height="332"/>
+                                                        <rect key="frame" x="80" y="0.0" width="275" height="314.5"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="300" id="vNf-cE-kRQ"/>
