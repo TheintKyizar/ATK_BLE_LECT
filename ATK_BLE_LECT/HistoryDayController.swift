@@ -18,6 +18,8 @@ class HistoryDayController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.addSubview(spinnerView)
+        self.spinnerView.startAnimating()
         setup()
         tableView.tableFooterView = UIView(frame:.zero)
         NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "refreshDate"), object: nil)
@@ -25,6 +27,8 @@ class HistoryDayController: UITableViewController {
         
         spinnerView.center = CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height/2)
         spinnerView.color = UIColor.black
+        
+        refreshControl?.addTarget(self, action: #selector(setup), for: .valueChanged)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -38,15 +42,14 @@ class HistoryDayController: UITableViewController {
     }
     
     @objc private func refreshTable(){
+        refreshControl?.endRefreshing()
         self.spinnerView.removeFromSuperview()
         self.spinnerView.stopAnimating()
         self.tableView.reloadData()
     }
     
-    private func setup(){
+    @objc private func setup(){
         
-        self.view.addSubview(spinnerView)
-        self.spinnerView.startAnimating()
         let token = UserDefaults.standard.string(forKey: "token")
         let headers:HTTPHeaders = [
             "Authorization" : "Bearer " + token!

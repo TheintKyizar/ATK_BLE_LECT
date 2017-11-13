@@ -183,13 +183,11 @@ Try again after some time</string>
                             <outlet property="delegate" destination="36k-rA-Y3V" id="Vpv-98-2Lx"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="eWK-r9-Sdt">
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="1Rb-Ph-QC3">
-                            <connections>
-                                <action selector="refreshButtonPressed:" destination="36k-rA-Y3V" id="F0e-FR-bOo"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="eWK-r9-Sdt"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="v3b-00-cHi">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S5Y-Oo-ZX6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -565,6 +563,10 @@ Try again after some time</string>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="PHw-dT-Na4"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="4sp-8P-Lc4">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
                     <connections>
                         <segue destination="OzL-SP-kL3" kind="show" identifier="lesson_detail_segue" id="yzf-MB-MsY"/>
                     </connections>
@@ -831,6 +833,10 @@ Try again after some time</string>
                             <outlet property="delegate" destination="oMy-tb-pRA" id="Fdt-MK-YMI"/>
                         </connections>
                     </tableView>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="cuE-3a-axF">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
                     <connections>
                         <segue destination="ueg-6n-fS4" kind="show" identifier="history_lesson_segue" id="deL-Fu-mwU"/>
                     </connections>
@@ -852,6 +858,10 @@ Try again after some time</string>
                             <outlet property="delegate" destination="ueg-6n-fS4" id="tHb-HL-VJ0"/>
                         </connections>
                     </tableView>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="prY-xs-NAe">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uGZ-mY-NJG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1105,6 +1115,6 @@ Try again after some time</string>
         <image name="monitor1" width="34" height="34"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="B1L-Qs-Pzg"/>
+        <segue reference="MLu-Ob-7yD"/>
     </inferredMetricsTieBreakers>
 </document>

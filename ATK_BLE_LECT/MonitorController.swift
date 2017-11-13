@@ -38,12 +38,11 @@ class MonitorController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        refreshControl?.addTarget(self, action: #selector(refreshStudents), for: .valueChanged)
     }
     
-    @IBAction func refreshButtonPressed(_ sender: UIBarButtonItem) {
+    @objc private func refreshStudents() {
         self.checkLessons()
-        students.removeAll()
-        self.tableView.reloadData()
     }
     
     private func checkLessons(){
@@ -70,9 +69,6 @@ class MonitorController: UITableViewController {
             mlesson_date.lesson_id = nlesson?.lesson_id
             self.lesson_date = mlesson_date
             
-            self.view.addSubview(spinnerController)
-            spinnerController.startAnimating()
-            
             alamofire.loadStudentsAndStatus(lesson: lesson!, lesson_date: mlesson_date, returnString: "checkLesson")
             NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "checkLesson"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "checkLesson"), object: nil)
@@ -85,9 +81,8 @@ class MonitorController: UITableViewController {
     }
     
     @objc private func refreshTable(){
+        refreshControl?.endRefreshing()
         NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "checkLesson"), object: nil)
-        self.spinnerController.removeFromSuperview()
-        self.spinnerController.stopAnimating()
         self.students = GlobalData.students
         UIView.transition(with: self.tableView, duration: 0.3, options: .transitionCrossDissolve, animations: {self.tableView.reloadData()}, completion: nil)
 

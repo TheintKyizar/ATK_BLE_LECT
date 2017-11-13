@@ -416,6 +416,7 @@ class alamofire{
                     GlobalData.weeklyTimetable.append(newLesson)
                 }
                 print("Done loading weeklyTimetable")
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "done loading timetable"), object: nil)
                 NSKeyedArchiver.archiveRootObject(GlobalData.weeklyTimetable, toFile: filePath.weeklyTimetable)
             }
         }

@@ -24,9 +24,17 @@ class TimetableController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        refreshControl?.addTarget(self, action: #selector(refreshTimetable), for: .valueChanged)
+    }
+    
+    @objc private func refreshTimetable(){
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading timetable"), object: nil)
+        alamofire.loadWeeklyTimetable()
     }
     
     @objc private func refreshTable(){
+        refreshControl?.endRefreshing()
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "done loading timetable"), object: nil)
         tableView.reloadData()
     }
 
@@ -62,9 +70,13 @@ class TimetableController: UITableViewController {
         let lesson = lessonInDay[indexPath.row]
         cell.lesson = lesson
         
-
-       
-
+        if GlobalData.currentLesson.ldateid != nil && GlobalData.currentLesson.ldateid == lesson.ldateid{
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+            cell.backgroundColor = UIColor(red: 0.84, green: 1.00, blue: 0.95, alpha: 1.0)
+        }else{
+            cell.backgroundColor = UIColor.white
+        }
+        
         return cell
     }
     

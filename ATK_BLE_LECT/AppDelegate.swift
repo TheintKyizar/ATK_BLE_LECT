@@ -132,7 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             
         }else{
             
-            endBackgroundTask()
+           // endBackgroundTask()
             
         }
         
@@ -244,13 +244,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 }
             }
         }
-        monitor()
+        self.monitor()
     }
     
     func monitor() {
-        
         let uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!)as UUID?
-        if GlobalData.lateStudents.count > 3{
+        if GlobalData.lateStudents.count > 0{
             let newRegion = CLBeaconRegion(proximityUUID: uuid!, identifier: "common")
             var count = 0
             locationManager.startMonitoring(for: newRegion)

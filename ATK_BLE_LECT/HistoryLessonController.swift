@@ -22,9 +22,7 @@ class HistoryLessonController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"load table"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "load table"), object: nil)
-        alamofire.loadStudentsAndStatus(lesson: GlobalData.timetable.filter({$0.lesson_id! == (lesson_date?.lesson_id)!}).first!, lesson_date: lesson_date!, returnString: "load table")
+        self.refreshStudents()
         
         tableView.tableFooterView = UIView(frame: .zero)
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -36,6 +34,8 @@ class HistoryLessonController: UITableViewController {
         spinnerController.color = UIColor.black
         self.view.addSubview(spinnerController)
         spinnerController.startAnimating()
+        
+        refreshControl?.addTarget(self, action: #selector(refreshStudents), for: .valueChanged)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
         
@@ -43,7 +43,15 @@ class HistoryLessonController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
+    @objc private func refreshStudents(){
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"load table"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "load table"), object: nil)
+        alamofire.loadStudentsAndStatus(lesson: GlobalData.timetable.filter({$0.lesson_id! == (lesson_date?.lesson_id)!}).first!, lesson_date: lesson_date!, returnString: "load table")
+    }
+    
     @objc private func refreshTable(){
+        refreshControl?.endRefreshing()
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "load table"), object: nil)
         self.spinnerController.removeFromSuperview()
         self.spinnerController.stopAnimating()
         students = GlobalData.students
