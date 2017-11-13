@@ -35,8 +35,8 @@ let OS = "Unknown"
 open class BaseDestination: Hashable, Equatable {
 
     /// output format pattern, see documentation for syntax
-    open var format = "$DHH:mm:ss.SSS$d $C$L$c $N.$F:$l - $M"
-
+    //open var format = "$DHH:mm:ss.SSS$d $C$L$c $N.$F:$l - $M"
+    open var format = "$Dyyy-MM-dd HH:mm:sss$d $N.$F:$l $L: $M"
     /// runs in own serial background thread for better performance
     open var asynchronously = true
 

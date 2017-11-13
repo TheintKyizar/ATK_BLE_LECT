@@ -178,12 +178,14 @@ class notification{
 class checkLesson{
     
     static func checkCurrentLesson() -> Bool{
-        let today = Date()
+        var today = Date()
         let currentDateStr = format.formateDate(format: "yyyy-MM-dd", date: today)
         GlobalData.today = GlobalData.weeklyTimetable.filter({$0.ldate == currentDateStr})
         //check if today has lessons
         
         if GlobalData.today.count > 0{
+            today.addTimeInterval(300)
+            print(format.formateDate(format: "HH:mm:ss", date: today))
             let currentTimeStr = format.formateDate(format: "HH:mm:ss", date: today)
             let currentLesson = GlobalData.today.first(where: {$0.start_time!<=currentTimeStr && $0.end_time!>=currentTimeStr})
             //check if current has lessons

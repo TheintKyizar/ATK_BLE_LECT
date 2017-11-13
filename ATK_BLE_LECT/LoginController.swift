@@ -82,14 +82,18 @@ class LoginController: UIViewController, UITextFieldDelegate {
     @IBAction func LoginPressed(_ sender: UIButton) {
         
         if !(usernameTxt.text?.isEmpty)! && !(passwordTxt.text?.isEmpty)!{
-            
-            //Login
-            self.login()
+            let appdelegate = UIApplication.shared.delegate as! AppDelegate
+            if appdelegate.isInternetAvailable() == true {
+                self.login()
+            }
+            else {
+                displayAlert(title: "LOGIN FAILED", message: "Your phone has no internet connection!")
+            }
             
         }else{
             
             //Text fields empty
-            
+             displayAlert(title: "Missing infomations", message: "Both username and password are required")
         }
         
     }
@@ -119,7 +123,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
             let code = response.response?.statusCode
             if code == 200{
                 
-                print("Successfully logged in")
+                log.info("Successfully logged in")
                 UserDefaults.standard.set(self.usernameTxt.text!, forKey: "username")
                 UserDefaults.standard.set(self.passwordTxt.text!, forKey: "password")
                 
@@ -162,10 +166,10 @@ class LoginController: UIViewController, UITextFieldDelegate {
                 
             }else if code == 400{
                 alertController.dismiss(animated: false, completion: nil)
-                print("Login failed")
+                log.info("Login failed")
             }else{
                 alertController.dismiss(animated: false, completion: nil)
-                print("Server busy...")
+                log.info("Server busy...")
             }
             
         }
@@ -216,7 +220,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
                     GlobalData.timetable.append(newLesson)
                 }
                 NSKeyedArchiver.archiveRootObject(GlobalData.timetable, toFile: filePath.timetablePath)
-                print("Done loading timetable")
+                log.info("Done loading timetable")
                 alamofire.loadWeeklyTimetable()
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshTable"), object: nil)
                 self.dismiss(animated: false, completion: nil)
@@ -248,5 +252,12 @@ extension UIViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+    func displayAlert(title:String,message:String){
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+        
     }
 }

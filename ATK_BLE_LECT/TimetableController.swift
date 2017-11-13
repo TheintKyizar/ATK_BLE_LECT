@@ -24,12 +24,23 @@ class TimetableController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
         refreshControl?.addTarget(self, action: #selector(refreshTimetable), for: .valueChanged)
     }
     
     @objc private func refreshTimetable(){
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading timetable"), object: nil)
-        alamofire.loadWeeklyTimetable()
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        if appDelegate.isInternetAvailable() == true{
+            Timer.after(1) {
+                NotificationCenter.default.addObserver(self, selector: #selector(self.refreshTable), name: Notification.Name(rawValue: "done loading timetable"), object: nil)
+                alamofire.loadWeeklyTimetable()
+            }
+        }else{
+            let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            
+        }
     }
     
     @objc private func refreshTable(){
@@ -50,6 +61,18 @@ class TimetableController: UITableViewController {
         return 5
     }
 
+    @IBAction func refreshButton(_ sender: Any) {
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        if appdelegate.isInternetAvailable() == true {
+            self.tableView.reloadData()
+        }
+        else {
+            let alert = UIAlertController(title: "No internet connection", message: "Please turn on internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
+            
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return GlobalData.weeklyTimetable.filter({$0.weekday == GlobalData.wdayInt[section]}).count
@@ -78,6 +101,11 @@ class TimetableController: UITableViewController {
         }
         
         return cell
+    }
+    private func turnOnData() {
+        let url = URL(string: "App-Prefs:root=WIFI") //for bluetooth setting
+        let app = UIApplication.shared
+        app.open(url!, options: ["string":""], completionHandler: nil)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
