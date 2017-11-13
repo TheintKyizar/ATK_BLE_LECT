@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-class ChangePasswordController: UIViewController {
+class ChangePasswordController: UIViewController{
 
     @IBOutlet weak var oldTF: UITextField!
     @IBOutlet weak var newTF: UITextField!
@@ -20,12 +20,37 @@ class ChangePasswordController: UIViewController {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
         trackPasswordLabel.isHidden = true
+        setupTextFields()
         // Do any additional setup after loading the view.
+    }
+    
+    private func setupTextFields(){
+        
+        oldTF.returnKeyType = .done
+        newTF.returnKeyType = .done
+        confirmTF.returnKeyType = .done
+        
+        oldTF.addTarget(self, action: #selector(oldTFDonePressed), for: .editingDidEnd)
+        newTF.addTarget(self, action: #selector(newTFDonePressed), for: .editingDidEnd)
+        
+    }
+    
+    @objc private func oldTFDonePressed(){
+        newTF.becomeFirstResponder()
+    }
+    
+    @objc private func newTFDonePressed(){
+        confirmTF.becomeFirstResponder()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     @IBAction func confirmPressed(_ sender: UIButton) {

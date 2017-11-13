@@ -106,6 +106,7 @@ class HistoryDaySelectController: UITableViewController {
         // Get the new view controller using segue.destinationViewController.
         if let destination = segue.destination as? HistoryDayController{
             if let lesson = sender as? Lesson{
+                destination.title = self.title
                 destination.lesson = lesson
             }
         }

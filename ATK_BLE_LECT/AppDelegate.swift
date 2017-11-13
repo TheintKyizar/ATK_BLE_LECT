@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     var window: UIWindow?
     var backgroundTask:UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
     var locationManager = CLLocationManager()
-    let studentsLimit = 3
+    let studentsLimit = 19
     var regionStatus = [String:String]()
     var flag = Bool()
     var commonFlag = Bool()
@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         locationManager.delegate = self
-        if UserDefaults.standard.string(forKey: "name") == nil{
+        if UserDefaults.standard.string(forKey: "id") == nil{
             //No user logged in
         }else{
             //User logged in
@@ -248,9 +248,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         lesson_date.lesson_date = GlobalData.currentLesson.ldate
         lesson_date.lesson_date_id = GlobalData.currentLesson.ldateid
         lesson_date.lesson_id = GlobalData.currentLesson.lesson_id
-        alamofire.loadStudentsAndStatus(lesson: GlobalData.currentLesson, lesson_date: lesson_date)
-        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done loading students and status"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(doneLoadingStudentsAndStatus), name: Notification.Name(rawValue: "done loading students and status"), object: nil)
+        alamofire.loadStudentsAndStatus(lesson: GlobalData.currentLesson, lesson_date: lesson_date, returnString: "loadLateStudents")
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"loadLateStudents"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(doneLoadingStudentsAndStatus), name: Notification.Name(rawValue: "loadLateStudents"), object: nil)
     }
 
     @objc func doneLoadingStudentsAndStatus(){
@@ -260,8 +260,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     private func getLateStudents() {
         if GlobalData.studentStatus.count > 0 {
             for i in 0...GlobalData.studentStatus.count-1 {
-                if(GlobalData.studentStatus[i].status == -1) {
-                    GlobalData.lateStudents.append(GlobalData.students.filter({$0.student_id! == GlobalData.studentStatus[i].student_id!}).first!)
+                if GlobalData.students[i].student_id != nil{
+                    if(GlobalData.studentStatus[i].status == -1) {
+                        GlobalData.lateStudents.append(GlobalData.students.filter({$0.student_id! == GlobalData.studentStatus[i].student_id!}).first!)
+                    }
                 }
             }
         }

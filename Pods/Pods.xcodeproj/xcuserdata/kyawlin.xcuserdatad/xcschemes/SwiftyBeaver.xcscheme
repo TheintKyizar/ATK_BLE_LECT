@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E7BD22B98BDE0F3D937C12AA1D6F46DB"
-               BuildableName = "SwiftyTimer.framework"
-               BlueprintName = "SwiftyTimer"
+               BlueprintIdentifier = "AC529E95D4829E5262D6D5E1E32D7BFE"
+               BuildableName = "SwiftyBeaver.framework"
+               BlueprintName = "SwiftyBeaver"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,9 +47,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E7BD22B98BDE0F3D937C12AA1D6F46DB"
-            BuildableName = "SwiftyTimer.framework"
-            BlueprintName = "SwiftyTimer"
+            BlueprintIdentifier = "AC529E95D4829E5262D6D5E1E32D7BFE"
+            BuildableName = "SwiftyBeaver.framework"
+            BlueprintName = "SwiftyBeaver"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

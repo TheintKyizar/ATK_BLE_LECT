@@ -12,7 +12,6 @@
 		C37056251F56AC210029C0E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C37056231F56AC210029C0E4 /* Main.storyboard */; };
 		C37056271F56AC210029C0E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C37056261F56AC210029C0E4 /* Assets.xcassets */; };
 		C370562A1F56AC210029C0E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C37056281F56AC210029C0E4 /* LaunchScreen.storyboard */; };
-		C3F472C61F57E45300B0DFD5 /* MoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F472C51F57E45300B0DFD5 /* MoreController.swift */; };
 		E102786A1F5D200400429562 /* items.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10278691F5D200400429562 /* items.swift */; };
 		E102786C1F5D24BA00429562 /* classes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E102786B1F5D24BA00429562 /* classes.swift */; };
 		E102786E1F5D336400429562 /* FilePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = E102786D1F5D336400429562 /* FilePath.swift */; };
@@ -27,6 +26,8 @@
 		E144D4551F5D1C4B00667DBD /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E144D4531F5D1C4B00667DBD /* LoginController.swift */; };
 		E166BB771F5E2C1200EE41EF /* MonitorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E166BB761F5E2C1100EE41EF /* MonitorController.swift */; };
 		E166BB811F5E3B8000EE41EF /* LessonDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E166BB801F5E3B8000EE41EF /* LessonDetailController.swift */; };
+		E16EDCDA1FAC3063007A967E /* MoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16EDCD91FAC3063007A967E /* MoreController.swift */; };
+		E1748E721FAFFA340039AE23 /* PopupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1748E711FAFFA340039AE23 /* PopupController.swift */; };
 		E18248DF1F9DC627009939DD /* UserInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18248DD1F9DC627009939DD /* UserInfoCell.swift */; };
 		E18248E01F9DC627009939DD /* UserInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E18248DE1F9DC627009939DD /* UserInfoCell.xib */; };
 		E1959D2A1F6131910015F171 /* ChangePasswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1959D291F6131910015F171 /* ChangePasswordController.swift */; };
@@ -46,7 +47,6 @@
 		C37056261F56AC210029C0E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C37056291F56AC210029C0E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C370562B1F56AC210029C0E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C3F472C51F57E45300B0DFD5 /* MoreController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreController.swift; sourceTree = "<group>"; };
 		E10278691F5D200400429562 /* items.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = items.swift; sourceTree = "<group>"; };
 		E102786B1F5D24BA00429562 /* classes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = classes.swift; sourceTree = "<group>"; };
 		E102786D1F5D336400429562 /* FilePath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilePath.swift; sourceTree = "<group>"; };
@@ -61,6 +61,8 @@
 		E144D4531F5D1C4B00667DBD /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		E166BB761F5E2C1100EE41EF /* MonitorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonitorController.swift; sourceTree = "<group>"; };
 		E166BB801F5E3B8000EE41EF /* LessonDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LessonDetailController.swift; sourceTree = "<group>"; };
+		E16EDCD91FAC3063007A967E /* MoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreController.swift; sourceTree = "<group>"; };
+		E1748E711FAFFA340039AE23 /* PopupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupController.swift; sourceTree = "<group>"; };
 		E18248DD1F9DC627009939DD /* UserInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoCell.swift; sourceTree = "<group>"; };
 		E18248DE1F9DC627009939DD /* UserInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserInfoCell.xib; sourceTree = "<group>"; };
 		E1959D291F6131910015F171 /* ChangePasswordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswordController.swift; sourceTree = "<group>"; };
@@ -137,8 +139,9 @@
 				E102786F1F5D396A00429562 /* TimetableController.swift */,
 				E166BB801F5E3B8000EE41EF /* LessonDetailController.swift */,
 				E144D4531F5D1C4B00667DBD /* LoginController.swift */,
+				E1748E711FAFFA340039AE23 /* PopupController.swift */,
 				E166BB761F5E2C1100EE41EF /* MonitorController.swift */,
-				C3F472C51F57E45300B0DFD5 /* MoreController.swift */,
+				E16EDCD91FAC3063007A967E /* MoreController.swift */,
 				E1959D291F6131910015F171 /* ChangePasswordController.swift */,
 				E12CA3EC1F5FC19900597719 /* History */,
 			);
@@ -302,7 +305,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		DAF4360B742F85251E4B87B1 /* [CP] Embed Pods Frameworks */ = {
@@ -344,12 +347,13 @@
 				E166BB771F5E2C1200EE41EF /* MonitorController.swift in Sources */,
 				E166BB811F5E3B8000EE41EF /* LessonDetailController.swift in Sources */,
 				E102786C1F5D24BA00429562 /* classes.swift in Sources */,
+				E16EDCDA1FAC3063007A967E /* MoreController.swift in Sources */,
 				E12CA3EE1F5FC21800597719 /* HistoryDayController.swift in Sources */,
 				E102786E1F5D336400429562 /* FilePath.swift in Sources */,
 				E12CA3E71F5F90C100597719 /* HistoryController.swift in Sources */,
-				C3F472C61F57E45300B0DFD5 /* MoreController.swift in Sources */,
 				E1959D2A1F6131910015F171 /* ChangePasswordController.swift in Sources */,
 				E1B910861F9F23EC00AA6A40 /* StudentCell.swift in Sources */,
+				E1748E721FAFFA340039AE23 /* PopupController.swift in Sources */,
 				E18248DF1F9DC627009939DD /* UserInfoCell.swift in Sources */,
 				C37056201F56AC210029C0E4 /* AppDelegate.swift in Sources */,
 				E10278711F5D396A00429562 /* TimetableController.swift in Sources */,

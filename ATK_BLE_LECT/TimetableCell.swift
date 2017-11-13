@@ -15,7 +15,7 @@ class TimetableCell: UITableViewCell {
             subjectLabel.text = (lesson?.subject)! + " " + (lesson?.catalog)!
             start_time.text = displayTime.display(time: (lesson?.start_time)!)
             end_time.text = displayTime.display(time: (lesson?.end_time)!)
-            venue.text = lesson?.venueName
+            venue.text = lesson?.location
             classNumber.text = lesson?.class_section
             arrivingtimeLabel.isHidden = true
             iconView.isHidden = true

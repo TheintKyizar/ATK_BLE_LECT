@@ -306,7 +306,7 @@ class alamofire{
         }
     }
     
-    static func loadStudentsAndStatus(lesson:Lesson, lesson_date:LessonDate){
+    static func loadStudentsAndStatus(lesson:Lesson, lesson_date:LessonDate, returnString:String){
         GlobalData.lesson_id = String(describing: lesson.lesson_id)
         print("Lesson_id : \(String(describing: lesson.lesson_id))")
         let token = UserDefaults.standard.string(forKey: "token")
@@ -350,7 +350,7 @@ class alamofire{
                         }
                         print("done loading status")
                         NSKeyedArchiver.archiveRootObject(GlobalData.studentStatus, toFile: filePath.historyPath)
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "done loading students and status"), object: nil)
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: returnString), object: nil)
                     }
                 }
             }
