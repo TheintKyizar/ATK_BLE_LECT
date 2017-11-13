@@ -12,7 +12,10 @@ class PopupController: UIViewController {
 
     @IBOutlet weak var navigationBar: UINavigationItem!
     @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var lateLabel: UILabel!
+    @IBOutlet weak var lateTextField: UITextField!
     
+    var lateBool:Bool?
     var student_id:Int?
     var lesson_date:LessonDate?
     var status:Int?
@@ -23,6 +26,13 @@ class PopupController: UIViewController {
         hideKeyboardWhenTappedAround()
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.borderWidth = 1
+        if lateBool == true{
+            lateLabel.isHidden = false
+            lateTextField.isHidden = false
+        }else{
+            lateLabel.isHidden = true
+            lateTextField.isHidden = true
+        }
         // Do any additional setup after loading the view.
     }
 
@@ -37,15 +47,45 @@ class PopupController: UIViewController {
     }
     
     @IBAction func submitButtonPressed(_ sender: UIButton) {
-        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done updating status"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(doneUpdatingStatus), name: Notification.Name(rawValue:"done updating status"), object: nil)
-        //change mins to seconds
-        status = status! * 60
-        alamofire.updateStatus(lesson_date: self.lesson_date!, student_id: student_id!, status: status!)
+        
+        if lateTextField.isHidden == false{
+            if lateTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) != ""{
+                guard let mStatus = Int(lateTextField.text!) else {
+                    let alertController = UIAlertController(title: "Missing information", message: "Please enter the timing for late", preferredStyle: .alert)
+                    let alertAction = UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                        alertController.dismiss(animated: false, completion: nil)
+                    })
+                    alertController.addAction(alertAction)
+                    self.present(alertController, animated: false, completion: nil)
+                    return
+                }
+                status = mStatus
+                
+                NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done updating status"), object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(doneUpdatingStatus), name: Notification.Name(rawValue:"done updating status"), object: nil)
+                
+                //change mins to seconds
+                if status! > 0 {
+                    status = status! * 60
+                }
+                alamofire.updateStatus(lesson_date: self.lesson_date!, student_id: student_id!, status: status!)
+            }
+            
+        }else{
+            NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done updating status"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(doneUpdatingStatus), name: Notification.Name(rawValue:"done updating status"), object: nil)
+            
+            //change mins to seconds
+            if status! > 0 {
+                status = status! * 60
+            }
+            alamofire.updateStatus(lesson_date: self.lesson_date!, student_id: student_id!, status: status!)
+        }
         
     }
     
     @objc private func doneUpdatingStatus(){
+        GlobalData.studentStatus.filter({$0.student_id == self.student_id!}).first?.status = status
         self.dismiss(animated: false, completion: nil)
     }
     /*

@@ -44,10 +44,15 @@ class MonitorController: UITableViewController {
     @objc private func refreshStudents() {
         let appdelegate = UIApplication.shared.delegate as! AppDelegate
         if appdelegate.isInternetAvailable() == true {
-            self.checkLessons()
+            Timer.after(1, {
+                self.checkLessons()
+            })
         }else {
             let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                alert.dismiss(animated: false, completion: nil)
+                self.refreshControl?.endRefreshing()
+            }))
             self.present(alert, animated: true, completion: nil)
             
         }
@@ -113,9 +118,6 @@ class MonitorController: UITableViewController {
         self.students = GlobalData.students
         UIView.transition(with: self.tableView, duration: 0.3, options: .transitionCrossDissolve, animations: {self.tableView.reloadData()}, completion: nil)
         self.tableView.reloadData()
-        
-        
-        
     }
     
     // MARK: - Table view data source
@@ -179,11 +181,22 @@ class MonitorController: UITableViewController {
             NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"cancel updating status"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(cancelUpdatingStatus), name: Notification.Name(rawValue:"cancel updating status"), object: nil)
             if cell.selectedValue != "Present"{
-                let popOverVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ReasonPopUp") as! PopupController
-                popOverVC.lesson_date = self.lesson_date!
-                popOverVC.student_id = students[sender.tag].student_id!
-                popOverVC.status = checkStatus(status: cell.selectedValue)
-                self.present(popOverVC, animated: true, completion: nil)
+                if cell.selectedValue != "Other..."{
+                    let popOverVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ReasonPopUp") as! PopupController
+                    //popOverVC.view.alpha = 0.8
+                    popOverVC.lesson_date = self.lesson_date!
+                    popOverVC.student_id = students[sender.tag].student_id!
+                    popOverVC.status = checkStatus(status: cell.selectedValue)
+                    popOverVC.lateBool = false
+                    self.present(popOverVC, animated: true, completion: nil)
+                }else{
+                    let popOverVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ReasonPopUp") as! PopupController
+                    //popOverVC.view.alpha = 0.8
+                    popOverVC.lesson_date = self.lesson_date!
+                    popOverVC.student_id = students[sender.tag].student_id!
+                    popOverVC.lateBool = true
+                    self.present(popOverVC, animated: true, completion: nil)
+                }
             }else{
                 self.view.addSubview(spinnerController)
                 spinnerController.startAnimating()
@@ -248,7 +261,9 @@ class MonitorController: UITableViewController {
         let indexPath = IndexPath(row: currentTag, section: 0)
         if let cell = tableView.cellForRow(at: indexPath) as? ManualAttendanceCell{
             cell.view.isHidden = true
-            GlobalData.studentStatus.filter({$0.student_id! == students[currentTag].student_id!}).first?.status = checkStatus(status: cell.selectedValue)
+            if cell.selectedValue != "Other..."{
+                GlobalData.studentStatus.filter({$0.student_id! == students[currentTag].student_id!}).first?.status = checkStatus(status: cell.selectedValue)
+            }
         }
         UIView.animate(withDuration: 0.3) {
             self.tableView.reloadData()

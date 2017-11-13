@@ -61,6 +61,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         let date = Date()
         self.title = format.formateDate(format: "EEE(dd MMM)", date: date)
         
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         self.checkUserInBackground()
         if checkLesson.checkCurrentLesson() != false{
             
@@ -68,18 +69,14 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             let lesson_id = (lesson?.lesson_id)!
             if UserDefaults.standard.string(forKey: "currentLesson") != nil{
                 if UserDefaults.standard.string(forKey: "currentLesson")! != String(describing:lesson_id){
-                    log.info("current lesson: \(UserDefaults.standard.string(forKey: "currentLesson")!)")
-                    log.info("Lesson Id: \(String(describing:lesson?.lesson_id!))")
+                    UserDefaults.standard.set((lesson?.lesson_id!)!, forKey: "currentLesson")
+                    log.info(UserDefaults.standard.string(forKey: "currentLesson")!)
+                    log.info(String(describing:(lesson?.lesson_id!)!))
+                    appDelegate.stopMonitoring()
                 }
             }else{
                 log.info("First lesson")
-                UserDefaults.standard.set(lesson?.lesson_id, forKey: "currentLesson")
-                log.info("current lesson: \(UserDefaults.standard.string(forKey: "currentLesson")!)")
-                log.info("Lesson Id: \(String(describing:lesson?.lesson_id!))")
-                log.info("My name: \(String(describing: UserDefaults.standard.string(forKey: "name")))")
-                log.info("Lesson Date Id: \(String(describing: UserDefaults.standard.string(forKey: "current lesson")))")
-                log.info("My major: \(String(describing: UserDefaults.standard.string(forKey: "major")))")
-                log.info("My minor: \(String(describing: UserDefaults.standard.string(forKey: "minor")))")
+                UserDefaults.standard.set((lesson?.lesson_id)!, forKey: "currentLesson")
             }
             /*Timer.after(1, {
                 self.broadcast()
@@ -89,9 +86,11 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             UserDefaults.standard.set("no", forKey: "current lesson")
             //No lesson currently, show next lesson
             lesson = GlobalData.nextLesson
+            appDelegate.stopMonitoring()
             
         }else{
             UserDefaults.standard.set("no", forKey: "current lesson")
+            appDelegate.stopMonitoring()
             //Today no lesson
             
         }

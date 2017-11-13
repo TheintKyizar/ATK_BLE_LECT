@@ -150,7 +150,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         
     }
     
-    private func stopMonitoring(){
+    func stopMonitoring(){
+        for i in locationManager.monitoredRegions{
+            locationManager.stopMonitoring(for: i)
+        }
+        
+        log.info("stop monitoring")
+        log.info("monnitored regions: \(locationManager.monitoredRegions.count)")
+    }
+    
+    func stopMonitoringSpecific(){
         for i in locationManager.monitoredRegions{
             if i.identifier != "common"{
                 locationManager.stopMonitoring(for: i)
@@ -214,6 +223,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             if region.identifier != "common"{
                 if regionStatus[region.identifier] == "inside"{
                     regionStatus[region.identifier] = "outside"
+                    locationManager.stopMonitoring(for: region)
                     GlobalData.regionExitFlag = true
                     self.requestStateForMonitoredRegions()
                 }
@@ -256,8 +266,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
     private func getLateStudents() {
         if GlobalData.studentStatus.count > 0 {
-            UserDefaults.standard.set(true, forKey: "background monitor")
-            UserDefaults.standard.set(GlobalData.currentLesson.ldateid, forKey: "current lesson")
             for i in 0...GlobalData.studentStatus.count-1 {
                 if GlobalData.students[i].student_id != nil{
                     if(GlobalData.studentStatus[i].status == -1) {
@@ -406,7 +414,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
-        self.stopMonitoring()
         NotificationCenter.default.post(name: Notification.Name(rawValue:"update time"), object: nil)
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
     }
