@@ -278,7 +278,7 @@ class alamofire{
     
     static func loadStudents(lesson:Lesson){
         GlobalData.lesson_id = String(describing: lesson.lesson_id)
-        print("Lesson_id : \(String(describing: lesson.lesson_id))")
+        log.info("Lesson_id : \(String(describing: lesson.lesson_id!))")
         let token = UserDefaults.standard.string(forKey: "token")
         let headers:HTTPHeaders = [
             "Authorization" : "Bearer " + token!,
@@ -301,7 +301,7 @@ class alamofire{
                     }
                     GlobalData.students.append(newStudent)
                 }
-                print("Done loading students")
+                log.info("Done loading students")
                 NSKeyedArchiver.archiveRootObject(GlobalData.students, toFile: filePath.studentPath)
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "done loading students"), object: nil)
             }
@@ -310,7 +310,7 @@ class alamofire{
     
     static func loadStudentsAndStatus(lesson:Lesson, lesson_date:LessonDate, returnString:String){
         GlobalData.lesson_id = String(describing: lesson.lesson_id)
-        print("Lesson_id : \(String(describing: lesson.lesson_id))")
+        log.info("Lesson_id : \(String(describing: lesson.lesson_id!))")
         let token = UserDefaults.standard.string(forKey: "token")
         let headers:HTTPHeaders = [
             "Authorization" : "Bearer " + token!,
@@ -336,7 +336,7 @@ class alamofire{
                 print("Done loading students")
                 NSKeyedArchiver.archiveRootObject(GlobalData.students, toFile: filePath.studentPath)
                 GlobalData.ldate_id = String(describing:lesson_date.lesson_date_id!)
-                print(lesson_date.lesson_date_id ?? "")
+                log.info("Lesson date Id: \(lesson_date.lesson_date_id ?? 0)")
                 let parameters:[String:Any]=[
                     "lesson_date_id" : lesson_date.lesson_date_id!
                 ]
@@ -350,7 +350,7 @@ class alamofire{
                             newStatus.student_id = json["student_id"] as? Int
                             GlobalData.studentStatus.append(newStatus)
                         }
-                        print("done loading status")
+                        log.info("done loading student's status")
                         NSKeyedArchiver.archiveRootObject(GlobalData.studentStatus, toFile: filePath.historyPath)
                         NotificationCenter.default.post(name: Notification.Name(rawValue: returnString), object: nil)
                     }
@@ -417,7 +417,7 @@ class alamofire{
                     }
                     GlobalData.weeklyTimetable.append(newLesson)
                 }
-                print("Done loading weeklyTimetable")
+                log.info("Done refreshing timetable")
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "done loading timetable"), object: nil)
                 NSKeyedArchiver.archiveRootObject(GlobalData.weeklyTimetable, toFile: filePath.weeklyTimetable)
             }
