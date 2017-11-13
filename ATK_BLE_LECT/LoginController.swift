@@ -56,7 +56,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
             if (endFrame?.origin.y)! >= UIScreen.main.bounds.size.height {
                 self.keyboardHeightLayoutConstraint?.constant = 30
             } else {
-                self.keyboardHeightLayoutConstraint?.constant = endFrame?.size.height ?? 0.0
+                self.keyboardHeightLayoutConstraint?.constant = ((endFrame?.size.height)! + 2 ) 
             }
             UIView.animate(withDuration: duration,
                            delay: TimeInterval(0),
