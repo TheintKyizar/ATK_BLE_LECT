@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     var window: UIWindow?
     var backgroundTask:UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
     var locationManager = CLLocationManager()
-    let studentsLimit = 19
+    let studentsLimit = 2
     var regionStatus = [String:String]()
     var flag = Bool()
     var commonFlag = Bool()
@@ -31,6 +31,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         locationManager.delegate = self
+        locationManager.requestAlwaysAuthorization()
+        stopMonitoring()
         if UserDefaults.standard.string(forKey: "id") == nil{
             //No user logged in
         }else{
@@ -90,10 +92,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             regionStatus[region.identifier] = "inside"
             if region.identifier == "common"{
                 commonFlag = true
+                if self.backgroundTask == UIBackgroundTaskInvalid{
+                    self.registerBackgroundTask()
+                }
                 Timer.after(2, {
                     if self.commonFlag == true{
                         self.requestStateForMonitoredRegions()
-                        
                     }
                 })
             }else{
@@ -103,6 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 takeAttendance()
                 NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"taken+\(Constant.identifier)"), object: nil)
                 NotificationCenter.default.addObserver(self, selector: #selector(takensuccess(region:)), name: Notification.Name(rawValue: "taken+\(Constant.identifier)"), object: region)
+                //self.endBackgroundTask()
                 
             }
         case .outside:
@@ -144,7 +149,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             
         }else{
             
-           // endBackgroundTask()
+           self.endBackgroundTask()
             
         }
         
@@ -185,19 +190,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         
         Timer.after(2) {
             // Check if there is any specificied region inside
-            for i in self.regionStatus{
+            /*for i in self.regionStatus{
                 if i.value == "inside" && i.key != "common"{
                     self.flag = false
                 }
-            }
+            }*/
             
-            if self.flag == true && self.regionStatus[self.regionStatus.keys.filter({$0 == "common"}).first!] == "inside"{
+            //if self.flag == true && self.regionStatus[self.regionStatus.keys.filter({$0 == "common"}).first!] == "inside"{
                 self.refreshStudents()
                 Timer.after(5){
                     self.requestStateForMonitoredRegions()
                 }
                 log.debug("refreshHere")
-            }
+            //}
         }
     }
     
@@ -225,10 +230,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                     regionStatus[region.identifier] = "outside"
                     locationManager.stopMonitoring(for: region)
                     GlobalData.regionExitFlag = true
-                    self.requestStateForMonitoredRegions()
+                    //self.requestStateForMonitoredRegions()
                 }
             }else{
                 regionStatus[region.identifier] = "outside"
+                self.endBackgroundTask()
             }
         }
     }
@@ -310,14 +316,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 count += 1
             }
         }
-       // endBackgroundTask()
+        self.endBackgroundTask()
     }
     
     private func refreshStudents(){
         log.info("Refreshing Student lists")
         log.info("Current group: \(Constant.currentGroup)")
         log.info("Total group: \(Constant.studentGroup)")
-        self.stopMonitoring()
+        self.stopMonitoringSpecific()
         let state = Constant.studentGroup
         var check = Bool()
         for i in 1...state{

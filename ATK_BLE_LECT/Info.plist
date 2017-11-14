@@ -26,6 +26,8 @@
 	<string>We want to use Bluetooth</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>We want to detect the beacons around you</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Mornitor beacons to take attendance</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>

@@ -216,8 +216,9 @@ class MonitorController: UITableViewController {
     @objc func refreshTableLoop(){
         for i in 0...GlobalData.studentStatus.count-1{
             if lastStatus?.filter({$0.student_id == GlobalData.studentStatus[i].student_id}).first?.status != GlobalData.studentStatus[i].status{
-                let indexPath = IndexPath(row: i, section: 0)
-                tableView.reloadRows(at: [indexPath], with: .automatic)
+                /*let indexPath = IndexPath(row: i, section: 0)
+                tableView.reloadRows(at: [indexPath], with: .automatic)*/
+                tableView.reloadData()
             }
         }
         lastStatus = GlobalData.studentStatus

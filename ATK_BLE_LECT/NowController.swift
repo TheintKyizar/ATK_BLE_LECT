@@ -70,8 +70,6 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             if UserDefaults.standard.string(forKey: "currentLesson") != nil{
                 if UserDefaults.standard.string(forKey: "currentLesson")! != String(describing:lesson_id){
                     UserDefaults.standard.set((lesson?.lesson_id!)!, forKey: "currentLesson")
-                    log.info(UserDefaults.standard.string(forKey: "currentLesson")!)
-                    log.info(String(describing:(lesson?.lesson_id!)!))
                     appDelegate.stopMonitoring()
                 }
             }else{
@@ -83,13 +81,13 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             })*/
             
         }else if checkLesson.checkNextLesson() != false{
-            UserDefaults.standard.set("no", forKey: "current lesson")
+            UserDefaults.standard.set("no", forKey: "currentLesson")
             //No lesson currently, show next lesson
             lesson = GlobalData.nextLesson
             appDelegate.stopMonitoring()
             
         }else{
-            UserDefaults.standard.set("no", forKey: "current lesson")
+            UserDefaults.standard.set("no", forKey: "currentLesson")
             appDelegate.stopMonitoring()
             //Today no lesson
             
@@ -119,7 +117,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
                     UserDefaults.standard.set(json["token"], forKey: "token")
                     log.info("current lesson: \(UserDefaults.standard.string(forKey: "currentLesson")!)")
                     log.info("My name: \(String(describing: UserDefaults.standard.string(forKey: "name")))")
-                    log.info("Lesson Date Id: \(String(describing: UserDefaults.standard.string(forKey: "current lesson")))")
+                    log.info("Lesson Date Id: \(String(describing: UserDefaults.standard.string(forKey: "currentLesson")))")
                     log.info("My major: \(String(describing: UserDefaults.standard.string(forKey: "major")))")
                     log.info("My minor: \(String(describing: UserDefaults.standard.string(forKey: "minor")))")
                     
