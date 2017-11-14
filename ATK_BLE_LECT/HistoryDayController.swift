@@ -50,27 +50,39 @@ class HistoryDayController: UITableViewController {
     
     @objc private func setup(){
         
-        let token = UserDefaults.standard.string(forKey: "token")
-        let headers:HTTPHeaders = [
-            "Authorization" : "Bearer " + token!
-        ]
-        Alamofire.request(Constant.URLAllDateOfLesson + String(describing: (lesson?.lesson_id)!), method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
-            if let JSON = response.result.value as? [AnyObject]{
-                self.lessonDates.removeAll()
-                for json in JSON{
-                    let newDate = LessonDate()
-                    newDate.lesson_date_id = json["id"] as? Int
-                    newDate.lesson_date = json["ldate"] as? String
-                    newDate.lesson_id = json["lesson_id"] as? Int
-                    self.lessonDates.append(newDate)
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        if appdelegate.isInternetAvailable() == true{
+            Timer.after(1, {
+                let token = UserDefaults.standard.string(forKey: "token")
+                let headers:HTTPHeaders = [
+                    "Authorization" : "Bearer " + token!
+                ]
+                Alamofire.request(Constant.URLAllDateOfLesson + String(describing: (self.lesson?.lesson_id)!), method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
+                    if let JSON = response.result.value as? [AnyObject]{
+                        self.lessonDates.removeAll()
+                        for json in JSON{
+                            let newDate = LessonDate()
+                            newDate.lesson_date_id = json["id"] as? Int
+                            newDate.lesson_date = json["ldate"] as? String
+                            newDate.lesson_id = json["lesson_id"] as? Int
+                            self.lessonDates.append(newDate)
+                        }
+                        log.info("Done loading dates")
+                        self.lessonDates.sort(by: {$0.lesson_date! > $1.lesson_date!})
+                        let date = Date()
+                        let today = format.formateDate(format: "yyyy-MM-dd", date: date)
+                        self.lessonDates = self.lessonDates.filter({$0.lesson_date! <= today})
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshDate"), object: nil)
+                    }
                 }
-                log.info("Done loading dates")
-                self.lessonDates.sort(by: {$0.lesson_date! > $1.lesson_date!})
-                let date = Date()
-                let today = format.formateDate(format: "yyyy-MM-dd", date: date)
-                self.lessonDates = self.lessonDates.filter({$0.lesson_date! <= today})
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshDate"), object: nil)
-            }
+            })
+        }else{
+            let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                alert.dismiss(animated: false, completion: nil)
+                self.refreshControl?.endRefreshing()
+            }))
+            self.present(alert, animated: true, completion: nil)
         }
         
     }

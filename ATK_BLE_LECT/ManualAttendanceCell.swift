@@ -20,7 +20,7 @@ class ManualAttendanceCell: UITableViewCell, UIPickerViewDelegate, UIPickerViewD
     var student_id = Int()
     
     let pickerData = [
-        "Absent","Present","5 mins","10 mins","15 mins","20 mins","25 mins","30 mins"
+        "Absent","Present","10 mins","15 mins","20 mins","25 mins","30 mins","Other..."
     ]
     
     override func awakeFromNib() {

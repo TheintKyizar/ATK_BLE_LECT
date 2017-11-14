@@ -44,9 +44,22 @@ class HistoryLessonController: UITableViewController {
     }
     
     @objc private func refreshStudents(){
-        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"load table"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "load table"), object: nil)
-        alamofire.loadStudentsAndStatus(lesson: GlobalData.timetable.filter({$0.lesson_id! == (lesson_date?.lesson_id)!}).first!, lesson_date: lesson_date!, returnString: "load table")
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        if appdelegate.isInternetAvailable() == true{
+            Timer.after(1, {
+                NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"load table"), object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(self.refreshTable), name: Notification.Name(rawValue: "load table"), object: nil)
+                alamofire.loadStudentsAndStatus(lesson: GlobalData.timetable.filter({$0.lesson_id! == (self.lesson_date?.lesson_id)!}).first!, lesson_date: self.lesson_date!, returnString: "load table")
+            })
+        }else{
+            //refreshControl?.endRefreshing()
+            let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                alert.dismiss(animated: false, completion:nil)
+                self.refreshControl?.endRefreshing()
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     @objc private func refreshTable(){
@@ -110,11 +123,20 @@ class HistoryLessonController: UITableViewController {
             NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"cancel updating status"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(cancelUpdatingStatus), name: Notification.Name(rawValue:"cancel updating status"), object: nil)
             if cell.selectedValue != "Present"{
-                let popOverVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ReasonPopUp") as! PopupController
-                popOverVC.lesson_date = self.lesson_date!
-                popOverVC.student_id = students[sender.tag].student_id!
-                popOverVC.status = checkStatus(status: cell.selectedValue)
-                self.present(popOverVC, animated: true, completion: nil)
+                if cell.selectedValue != "Other..."{
+                    let popOverVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ReasonPopUp") as! PopupController
+                    popOverVC.lesson_date = self.lesson_date!
+                    popOverVC.student_id = students[sender.tag].student_id!
+                    popOverVC.status = checkStatus(status: cell.selectedValue)
+                    popOverVC.lateBool = false
+                    self.present(popOverVC, animated: true, completion: nil)
+                }else{
+                    let popOverVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ReasonPopUp") as! PopupController
+                    popOverVC.lesson_date = self.lesson_date!
+                    popOverVC.student_id = students[sender.tag].student_id!
+                    popOverVC.lateBool = true
+                    self.present(popOverVC, animated: true, completion: nil)
+                }
             }else{
                 self.view.addSubview(spinnerController)
                 spinnerController.startAnimating()
@@ -141,7 +163,9 @@ class HistoryLessonController: UITableViewController {
         let indexPath = IndexPath(row: currentTag, section: 0)
         if let cell = tableView.cellForRow(at: indexPath) as? ManualAttendanceCell{
             cell.view.isHidden = true
-            status.filter({$0.student_id! == students[currentTag].student_id!}).first?.status = checkStatus(status: cell.selectedValue)
+            if cell.selectedValue != "Other..."{
+                status.filter({$0.student_id! == students[currentTag].student_id!}).first?.status = checkStatus(status: cell.selectedValue)
+            }
         }
         UIView.animate(withDuration: 0.3) {
             self.tableView.reloadData()

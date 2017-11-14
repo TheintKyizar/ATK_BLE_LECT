@@ -37,7 +37,10 @@ class TimetableController: UITableViewController {
             }
         }else{
             let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                alert.dismiss(animated: false, completion: nil)
+                self.refreshControl?.endRefreshing()
+            }))
             self.present(alert, animated: true, completion: nil)
             
         }

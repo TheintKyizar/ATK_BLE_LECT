@@ -45,7 +45,8 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#07-01-01" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0vp-j1-JVJ">
-                                        <rect key="frame" x="0.0" y="134.5" width="355" height="23"/>                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <rect key="frame" x="0.0" y="134.5" width="355" height="23"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -64,7 +65,7 @@ Try again after some time</string>
                                             <constraint firstAttribute="width" secondItem="hI4-WJ-RrD" secondAttribute="height" multiplier="1:1" id="dTF-AJ-7fT"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Broadcast My Beacon" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zhq-kz-ZBH">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Broadcast My Beacon" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zhq-kz-ZBH">
                                         <rect key="frame" x="84.5" y="461" width="186" height="23"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <nil key="textColor"/>
@@ -442,16 +443,28 @@ Try again after some time</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="1NH-Cw-2QP">
-                                <rect key="frame" x="15" y="203.5" width="345" height="260"/>
+                                <rect key="frame" x="15" y="169" width="345" height="329"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Comment:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nml-am-zak">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Late: (in minutes)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tXW-IB-uj7">
                                         <rect key="frame" x="0.0" y="0.0" width="345" height="23"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="minutes" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2xH-LQ-q7S">
+                                        <rect key="frame" x="0.0" y="31" width="345" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Comment: (Optional)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nml-am-zak">
+                                        <rect key="frame" x="0.0" y="69" width="345" height="23"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="rv0-o7-5aw">
-                                        <rect key="frame" x="0.0" y="31" width="345" height="185"/>
+                                        <rect key="frame" x="0.0" y="100" width="345" height="185"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="t16-hD-fjo"/>
@@ -461,7 +474,7 @@ Try again after some time</string>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="JTg-je-KiS">
-                                        <rect key="frame" x="0.0" y="224" width="345" height="36"/>
+                                        <rect key="frame" x="0.0" y="293" width="345" height="36"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V69-p9-5W5">
                                                 <rect key="frame" x="0.0" y="0.0" width="345" height="36"/>
@@ -483,15 +496,19 @@ Try again after some time</string>
                                     <constraint firstAttribute="trailing" secondItem="nml-am-zak" secondAttribute="trailing" id="IyQ-VB-lDj"/>
                                     <constraint firstAttribute="trailing" secondItem="JTg-je-KiS" secondAttribute="trailing" id="O05-30-XZr"/>
                                     <constraint firstItem="rv0-o7-5aw" firstAttribute="leading" secondItem="1NH-Cw-2QP" secondAttribute="leading" id="O1l-g0-YH5"/>
+                                    <constraint firstAttribute="trailing" secondItem="2xH-LQ-q7S" secondAttribute="trailing" id="XXF-Zp-WbE"/>
                                     <constraint firstItem="nml-am-zak" firstAttribute="leading" secondItem="1NH-Cw-2QP" secondAttribute="leading" id="bPA-Xe-C7g"/>
+                                    <constraint firstAttribute="trailing" secondItem="tXW-IB-uj7" secondAttribute="trailing" id="d9H-ja-4nL"/>
+                                    <constraint firstItem="tXW-IB-uj7" firstAttribute="leading" secondItem="1NH-Cw-2QP" secondAttribute="leading" id="mje-P5-ZPG"/>
                                     <constraint firstItem="JTg-je-KiS" firstAttribute="leading" secondItem="1NH-Cw-2QP" secondAttribute="leading" id="rEy-vm-Hhi"/>
+                                    <constraint firstItem="2xH-LQ-q7S" firstAttribute="leading" secondItem="1NH-Cw-2QP" secondAttribute="leading" id="ugB-Ra-owR"/>
                                 </constraints>
                             </stackView>
                             <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PQT-SD-Agm">
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
-                                    <navigationItem title="Title" id="jkZ-59-KHH">
+                                    <navigationItem title="Manual Attendance Taking" id="jkZ-59-KHH">
                                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="9mq-ra-2sV">
                                             <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
@@ -511,6 +528,8 @@ Try again after some time</string>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="lateLabel" destination="tXW-IB-uj7" id="4xD-Xv-6b9"/>
+                        <outlet property="lateTextField" destination="2xH-LQ-q7S" id="FLq-81-YIB"/>
                         <outlet property="navigationBar" destination="jkZ-59-KHH" id="urh-qc-eTk"/>
                         <outlet property="textView" destination="rv0-o7-5aw" id="YgV-aV-Y9o"/>
                     </connections>
