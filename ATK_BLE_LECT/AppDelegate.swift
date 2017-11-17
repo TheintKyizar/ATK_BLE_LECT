@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     var window: UIWindow?
     var backgroundTask:UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
     var locationManager = CLLocationManager()
-    let studentsLimit = 2
+    let studentsLimit = 19
     var regionStatus = [String:String]()
     var flag = Bool()
     var commonFlag = Bool()
@@ -42,8 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 window?.rootViewController  = nowController
             }
         }
-        
-        
         
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: .alert) { (success, error) in
@@ -80,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             log.info("Failed to read file")
             log.info(error)
         }
-        //log.info("@@@@@@@contents of the file \(readString)")
+        log.info("@@@@@@@contents of the file \(readString)")
         
         return true
     }
@@ -221,7 +219,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             print("Failed to read file")
             print(error)
         }
-        //print("~~~~~~~~~~~~~~~`Contents of file \(readString)")
+        print("~~~~~~~~~~~~~~~`Contents of file \(readString)")
         let headers: HTTPHeaders = [
             "Content-Type" : "multipart/form-data"
         ]

@@ -27,9 +27,19 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView(frame: .zero)
-        alamofire.loadStudents(lesson: lesson!)
-        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done loading students"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading students"), object: nil)
+        
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        if appdelegate.isInternetAvailable() == true{
+            alamofire.loadStudents(lesson: lesson!)
+            NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done loading students"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading students"), object: nil)
+        }else{
+            let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                alert.dismiss(animated: false, completion: nil)
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
         
         let nib = UINib(nibName: "StudentCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "cell")

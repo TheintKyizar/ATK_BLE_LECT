@@ -19,12 +19,15 @@ class MonitorController: UITableViewController {
     var students = [Student]()
     var timer:Timer?
     var lastStatus:[Status]?
+    private var count = 0
+    @IBOutlet weak var studentLabel: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         spinnerController.center = CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height/2)
         spinnerController.color = UIColor.black
+        studentLabel.setTitleTextAttributes([kCTFontAttributeName as NSAttributedStringKey: UIFont.boldSystemFont(ofSize: 17)], for: .normal)
         
         students.removeAll()
         self.checkLessons()
@@ -119,6 +122,15 @@ class MonitorController: UITableViewController {
         NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "checkLesson"), object: nil)
         self.students = GlobalData.students
         UIView.transition(with: self.tableView, duration: 0.3, options: .transitionCrossDissolve, animations: {self.tableView.reloadData()}, completion: nil)
+        count = 0
+        
+        for i in GlobalData.studentStatus{
+            if i.status != -1{
+                count = count + 1
+            }
+        }
+        self.studentLabel.title = "\(count)/\(GlobalData.studentStatus.count)"
+        
         self.tableView.reloadData()
     }
     
@@ -145,6 +157,7 @@ class MonitorController: UITableViewController {
         toolbar.setItems([doneButton], animated: false)
         cell.view.addSubview(toolbar)
         cell.selectionStyle = .none
+        
         return cell
     }
     
@@ -216,13 +229,18 @@ class MonitorController: UITableViewController {
     }
     
     @objc func refreshTableLoop(){
+        count = 0
         for i in 0...GlobalData.studentStatus.count-1{
+            
+            if GlobalData.studentStatus[i].status != -1{
+                count = count + 1
+            }
+            
             if lastStatus?.filter({$0.student_id == GlobalData.studentStatus[i].student_id}).first?.status != GlobalData.studentStatus[i].status{
-                /*let indexPath = IndexPath(row: i, section: 0)
-                tableView.reloadRows(at: [indexPath], with: .automatic)*/
                 tableView.reloadData()
             }
         }
+        self.studentLabel.title = "\(count)/\(GlobalData.studentStatus.count)"
         lastStatus = GlobalData.studentStatus
     }
     

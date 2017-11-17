@@ -188,7 +188,7 @@ class checkLesson{
         //check if today has lessons
         
         if GlobalData.today.count > 0{
-            today.addTimeInterval(300)
+            today.addTimeInterval(600)
             print(format.formateDate(format: "HH:mm:ss", date: today))
             let currentTimeStr = format.formateDate(format: "HH:mm:ss", date: today)
             let currentLesson = GlobalData.today.first(where: {$0.start_time!<=currentTimeStr && $0.end_time!>=currentTimeStr})

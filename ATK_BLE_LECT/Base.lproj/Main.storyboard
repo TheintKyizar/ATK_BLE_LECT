@@ -183,11 +183,16 @@ Try again after some time</string>
                             <outlet property="delegate" destination="36k-rA-Y3V" id="Vpv-98-2Lx"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="eWK-r9-Sdt"/>
+                    <navigationItem key="navigationItem" id="eWK-r9-Sdt">
+                        <barButtonItem key="rightBarButtonItem" title=" " id="Mhq-2d-w4q"/>
+                    </navigationItem>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="v3b-00-cHi">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </refreshControl>
+                    <connections>
+                        <outlet property="studentLabel" destination="Mhq-2d-w4q" id="mAv-NA-FNM"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S5Y-Oo-ZX6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1060,7 +1065,7 @@ Try again after some time</string>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="123456" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Exc-TL-UNL">
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Exc-TL-UNL">
                                                 <rect key="frame" x="0.0" y="114" width="355" height="30"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1133,6 +1138,6 @@ Try again after some time</string>
         <image name="monitor1" width="34" height="34"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="MLu-Ob-7yD"/>
+        <segue reference="SdP-oJ-PPa"/>
     </inferredMetricsTieBreakers>
 </document>

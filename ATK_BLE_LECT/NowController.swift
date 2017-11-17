@@ -79,7 +79,17 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
            
         }
         
-        self.checkUserInBackground()
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        if appdelegate.isInternetAvailable() == true{
+            self.checkUserInBackground()
+        }else{
+            let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                alert.dismiss(animated: false, completion: nil)
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
+        
         if checkLesson.checkCurrentLesson() != false{
             
             UserDefaults.standard.set(GlobalData.currentLesson.ldateid, forKey: "current lesson date id")
@@ -102,6 +112,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             UserDefaults.standard.set("no", forKey: "currentLesson")
             UserDefaults.standard.removeObject(forKey: "current lesson date id")
             //No lesson currently, show next lesson
+            nextLessonRefresh()
             lesson = GlobalData.nextLesson
             appDelegate.stopMonitoring()
             
@@ -260,19 +271,6 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             }
         }
         
-        for i in upcomingLesson{
-            date = format.formateDate(format: "HH:mm:ss", date: Date())
-            let start_time = format.formatTime(format: "HH:mm:ss", time: i.start_time!)
-            let calendar = Calendar.current.dateComponents([.hour,.minute,.second], from: format.formatTime(format: "HH:mm:ss", time: date), to: start_time)
-            let interval = Double(calendar.hour!*3600 + calendar.minute!*60 + calendar.second!)
-            if interval > 0 {
-                let notificationContent = notification.notiContent(title: "Lesson started", body: "Please open your app to take attendance")
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
-                notification.addNotification(trigger: trigger, content: notificationContent, identifier: "lesson start")
-            }
-            
-        }
-        
     }
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
@@ -286,6 +284,21 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         default: status = "Bluetooth Status: Unknown"
         }
         log.info(status)
+    }
+    
+    private func nextLessonRefresh(){
+        let nLesson = GlobalData.nextLesson
+        let date = format.formateDate(format: "HH:mm:ss", date: Date())
+        let start_time = format.formatTime(format: "HH:mm:ss", time: nLesson.start_time!)
+        let calendar = Calendar.current.dateComponents([.hour,.minute,.second], from: format.formatTime(format: "HH:mm:ss", time: date),to: start_time)
+        let interval = Double(calendar.hour!*3600 + calendar.minute!*60 + calendar.second! - 600)
+        if interval > 0 {
+            
+            let nTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(checkTime), userInfo: nil, repeats: false)
+            RunLoop.main.add(nTimer, forMode: RunLoopMode.commonModes)
+            
+        }
+        
     }
     
     func broadcast() {
