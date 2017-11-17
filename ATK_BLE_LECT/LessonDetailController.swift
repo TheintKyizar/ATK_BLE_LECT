@@ -52,7 +52,7 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
         subjectTxt.text = (lesson?.subject)! + " " + (lesson?.catalog)!
         subject_nameTxt.text = (lesson?.subject)! + " " + (lesson?.catalog)!
         groupTxt.text = lesson?.class_section
-        timeslotTxt.text = GlobalData.wday[(lesson?.weekday)!]! + " \(displayTime.display(time: (lesson?.start_time!)!)) \(displayTime.display(time: (lesson?.end_time!)!))"
+        timeslotTxt.text = GlobalData.wday[(lesson?.weekday)!]! + " \(displayTime.display(time: (lesson?.start_time!)!))-\(displayTime.display(time: (lesson?.end_time!)!))"
         venueTxt.text = lesson?.location
     }
     

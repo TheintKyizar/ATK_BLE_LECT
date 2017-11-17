@@ -65,15 +65,18 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         
         if let currentLessonDateId = UserDefaults.standard.string(forKey: "current lesson date id"){
             GlobalData.currentLesson.ldateid = Int(currentLessonDateId)
-            let start_time = format.formatTime(format: "HH:mm:ss", time: (GlobalData.weeklyTimetable.filter({$0.ldateid == Int(currentLessonDateId)}).first?.start_time!)!)
-            let timeInterval = format.formatTime(format: "HH:mm:ss", time: format.formateDate(format: "HH:mm:ss", date: Date())).timeIntervalSince(start_time)
-            if timeInterval >= 5400{
-                if UserDefaults.standard.string(forKey: "\(currentLessonDateId) log file") == nil{
-                    let appdelegate = UIApplication.shared.delegate as! AppDelegate
-                    UserDefaults.standard.set("true", forKey: "\(currentLessonDateId) log file")
-                    appdelegate.uploadLogFile()
+            if let timeString = (GlobalData.weeklyTimetable.filter({$0.ldateid == Int(currentLessonDateId)}).first?.start_time!){
+                let start_time = format.formatTime(format: "HH:mm:ss", time: timeString)
+                let timeInterval = format.formatTime(format: "HH:mm:ss", time: format.formateDate(format: "HH:mm:ss", date: Date())).timeIntervalSince(start_time)
+                if timeInterval >= 5400{
+                    if UserDefaults.standard.string(forKey: "\(currentLessonDateId) log file") == nil{
+                        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+                        UserDefaults.standard.set("true", forKey: "\(currentLessonDateId) log file")
+                        appdelegate.uploadLogFile()
+                    }
                 }
             }
+           
         }
         
         self.checkUserInBackground()
