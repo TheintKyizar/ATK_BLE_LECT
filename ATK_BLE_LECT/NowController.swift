@@ -62,12 +62,29 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         self.title = format.formateDate(format: "EEE(dd MMM)", date: date)
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        
+        if let currentLessonDateId = UserDefaults.standard.string(forKey: "current lesson date id"){
+            GlobalData.currentLesson.ldateid = Int(currentLessonDateId)
+            let start_time = format.formatTime(format: "HH:mm:ss", time: (GlobalData.weeklyTimetable.filter({$0.ldateid == Int(currentLessonDateId)}).first?.start_time!)!)
+            let timeInterval = format.formatTime(format: "HH:mm:ss", time: format.formateDate(format: "HH:mm:ss", date: Date())).timeIntervalSince(start_time)
+            if timeInterval >= 5400{
+                if UserDefaults.standard.string(forKey: "\(currentLessonDateId) log file") == nil{
+                    let appdelegate = UIApplication.shared.delegate as! AppDelegate
+                    UserDefaults.standard.set("true", forKey: "\(currentLessonDateId) log file")
+                    appdelegate.uploadLogFile()
+                }
+            }
+        }
+        
         self.checkUserInBackground()
         if checkLesson.checkCurrentLesson() != false{
+            
+            UserDefaults.standard.set(GlobalData.currentLesson.ldateid, forKey: "current lesson date id")
             
             lesson = GlobalData.currentLesson
             let lesson_id = (lesson?.lesson_id)!
             if UserDefaults.standard.string(forKey: "currentLesson") != nil{
+                
                 if UserDefaults.standard.string(forKey: "currentLesson")! != String(describing:lesson_id){
                     UserDefaults.standard.set((lesson?.lesson_id!)!, forKey: "currentLesson")
                     appDelegate.stopMonitoring()
@@ -76,18 +93,18 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
                 log.info("First lesson")
                 UserDefaults.standard.set((lesson?.lesson_id)!, forKey: "currentLesson")
             }
-            /*Timer.after(1, {
-                self.broadcast()
-            })*/
+            
             
         }else if checkLesson.checkNextLesson() != false{
             UserDefaults.standard.set("no", forKey: "currentLesson")
+            UserDefaults.standard.removeObject(forKey: "current lesson date id")
             //No lesson currently, show next lesson
             lesson = GlobalData.nextLesson
             appDelegate.stopMonitoring()
             
         }else{
             UserDefaults.standard.set("no", forKey: "currentLesson")
+            UserDefaults.standard.removeObject(forKey: "current lesson date id")
             appDelegate.stopMonitoring()
             //Today no lesson
             
@@ -144,6 +161,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             location_label.text = (lesson?.location)!
             imageView.image = #imageLiteral(resourceName: "bluetooth_on")
             imageView.isUserInteractionEnabled = true
+            imageView.isHidden = false
             status_label.text = ""
             broadcast_label.text = "Broadcast My Beacon"
             subject_label.isHidden = false
@@ -160,6 +178,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             time_label.text = displayTime.display(time: (lesson?.start_time)!) + " " + displayTime.display(time: (lesson?.end_time)!)
             location_label.text = (lesson?.location)!
             imageView.image = #imageLiteral(resourceName: "bluetooth_off")
+            imageView.isHidden = false
             status_label.text = GlobalData.nextLessonTime
             broadcast_label.isHidden = true
             subject_label.isHidden = false

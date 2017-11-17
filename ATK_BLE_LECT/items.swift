@@ -22,6 +22,7 @@ class Constant{
     static let URLWeeklyTimetable = baseURL + "api/web/index.php/v1/lesson-lecturer/weekly-lesson?expand=lesson,venue,lesson_date_weekly,beacon_lesson"
     static let URLlessonUUID = baseURL + "api/web/index.php/v1/beacon-lesson/uuid"
     static let URLchangepass = baseURL + "api/web/index.php/v1/user/change-password"
+    static let URLLogFile = baseURL + "/api/web/index.php/v1/site/upload"
     
     static var name = String()
     static var token = String()

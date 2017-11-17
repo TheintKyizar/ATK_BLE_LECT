@@ -48,7 +48,7 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
     }
     
     private func setupLabels(){
-        creditTxt.text = String(calculateCredit(lesson: lesson!))
+        creditTxt.text = String(describing: (lesson?.credit_unit!)!)
         subjectTxt.text = (lesson?.subject)! + " " + (lesson?.catalog)!
         subject_nameTxt.text = (lesson?.subject)! + " " + (lesson?.catalog)!
         groupTxt.text = lesson?.class_section
@@ -56,7 +56,7 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
         venueTxt.text = lesson?.location
     }
     
-    private func calculateCredit(lesson:Lesson) -> Int{
+    /*private func calculateCredit(lesson:Lesson) -> Int{
         var credit = 0
         let lessons = GlobalData.timetable.filter({$0.module_id == lesson.module_id})
         for lesson in lessons{
@@ -64,7 +64,7 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
         }
         return credit
         
-    }
+    }*/
     
     private func calTimeDiff(start_time:String, end_time:String) -> Int{
         

@@ -19,6 +19,7 @@ class Lesson : NSObject, NSCoding {
     var location: String?
     var class_section: String?
     var module_id:String?
+    var credit_unit:Int?
     
     
     var ldate: String?
@@ -52,6 +53,7 @@ class Lesson : NSObject, NSCoding {
         status = nil
         recorded_time = "00:00"
         module_id = ""
+        credit_unit = 0
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -60,6 +62,7 @@ class Lesson : NSObject, NSCoding {
         subject = aDecoder.decodeObject(forKey: "subject") as! String?
         catalog = aDecoder.decodeObject(forKey: "catalog") as! String?
         module_id = aDecoder.decodeObject(forKey: "module_id") as! String?
+        credit_unit = aDecoder.decodeObject(forKey: "credit_unit") as! Int?
         
         venueName = aDecoder.decodeObject(forKey: "venueName") as! String?
         location = aDecoder.decodeObject(forKey: "location") as! String?
@@ -86,6 +89,7 @@ class Lesson : NSObject, NSCoding {
         aCoder.encode(subject, forKey: "subject")
         aCoder.encode(catalog, forKey: "catalog")
         aCoder.encode(module_id, forKey: "module_id")
+        aCoder.encode(credit_unit, forKey: "credit_unit")
         
         aCoder.encode(venueName, forKey: "venueName")
         
@@ -401,6 +405,7 @@ class alamofire{
                         newLesson.weekday = lesson["weekday"] as? String
                         newLesson.start_time = lesson["start_time"] as? String
                         newLesson.end_time = lesson["end_time"] as? String
+                        newLesson.credit_unit = Int((lesson["credit_unit"] as? String)!)
                     }
                     
                     if let lesson_date = json["lesson_date_weekly"] as? [String:Any]{

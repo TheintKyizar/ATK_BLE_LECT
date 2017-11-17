@@ -206,6 +206,74 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
     }
     
+    public func uploadLogFile() {
+        let cacheDirURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        let fileurl = cacheDirURL.appendingPathComponent("swiftybeaver").appendingPathExtension("log")
+        //let pathString = fileurl.path
+        let filename = fileurl.lastPathComponent
+        print("File Path: \(fileurl.path)")
+        print("File name: \(filename)")
+        var readString = ""
+        do{
+            readString = try String(contentsOf: fileurl)
+        }
+        catch let error as NSError {
+            print("Failed to read file")
+            print(error)
+        }
+        //print("~~~~~~~~~~~~~~~`Contents of file \(readString)")
+        let headers: HTTPHeaders = [
+            "Content-Type" : "multipart/form-data"
+        ]
+        
+        let url = try! URLRequest(url: Constant.URLLogFile, method: .post, headers: headers)
+        var data = Data()
+        if let fileContents = FileManager.default.contents(atPath: fileurl.path) {
+            data = fileContents as Data
+        }
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        let result = formatter.string(from: date)
+        let Name = "iOS_\(result)_\((GlobalData.currentLesson.ldateid)!)_\(UserDefaults.standard.string(forKey: "id")!)"
+        print("Name&&&&&&&&&&&&&&&&\(Name)")
+        Alamofire.upload(multipartFormData: {(MultipartFormData) in
+            MultipartFormData.append(data, withName: "logFile", fileName: Name, mimeType: "text/plain")
+            /*for (key,_) in parameters {
+             let name = String(key)
+             if let value = parameters[name] as? String {
+             MultipartFormData.append((value as AnyObject).data(using: String.Encoding.utf8.rawValue)!, withName: key)
+             }
+             }*/
+            
+        }, with: url, encodingCompletion: { (result) in
+            switch result {
+            case .success(let upload, _, _):
+                upload.responseJSON {
+                    response in
+                    print("MultipartFormData@@@@@@@@@@@@@\(data.endIndex)")
+                    print("response.request\(String(describing: response.request))")  // original URL request
+                    print("response.response\(String(describing: response.response))" ) // URL response
+                    print("response.data\(String(describing: response.data))")     // server data
+                    print(response.result)   // result of response serialization
+                    //remove the file
+                    if response.response?.statusCode == 200{
+                        self.deleteLogFile()
+                    }
+                    if let JSON = response.result.value {
+                        print("JSON: \(JSON)")
+                    }
+                }
+            case .failure(let encodingError):
+                print(encodingError)
+            }
+        })
+    }
+    func deleteLogFile(){
+        let file = FileDestination()
+        let _  = file.deleteLogFile()
+    }
+    
     @objc func takensuccess(region:CLBeaconRegion) {
         //if let index2 = GlobalData.monitoredRegions.index(of: region)
         /*GlobalData.monitoredRegions.remove(at: GlobalData.monitoredRegions.index(of: region)!)

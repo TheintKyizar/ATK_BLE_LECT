@@ -200,6 +200,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
                         newLesson.start_time = lesson["start_time"] as? String
                         newLesson.end_time = lesson["end_time"] as? String
                         newLesson.location = lesson["facility"] as? String
+                        newLesson.credit_unit = Int((lesson["credit_unit"] as? String)!)
                     }
                     
                     if let lesson_date = json["lesson_date"] as? [String:Any]{

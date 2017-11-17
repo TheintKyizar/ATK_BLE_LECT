@@ -83,6 +83,8 @@ class MonitorController: UITableViewController {
             mlesson_date.lesson_id = nlesson?.lesson_id
             self.lesson_date = mlesson_date
             
+            self.startRefreshing()
+            
             alamofire.loadStudentsAndStatus(lesson: lesson!, lesson_date: mlesson_date, returnString: "checkLesson")
             NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "checkLesson"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "checkLesson"), object: nil)
@@ -206,7 +208,7 @@ class MonitorController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.startRefreshing()
+        self.checkLessons()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
