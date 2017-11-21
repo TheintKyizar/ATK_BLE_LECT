@@ -219,7 +219,7 @@ class checkLesson{
             var minute:Int!
             hour = Int((time?[0])!)
             minute = Int((time?[1])!)
-            let totalSecond = hour*3600 + minute*60 - 300
+            let totalSecond = hour*3600 + minute*60 - 600
             let hr = totalSecond/3600
             let min = (totalSecond%3600)/60
             GlobalData.nextLessonTime = "not yet time \ntry again after \(hr):\(min)"

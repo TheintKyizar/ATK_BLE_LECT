@@ -42,7 +42,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         setupImageView()
         checkTime()
         setupTimer() //Upcoming lessons
-
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -57,6 +57,34 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     }
     
     @objc private func checkTime(){
+        
+        if CLLocationManager.locationServicesEnabled(){
+            switch CLLocationManager.authorizationStatus(){
+            case .authorizedAlways:
+                break
+            default:
+                let alertController = UIAlertController(title: "Location Services", message: "Please always allow location services for background functions", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                    if let url = URL(string: "App-Prefs:root=Privacy&path=LOCATION") {
+                        // If general location settings are disabled then open general location settings
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    }
+                })
+                alertController.addAction(action)
+                self.present(alertController, animated: false, completion: nil)
+            }
+        }else{
+            //location Services off
+            let alertController = UIAlertController(title: "Location Services", message: "Please always allow location services for background functions", preferredStyle: .alert)
+            let action = UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                if let url = URL(string: "App-Prefs:root=Privacy&path=LOCATION") {
+                    // If general location settings are disabled then open general location settings
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
+            })
+            alertController.addAction(action)
+            self.present(alertController, animated: false, completion: nil)
+        }
         
         let date = Date()
         self.title = format.formateDate(format: "EEE(dd MMM)", date: date)
@@ -76,7 +104,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
                     }
                 }
             }
-           
+            
         }
         
         let appdelegate = UIApplication.shared.delegate as! AppDelegate
@@ -106,6 +134,13 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
                 log.info("First lesson")
                 UserDefaults.standard.set((lesson?.lesson_id)!, forKey: "currentLesson")
             }
+            
+            Timer.after(1, {
+                let timeInterval = format.formatTime(format: "HH:mm:ss", time: format.formateDate(format: "HH:mm:ss", date: Date())).timeIntervalSince(format.formatTime(format: "HH:mm:ss", time: (self.lesson?.start_time!)!))
+                if timeInterval < 0{
+                    self.broadcast()
+                }
+            })
             
             
         }else if checkLesson.checkNextLesson() != false{
@@ -245,11 +280,13 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
             bluetoothManager.stopAdvertising()
             log.debug("Stop broadcasting...")
             return
-        }
-
-        if GlobalData.currentLesson.lesson_id != nil {
+        }else{
             broadcast()
         }
+        
+        /*if GlobalData.currentLesson.lesson_id != nil {
+            
+        }*/
         
     }
     
@@ -257,7 +294,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         if UserDefaults.standard.string(forKey: "notification time") == nil{
             UserDefaults.standard.set("10", forKey: "notification time")
         }
-        var date = format.formateDate(format: "HH:mm:ss", date: Date())
+        let date = format.formateDate(format: "HH:mm:ss", date: Date())
         let upcomingLesson = GlobalData.today.filter({$0.start_time! > date})
         for i in upcomingLesson{
             let start_time = format.formatTime(format: "HH:mm:ss", time: i.start_time!)
@@ -316,6 +353,9 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
                 let major = UInt16(Int(UserDefaults.standard.string(forKey: "major")!)!)as CLBeaconMajorValue
                 let minor = UInt16(Int(UserDefaults.standard.string(forKey: "minor")!)!)as CLBeaconMinorValue
                 uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!) as UUID?
+                log.info("Lesson uuid: " + String(describing: uuid))
+                log.info("minor: " + String(describing:minor))
+                log.info("major: " + String(describing:major))
                 let beaconRegion = CLBeaconRegion(proximityUUID: uuid!, major: major, minor: minor, identifier: "\(String(describing: UserDefaults.standard.string(forKey: "id")!))")
                 dataDictionary = beaconRegion.peripheralData(withMeasuredPower: nil)
                 bluetoothManager.startAdvertising(dataDictionary as?[String: Any])
@@ -348,7 +388,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     func turnOnBlt() {
         let url = URL(string: "App-Prefs:root=Bluetooth") //for bluetooth setting
         let app = UIApplication.shared
-        app.open(url!, options: ["string":""], completionHandler: nil)
+        app.open(url!, options: [:], completionHandler: nil)
     }
     
     deinit {

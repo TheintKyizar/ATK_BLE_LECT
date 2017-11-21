@@ -32,7 +32,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         // Override point for customization after application launch.
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
+        
         stopMonitoring()
+        self.deleteLogFile()
         if UserDefaults.standard.string(forKey: "id") == nil{
             //No user logged in
         }else{
@@ -78,7 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             log.info("Failed to read file")
             log.info(error)
         }
-        log.info("@@@@@@@contents of the file \(readString)")
+        print("@@@@@@@contents of the file \(readString)")
         
         return true
     }
@@ -352,6 +354,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     func monitor() {
+        
+        for i in locationManager.monitoredRegions{
+            locationManager.stopMonitoring(for: i)
+        }
+        
         let uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!)as UUID?
         if GlobalData.lateStudents.count > 0{
             log.info("Lesson uuid: " + String(describing: uuid!))
@@ -486,6 +493,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
+        
         NotificationCenter.default.post(name: Notification.Name(rawValue:"update time"), object: nil)
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
     }
