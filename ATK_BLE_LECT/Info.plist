@@ -36,9 +36,11 @@
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>We want to use Bluetooth</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Mornitor beacons to take attendance</string>
+	<string>Allow app to detect beacons</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>We want to detect the beacons around you</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow app to detect beacons</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>
