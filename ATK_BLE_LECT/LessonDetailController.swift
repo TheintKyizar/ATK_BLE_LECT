@@ -20,6 +20,8 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
     @IBOutlet weak var groupTxt: UILabel!
     @IBOutlet weak var timeslotTxt: UILabel!
     @IBOutlet weak var venueTxt: UILabel!
+    @IBOutlet weak var studentLabel: UILabel!
+    var internetConnection = Bool()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,10 +32,15 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
         
         let appdelegate = UIApplication.shared.delegate as! AppDelegate
         if appdelegate.isInternetAvailable() == true{
+            studentLabel.isHidden = false
+            internetConnection = true
             alamofire.loadStudents(lesson: lesson!)
             NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done loading students"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: Notification.Name(rawValue: "done loading students"), object: nil)
         }else{
+            studentLabel.isHidden = true
+            internetConnection = false
+            GlobalData.students.removeAll()
             let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
                 alert.dismiss(animated: false, completion: nil)
@@ -53,6 +60,7 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
     }
     
     @objc private func refreshTable(){
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"done loading students"), object: nil)
         log.info("refreshing table")
         self.tableView.reloadData()
     }
@@ -96,6 +104,19 @@ class LessonDetailController: UIViewController,UITableViewDelegate,UITableViewDa
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 40
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        var title = ""
+        if internetConnection == false{
+            title = "No internet connection"
+        }
+        return title
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let header = view as? UITableViewHeaderFooterView else {return}
+        header.textLabel?.textColor = UIColor.red
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -192,6 +192,7 @@ Try again after some time</string>
                     </refreshControl>
                     <connections>
                         <outlet property="studentLabel" destination="Mhq-2d-w4q" id="mAv-NA-FNM"/>
+                        <segue destination="3YV-BW-o0w" kind="presentation" identifier="sign_in_segue" id="MXt-eJ-3HJ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S5Y-Oo-ZX6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -740,6 +741,7 @@ Try again after some time</string>
                     <connections>
                         <outlet property="creditTxt" destination="T83-zD-RAy" id="lYb-bn-qeR"/>
                         <outlet property="groupTxt" destination="Wz2-iu-1uV" id="yrz-qP-7Rl"/>
+                        <outlet property="studentLabel" destination="iEA-tO-sbc" id="px5-dB-V9e"/>
                         <outlet property="subjectTxt" destination="eq9-Yz-5QQ" id="boO-KI-5QR"/>
                         <outlet property="subject_nameTxt" destination="E4I-gn-Tt8" id="WwM-ef-Je2"/>
                         <outlet property="tableView" destination="C3H-Yl-sV7" id="cVa-Gf-cwX"/>
@@ -862,6 +864,7 @@ Try again after some time</string>
                     </refreshControl>
                     <connections>
                         <segue destination="ueg-6n-fS4" kind="show" identifier="history_lesson_segue" id="deL-Fu-mwU"/>
+                        <segue destination="3YV-BW-o0w" kind="presentation" identifier="sign_in_segue" id="1Qx-zM-n4U"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RV1-GV-TGo" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -885,6 +888,9 @@ Try again after some time</string>
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </refreshControl>
+                    <connections>
+                        <segue destination="3YV-BW-o0w" kind="presentation" identifier="sign_in_segue" id="FRL-3P-cF7"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uGZ-mY-NJG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1138,6 +1144,6 @@ Try again after some time</string>
         <image name="monitor1" width="34" height="34"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="SdP-oJ-PPa"/>
+        <segue reference="MXt-eJ-3HJ"/>
     </inferredMetricsTieBreakers>
 </document>

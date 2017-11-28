@@ -17,6 +17,7 @@ class HistoryLessonController: UITableViewController {
     var count = Int()
     var selectedIndexPath = [IndexPath]()
     var currentTag = Int()
+    var internetConnection = Bool()
     
     let spinnerController = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     
@@ -46,13 +47,16 @@ class HistoryLessonController: UITableViewController {
     @objc private func refreshStudents(){
         let appdelegate = UIApplication.shared.delegate as! AppDelegate
         if appdelegate.isInternetAvailable() == true{
+            internetConnection = true
             Timer.after(1, {
                 NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"load table"), object: nil)
                 NotificationCenter.default.addObserver(self, selector: #selector(self.refreshTable), name: Notification.Name(rawValue: "load table"), object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(self.sessionExpired), name: Notification.Name(rawValue: "session expired"), object: nil)
                 alamofire.loadStudentsAndStatus(lesson: GlobalData.timetable.filter({$0.lesson_id! == (self.lesson_date?.lesson_id)!}).first!, lesson_date: self.lesson_date!, returnString: "load table")
             })
         }else{
             //refreshControl?.endRefreshing()
+            internetConnection = false
             let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
                 alert.dismiss(animated: false, completion:nil)
@@ -60,6 +64,16 @@ class HistoryLessonController: UITableViewController {
             }))
             self.present(alert, animated: true, completion: nil)
         }
+    }
+    
+    @objc private func sessionExpired(){
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "session expired"), object: nil)
+        let alertController = UIAlertController(title: "Session expired", message: "Please log in to continue", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+            self.performSegue(withIdentifier: "sign_in_segue", sender: nil)
+        })
+        alertController.addAction(action)
+        self.present(alertController, animated: false, completion: nil)
     }
     
     @objc private func refreshTable(){
@@ -95,6 +109,21 @@ class HistoryLessonController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return count
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        var title = ""
+        if internetConnection == false{
+            title = "No internet connection"
+        }
+        return title
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if internetConnection == false{
+            guard let header = view as? UITableViewHeaderFooterView else {return}
+            header.textLabel?.textColor = UIColor.red
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

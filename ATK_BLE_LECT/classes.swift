@@ -307,8 +307,8 @@ class alamofire{
                 }
                 log.info("Done loading students")
                 NSKeyedArchiver.archiveRootObject(GlobalData.students, toFile: filePath.studentPath)
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "done loading students"), object: nil)
             }
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "done loading students"), object: nil)
         }
     }
     
@@ -324,6 +324,11 @@ class alamofire{
             "lesson_id" : lesson.lesson_id!//13
         ]
         Alamofire.request(Constant.URLGetStudentOfLesson, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
+            
+            if (response.response?.statusCode)! >= 400{
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "session expired"), object: nil)
+            }
+            
             if let JSON = response.result.value as? [[String:AnyObject]]{
                 GlobalData.students.removeAll()
                 for json in JSON{

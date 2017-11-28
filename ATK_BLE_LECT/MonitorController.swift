@@ -20,6 +20,7 @@ class MonitorController: UITableViewController {
     var timer:Timer?
     var lastStatus:[Status]?
     private var count = 0
+    var internetConnection = Bool()
     @IBOutlet weak var studentLabel: UIBarButtonItem!
     
     override func viewDidLoad() {
@@ -47,14 +48,17 @@ class MonitorController: UITableViewController {
     @objc private func refreshStudents() {
         let appdelegate = UIApplication.shared.delegate as! AppDelegate
         if appdelegate.isInternetAvailable() == true {
+            internetConnection = true
             Timer.after(1, {
                 self.checkLessons()
             })
         }else {
+            internetConnection = false
             let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
                 alert.dismiss(animated: false, completion: nil)
                 self.refreshControl?.endRefreshing()
+                self.tableView.reloadData()
             }))
             self.present(alert, animated: true, completion: nil)
             
@@ -146,6 +150,14 @@ class MonitorController: UITableViewController {
         return students.count
     }
     
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        var title = ""
+        if internetConnection == false{
+            title = "No internet connection"
+        }
+        return title
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ManualAttendanceCell
         cell.commonInit(studentName: students[indexPath.row].name!, status: (GlobalData.studentStatus.filter({$0.student_id == students[indexPath.row].student_id}).first?.status)!, student_id: students[indexPath.row].student_id!)
@@ -220,11 +232,23 @@ class MonitorController: UITableViewController {
         }
     }
     
+    @objc private func sessionExpired(){
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "session expired"), object: nil)
+        let alertController = UIAlertController(title: "Session expired", message: "Please log in to continue", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+            self.performSegue(withIdentifier: "sign_in_segue", sender: nil)
+        })
+        alertController.addAction(action)
+        self.present(alertController, animated: false, completion: nil)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(sessionExpired), name: Notification.Name(rawValue: "session expired"), object: nil)
         self.checkLessons()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "session expired"), object: nil)
         self.stopRefreshing()
     }
     

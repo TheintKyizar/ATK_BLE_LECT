@@ -13,6 +13,7 @@ class HistoryDayController: UITableViewController {
 
     var lesson:Lesson?
     var lessonDates = [LessonDate]()
+    var internetConnection = Bool()
     
     let spinnerView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     
@@ -52,12 +53,25 @@ class HistoryDayController: UITableViewController {
         
         let appdelegate = UIApplication.shared.delegate as! AppDelegate
         if appdelegate.isInternetAvailable() == true{
+            internetConnection = true
             Timer.after(1, {
                 let token = UserDefaults.standard.string(forKey: "token")
                 let headers:HTTPHeaders = [
                     "Authorization" : "Bearer " + token!
                 ]
                 Alamofire.request(Constant.URLAllDateOfLesson + String(describing: (self.lesson?.lesson_id)!), method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
+                    
+                    let code = (response.response?.statusCode)!
+                    
+                    if code >= 400{
+                        let alertController = UIAlertController(title: "Session expired", message: "Please log in to continue", preferredStyle: .alert)
+                        let action = UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                            self.performSegue(withIdentifier: "sign_in_segue", sender: nil)
+                        })
+                        alertController.addAction(action)
+                        self.present(alertController, animated: false, completion: nil)
+                    }
+                    
                     if let JSON = response.result.value as? [AnyObject]{
                         self.lessonDates.removeAll()
                         for json in JSON{
@@ -77,10 +91,13 @@ class HistoryDayController: UITableViewController {
                 }
             })
         }else{
+            self.spinnerView.removeFromSuperview()
             let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
                 alert.dismiss(animated: false, completion: nil)
                 self.refreshControl?.endRefreshing()
+                self.internetConnection = false
+                self.tableView.reloadData()
             }))
             self.present(alert, animated: true, completion: nil)
         }
@@ -101,7 +118,13 @@ class HistoryDayController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
-        let title = "\(String(describing: displayTime.display(time: (lesson?.start_time)!)))-\(String(describing: displayTime.display(time: (lesson?.end_time)!)))(\(String(describing: (GlobalData.wday[(lesson?.weekday!)!])!)))"
+        var title = String()
+        
+        if internetConnection == false{
+            title = "No internet connection"
+        }else{
+            title = "\(String(describing: displayTime.display(time: (lesson?.start_time)!)))-\(String(describing: displayTime.display(time: (lesson?.end_time)!)))(\(String(describing: (GlobalData.wday[(lesson?.weekday!)!])!)))"
+        }
         return title
     }
 
@@ -112,6 +135,13 @@ class HistoryDayController: UITableViewController {
         // Configure the cell...
 
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if internetConnection == false{
+            guard let header = view as? UITableViewHeaderFooterView else {return}
+            header.textLabel?.textColor = UIColor.red
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

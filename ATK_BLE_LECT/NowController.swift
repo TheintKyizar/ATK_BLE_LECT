@@ -120,10 +120,22 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         
         if checkLesson.checkCurrentLesson() != false{
             
+            if bluetoothManager.state == .poweredOff{
+                let alertController = UIAlertController(title: "Bluetooth required", message: "Please turn on bluetooth to take attendance", preferredStyle: .alert )
+                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(action)
+                self.present(alertController, animated: false, completion: nil)
+            }
+            
             UserDefaults.standard.set(GlobalData.currentLesson.ldateid, forKey: "current lesson date id")
             
             lesson = GlobalData.currentLesson
             let lesson_id = (lesson?.lesson_id)!
+            
+            let notificationContent = notification.notiContent(title: "Bluetooth required", body: "Please turn on bluetooth to take attendance")
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+            notification.addNotification(trigger: trigger, content: notificationContent, identifier: "bluetooth")
+            
             if UserDefaults.standard.string(forKey: "currentLesson") != nil{
                 
                 if UserDefaults.standard.string(forKey: "currentLesson")! != String(describing:lesson_id){
@@ -314,6 +326,11 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
         var status = ""
         switch peripheral.state {
         case .poweredOff: status = "Bluetooth Status: Turned Off"
+            if checkLesson.checkCurrentLesson() != false{
+                let notificationContent = notification.notiContent(title: "Bluetooth required", body: "Please turn on bluetooth to take attendance")
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                notification.addNotification(trigger: trigger, content: notificationContent, identifier: "bluetooth")
+            }
         case .poweredOn: status = "Bluetooth Status: Turned On"
         case .resetting: status = "Bluetooth Status: Resetting"
         case .unauthorized: status = "BLuetooth Status: Not Authorized"

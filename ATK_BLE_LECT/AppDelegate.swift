@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     var window: UIWindow?
     var backgroundTask:UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
     var locationManager = CLLocationManager()
-    let studentsLimit = 19
+    let studentsLimit = 2
     var regionStatus = [String:String]()
     var flag = Bool()
     var commonFlag = Bool()
@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         locationManager.requestAlwaysAuthorization()
         
         stopMonitoring()
-        self.deleteLogFile()
+        //self.deleteLogFile()
         if UserDefaults.standard.string(forKey: "id") == nil{
             //No user logged in
         }else{
@@ -104,9 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 commonFlag = false
                 Constant.identifier = Int(region.identifier)!
                 log.debug("Entered specific")
-                takeAttendance()
-                NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"taken+\(Constant.identifier)"), object: nil)
-                NotificationCenter.default.addObserver(self, selector: #selector(takensuccess(region:)), name: Notification.Name(rawValue: "taken+\(Constant.identifier)"), object: region)
+                self.takeAttendance()
                 //self.endBackgroundTask()
                 
             }
@@ -145,7 +143,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         if checkLesson.checkCurrentLesson() != false{
             
             //Currently has lesson
-            loadLateStudents()
+            if isInternetAvailable() == true{
+                loadLateStudents()
+            }
             
         }else{
             
@@ -198,10 +198,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             
             //if self.flag == true && self.regionStatus[self.regionStatus.keys.filter({$0 == "common"}).first!] == "inside"{
                 self.refreshStudents()
-                Timer.after(5){
-                    self.requestStateForMonitoredRegions()
-                }
-                log.debug("refreshHere")
+                //Timer.after(5){
+                self.requestStateForMonitoredRegions()
+                //}
+                log.debug("refreshing")
             //}
         }
     }
@@ -272,14 +272,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     func deleteLogFile(){
         let file = FileDestination()
         let _  = file.deleteLogFile()
-    }
-    
-    @objc func takensuccess(region:CLBeaconRegion) {
-        //if let index2 = GlobalData.monitoredRegions.index(of: region)
-        /*GlobalData.monitoredRegions.remove(at: GlobalData.monitoredRegions.index(of: region)!)
-         GlobalData.tempRegions.remove(at: GlobalData.tempRegions.index(of: region)!)
-         locationManager.stopMonitoring(for: region)*/
-        
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
@@ -362,9 +354,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         let uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!)as UUID?
         if GlobalData.lateStudents.count > 0{
             log.info("Lesson uuid: " + String(describing: uuid!))
-            let newRegion = CLBeaconRegion(proximityUUID: uuid!, identifier: "common")
+            let commonRegion = CLBeaconRegion(proximityUUID: uuid!, identifier: "common")
             var count = 0
-            locationManager.startMonitoring(for: newRegion)
+            locationManager.startMonitoring(for: commonRegion)
             
             if (GlobalData.lateStudents.count % studentsLimit) > 0{
                 Constant.studentGroup = (GlobalData.lateStudents.count/studentsLimit) + 1
@@ -388,8 +380,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 }
                 count += 1
             }
+            locationManager.requestState(for: commonRegion)
+            Timer.after(2) {
+                if self.commonFlag == false{
+                    self.endBackgroundTask()
+                }
+            }
+        }else{
+            self.endBackgroundTask()
         }
-        self.endBackgroundTask()
     }
     
     private func refreshStudents(){
@@ -422,10 +421,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 GlobalData.regions.append(newRegion)
             }
         }else{
-            for i in 0...(GlobalData.lateStudents.count - start) - 1{
-                let newRegion = CLBeaconRegion(proximityUUID: uuid!, major:UInt16(GlobalData.lateStudents[i+start].major!), minor: UInt16(GlobalData.lateStudents[i+start].minor!), identifier: String(GlobalData.lateStudents[i+start].student_id!))
-                locationManager.startMonitoring(for: newRegion)
-                GlobalData.regions.append(newRegion)
+            if GlobalData.lateStudents.count > 0 {
+                for i in 0...(GlobalData.lateStudents.count - start) - 1{
+                    let newRegion = CLBeaconRegion(proximityUUID: uuid!, major:UInt16(GlobalData.lateStudents[i+start].major!), minor: UInt16(GlobalData.lateStudents[i+start].minor!), identifier: String(GlobalData.lateStudents[i+start].student_id!))
+                    locationManager.startMonitoring(for: newRegion)
+                    GlobalData.regions.append(newRegion)
+                }
             }
         }
         //locationManager.requestState(for: newRegion)
@@ -452,6 +453,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             let statusCode = response.response?.statusCode
             if (statusCode == 200){
                 log.info("Attendance taken successful")
+                if GlobalData.lateStudents.count > 0 {
+                    for i in 0...(GlobalData.lateStudents.count-1){
+                        if GlobalData.lateStudents[i].student_id == Constant.identifier{
+                            GlobalData.lateStudents.remove(at: i)
+                            self.monitor()
+                        }
+                    }
+                }
             }
             if let data = response.result.value{
                 log.info("///////////////result below////////////")
@@ -459,8 +468,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             }
             
         }
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "taken+\(Constant.identifier)"), object: nil)
-        
     }
     
     
