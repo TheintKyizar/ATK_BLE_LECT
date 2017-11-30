@@ -32,8 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         // Override point for customization after application launch.
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
-        
-        stopMonitoring()
         //self.deleteLogFile()
         if UserDefaults.standard.string(forKey: "id") == nil{
             //No user logged in

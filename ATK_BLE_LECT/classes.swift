@@ -325,8 +325,10 @@ class alamofire{
         ]
         Alamofire.request(Constant.URLGetStudentOfLesson, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
             
-            if (response.response?.statusCode)! >= 400{
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "session expired"), object: nil)
+            if let code = response.response?.statusCode{
+                if code >= 400{
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "session expired"), object: nil)
+                }
             }
             
             if let JSON = response.result.value as? [[String:AnyObject]]{

@@ -53,6 +53,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     private func addObserver(){
         NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.addObserver(self, selector: #selector(checkTime), name: Notification.Name(rawValue:"update time"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(checkTime), name: Notification.Name(rawValue:"timetable changed"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(setupTimer), name: Notification.Name(rawValue:"stepper changed"), object: nil)
     }
     

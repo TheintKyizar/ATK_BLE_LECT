@@ -21,6 +21,7 @@ class MonitorController: UITableViewController {
     var lastStatus:[Status]?
     private var count = 0
     var internetConnection = Bool()
+    var currentLesson = Bool()
     @IBOutlet weak var studentLabel: UIBarButtonItem!
     
     override func viewDidLoad() {
@@ -67,7 +68,17 @@ class MonitorController: UITableViewController {
     }
     
     private func checkLessons(){
+        
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        
+        if appdelegate.isInternetAvailable() == true{
+            internetConnection = true
+        }else{
+            internetConnection = false
+        }
+        
         if checkLesson.checkCurrentLesson() == false{
+            currentLesson = false
             if checkLesson.checkNextLesson() == false{
                 //No lesson today
                 log.info("No lesson today")
@@ -80,6 +91,7 @@ class MonitorController: UITableViewController {
             }
         }else{
             //current lesson
+            currentLesson = true
             log.info("Currently have lesson")
             lesson = GlobalData.currentLesson
             self.title = (lesson?.subject)! + " " + (lesson?.catalog)!
@@ -154,6 +166,10 @@ class MonitorController: UITableViewController {
         var title = ""
         if internetConnection == false{
             title = "No internet connection"
+        }else{
+            if currentLesson == false{
+                title = "No lesson"
+            }
         }
         return title
     }

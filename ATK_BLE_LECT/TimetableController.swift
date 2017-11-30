@@ -48,6 +48,7 @@ class TimetableController: UITableViewController {
     
     @objc private func refreshTable(){
         refreshControl?.endRefreshing()
+        NotificationCenter.default.post(name: Notification.Name(rawValue:"timetable changed"), object: nil)
         NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "done loading timetable"), object: nil)
         tableView.reloadData()
     }
