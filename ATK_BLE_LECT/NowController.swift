@@ -178,7 +178,31 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
     private func checkUserInBackground(){
         
         log.info("Checking user in Background")
-        let parameters:[String:Any] = [
+        let token = UserDefaults.standard.string(forKey: "token")
+        let headers:HTTPHeaders = [
+            "Authorization":"Bearer " + token!,
+            "Content-Type":"application/json"
+        ]
+        let spinnerIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        spinnerIndicator.center = CGPoint(x: self.view.frame.width/2,y: self.view.frame.height/2)
+        spinnerIndicator.color = UIColor.black
+        spinnerIndicator.startAnimating()
+        self.view.addSubview(spinnerIndicator)
+        Alamofire.request(Constant.URLWeeklyTimetable, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
+            let code = (response.response?.statusCode)!
+            spinnerIndicator.removeFromSuperview()
+            log.info("Status code: " + String(describing: code))
+            if code >= 400 && code < 500{
+                let alertView = UIAlertController(title: "Section time out", message: "Your sign in section is expired", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                    self.performSegue(withIdentifier: "sign_in_segue", sender: nil)
+                })
+                alertView.addAction(action)
+                self.present(alertView, animated: false, completion: nil)
+            }
+        }
+        
+        /*let parameters:[String:Any] = [
             "username" : UserDefaults.standard.string(forKey: "username")!,
             "password" : UserDefaults.standard.string(forKey: "password")!
         ]
@@ -209,7 +233,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
                 alertView.addAction(action)
                 self.present(alertView, animated: false, completion: nil)
             }
-        }
+        }*/
         
     }
     

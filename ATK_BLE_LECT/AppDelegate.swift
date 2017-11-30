@@ -27,12 +27,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     var regionStatus = [String:String]()
     var flag = Bool()
     var commonFlag = Bool()
+    var attendanceFlags = [String:String]()
+    var refreshingFlag = Bool()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
-        //self.deleteLogFile()
+        
+        deleteLogFile()
+        
         if UserDefaults.standard.string(forKey: "id") == nil{
             //No user logged in
         }else{
@@ -94,7 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                     self.registerBackgroundTask()
                 }
                 Timer.after(2, {
-                    if self.commonFlag == true{
+                    if self.commonFlag == true && self.refreshingFlag == false{
                         self.requestStateForMonitoredRegions()
                     }
                 })
@@ -102,7 +106,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 commonFlag = false
                 Constant.identifier = Int(region.identifier)!
                 log.debug("Entered specific")
-                self.takeAttendance()
+                if attendanceFlags[region.identifier] != "taken"{
+                    self.takeAttendance(region: region as! CLBeaconRegion)
+                    attendanceFlags[region.identifier] = "taken"
+                }
                 //self.endBackgroundTask()
                 
             }
@@ -176,7 +183,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     func requestStateForMonitoredRegions() {
         flag = true
         let monitoredRegions = Array(locationManager.monitoredRegions)
-        
         // requestState for all regions
         if locationManager.monitoredRegions.count > 0{
             for i in 0...locationManager.monitoredRegions.count - 1{
@@ -185,22 +191,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 }
             }
         }
-        
+        refreshingFlag = true
         Timer.after(2) {
-            // Check if there is any specificied region inside
-            /*for i in self.regionStatus{
-                if i.value == "inside" && i.key != "common"{
-                    self.flag = false
-                }
-            }*/
-            
-            //if self.flag == true && self.regionStatus[self.regionStatus.keys.filter({$0 == "common"}).first!] == "inside"{
+            if GlobalData.lateStudents.count > self.studentsLimit{
                 self.refreshStudents()
-                //Timer.after(5){
                 self.requestStateForMonitoredRegions()
-                //}
                 log.debug("refreshing")
-            //}
+            }
         }
     }
     
@@ -292,6 +289,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 }
             }else{
                 regionStatus[region.identifier] = "outside"
+                refreshingFlag = false
                 self.endBackgroundTask()
             }
         }
@@ -345,6 +343,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     func monitor() {
         
+        refreshingFlag = false
+        
         for i in locationManager.monitoredRegions{
             locationManager.stopMonitoring(for: i)
         }
@@ -379,11 +379,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 count += 1
             }
             locationManager.requestState(for: commonRegion)
-            Timer.after(2) {
-                if self.commonFlag == false{
-                    self.endBackgroundTask()
-                }
-            }
         }else{
             self.endBackgroundTask()
         }
@@ -429,7 +424,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
         //locationManager.requestState(for: newRegion)
     }
-    func takeAttendance() {
+    func takeAttendance(region:CLBeaconRegion) {
         Constant.token = UserDefaults.standard.string(forKey: "token")!
         Constant.lecturer_id = UserDefaults.standard.integer(forKey: "id")
         
@@ -450,14 +445,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             
             let statusCode = response.response?.statusCode
             if (statusCode == 200){
-                log.info("Attendance taken successful")
-                if GlobalData.lateStudents.count > 0 {
-                    for i in 0...(GlobalData.lateStudents.count-1){
-                        if GlobalData.lateStudents[i].student_id == Constant.identifier{
-                            GlobalData.lateStudents.remove(at: i)
-                            self.monitor()
-                        }
-                    }
+                log.info("Attendance taken successful\(region.identifier)")
+                print("GlobalData.lateStudents: \(GlobalData.lateStudents.count)")
+                
+                if let student = GlobalData.lateStudents.filter({$0.student_id == Int(region.identifier)}).first{
+                    GlobalData.lateStudents = GlobalData.lateStudents.filter({$0.student_id != student.student_id!})
+                    self.monitor()
                 }
             }
             if let data = response.result.value{
@@ -492,6 +485,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     func endBackgroundTask() {
+        refreshingFlag = false
         log.info("Background task ended.")
         UIApplication.shared.endBackgroundTask(backgroundTask)
         backgroundTask = UIBackgroundTaskInvalid
