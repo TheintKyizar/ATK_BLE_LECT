@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     var window: UIWindow?
     var backgroundTask:UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
     var locationManager = CLLocationManager()
-    let studentsLimit = 2
+    let studentsLimit = 19
     var regionStatus = [String:String]()
     var flag = Bool()
     var commonFlag = Bool()
@@ -34,8 +34,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         // Override point for customization after application launch.
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
-        
-        deleteLogFile()
         
         if UserDefaults.standard.string(forKey: "id") == nil{
             //No user logged in
@@ -272,6 +270,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
         log.debug("Started monitoring \(region.identifier) region")
     }
+    
     func locationManager(_ manager: CLLocationManager, didStopMonitoringFor region: CLRegion) {
         
         log.debug("Stop monitoring \(region.identifier) region")
@@ -317,9 +316,81 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         lesson_date.lesson_date = GlobalData.currentLesson.ldate
         lesson_date.lesson_date_id = GlobalData.currentLesson.ldateid
         lesson_date.lesson_id = GlobalData.currentLesson.lesson_id
-        alamofire.loadStudentsAndStatus(lesson: GlobalData.currentLesson, lesson_date: lesson_date, returnString: "loadLateStudents")
+        loadStudentsNStatus(lesson: GlobalData.currentLesson, lesson_date: lesson_date, returnString: "loadLateStudents")
         NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue:"loadLateStudents"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(doneLoadingStudentsAndStatus), name: Notification.Name(rawValue: "loadLateStudents"), object: nil)
+        
+    }
+    
+    private func loadStudentsNStatus(lesson:Lesson, lesson_date:LessonDate, returnString:String){
+        GlobalData.lesson_id = String(describing: lesson.lesson_id)
+        log.info("Lesson_id : \(String(describing: lesson.lesson_id!))")
+        let token = UserDefaults.standard.string(forKey: "token")
+        let headers:HTTPHeaders = [
+            "Authorization" : "Bearer " + token!,
+            "Content-Type" : "application/json"
+        ]
+        let parameters:[String:Any]=[
+            "lesson_id" : lesson.lesson_id!//13
+        ]
+        Alamofire.request(Constant.URLGetStudentOfLesson, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { (response:DataResponse) in
+            
+            if let code = response.response?.statusCode{
+                if code == 200{
+                    if let JSON = response.result.value as? [[String:AnyObject]]{
+                        GlobalData.students.removeAll()
+                        for json in JSON{
+                            let newStudent = Student()
+                            newStudent.name = json["name"] as? String
+                            newStudent.student_card = json["card"] as? String
+                            newStudent.student_id = json["id"] as? Int
+                            if let beacon = json["beacon_user"] as? [String:AnyObject]{
+                                newStudent.major = beacon["major"] as? Int
+                                newStudent.minor = beacon["minor"] as? Int
+                            }
+                            GlobalData.students.append(newStudent)
+                        }
+                        print("Done loading students")
+                        NSKeyedArchiver.archiveRootObject(GlobalData.students, toFile: filePath.studentPath)
+                        GlobalData.ldate_id = String(describing:lesson_date.lesson_date_id!)
+                        log.info("Lesson date Id: \(lesson_date.lesson_date_id ?? 0)")
+                        let parameters:[String:Any]=[
+                            "lesson_date_id" : lesson_date.lesson_date_id!
+                        ]
+                        Alamofire.request(Constant.URLAtkStatus, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { (response2:DataResponse) in
+                            if let code2 = response2.response?.statusCode{
+                                if code2 == 200{
+                                    let notificationContent = notification.notiContent(title: "Monitoring status", body: "Started monitoring")
+                                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                                    notification.addNotification(trigger: trigger, content: notificationContent, identifier: "monitor started")
+                                    if let JSON = response2.result.value as? [[String:AnyObject]]{
+                                        GlobalData.studentStatus.removeAll()
+                                        for json in JSON{
+                                            let newStatus = Status()
+                                            newStatus.recorded_time = json["recorded_time"] as? String
+                                            newStatus.status = json["status"] as? Int
+                                            newStatus.student_id = json["student_id"] as? Int
+                                            GlobalData.studentStatus.append(newStatus)
+                                        }
+                                        log.info("done loading student's status")
+                                        NSKeyedArchiver.archiveRootObject(GlobalData.studentStatus, toFile: filePath.historyPath)
+                                        NotificationCenter.default.post(name: Notification.Name(rawValue: returnString), object: nil)
+                                    }
+                                }else{
+                                    let notificationContent = notification.notiContent(title: "Monitoring Error", body: "Please relaunch the app to begin monitoring")
+                                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                                    notification.addNotification(trigger: trigger, content: notificationContent, identifier: "monitor error")
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    let notificationContent = notification.notiContent(title: "Monitoring Error", body: "Please relaunch the app to begin monitoring")
+                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                    notification.addNotification(trigger: trigger, content: notificationContent, identifier: "monitor error")
+                }
+            }
+        }
     }
 
     @objc func doneLoadingStudentsAndStatus(){
@@ -382,6 +453,53 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }else{
             self.endBackgroundTask()
         }
+        
+    }
+    
+    func reMonitor(){
+        refreshingFlag = false
+        
+        for i in locationManager.monitoredRegions{
+            locationManager.stopMonitoring(for: i)
+        }
+        
+        let uuid = NSUUID(uuidString: GlobalData.currentLesson.uuid!)as UUID?
+        if GlobalData.lateStudents.count > 0{
+            log.info("Lesson uuid: " + String(describing: uuid!))
+            let commonRegion = CLBeaconRegion(proximityUUID: uuid!, identifier: "common")
+            locationManager.startMonitoring(for: commonRegion)
+            
+            if (GlobalData.lateStudents.count % studentsLimit) > 0{
+                Constant.studentGroup = (GlobalData.lateStudents.count/studentsLimit) + 1
+            }else{
+                Constant.studentGroup = (GlobalData.lateStudents.count/studentsLimit)
+            }
+            
+            if Constant.currentGroup > Constant.studentGroup{
+                Constant.currentGroup = 1
+            }
+            
+            let start = (Constant.currentGroup - 1)*studentsLimit
+            if (GlobalData.lateStudents.count - start) > studentsLimit{
+                for i in 0...studentsLimit-1{
+                    let newRegion = CLBeaconRegion(proximityUUID: uuid!, major:UInt16(GlobalData.lateStudents[i+start].major!), minor: UInt16(GlobalData.lateStudents[i+start].minor!), identifier: String(GlobalData.lateStudents[i+start].student_id!))
+                    locationManager.startMonitoring(for: newRegion)
+                    GlobalData.regions.append(newRegion)
+                }
+            }else{
+                if GlobalData.lateStudents.count > 0 {
+                    for i in 0...(GlobalData.lateStudents.count - start) - 1{
+                        let newRegion = CLBeaconRegion(proximityUUID: uuid!, major:UInt16(GlobalData.lateStudents[i+start].major!), minor: UInt16(GlobalData.lateStudents[i+start].minor!), identifier: String(GlobalData.lateStudents[i+start].student_id!))
+                        locationManager.startMonitoring(for: newRegion)
+                        GlobalData.regions.append(newRegion)
+                    }
+                }
+            }
+            
+            locationManager.requestState(for: commonRegion)
+        }else{
+            self.endBackgroundTask()
+        }
     }
     
     private func refreshStudents(){
@@ -422,6 +540,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 }
             }
         }
+        
         //locationManager.requestState(for: newRegion)
     }
     func takeAttendance(region:CLBeaconRegion) {
@@ -450,7 +569,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 
                 if let student = GlobalData.lateStudents.filter({$0.student_id == Int(region.identifier)}).first{
                     GlobalData.lateStudents = GlobalData.lateStudents.filter({$0.student_id != student.student_id!})
-                    self.monitor()
+                    self.reMonitor()
                 }
             }
             if let data = response.result.value{
@@ -467,9 +586,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
     }
+    
     func applicationWillEnterBackground(_ application: UIApplication) {
         log.info("will enter background")
     }
+    
     func applicationDidEnterBackground(_ application: UIApplication) {
         log.debug("did enter background")
         registerBackgroundTask()
@@ -494,6 +615,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     func applicationWillEnterForeground(_ application: UIApplication) {
         
         NotificationCenter.default.post(name: Notification.Name(rawValue:"update time"), object: nil)
+        attendanceFlags.removeAll()
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
     }
     

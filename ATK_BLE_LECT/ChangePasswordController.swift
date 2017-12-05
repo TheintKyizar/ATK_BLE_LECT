@@ -63,7 +63,16 @@ class ChangePasswordController: UIViewController{
             alertController.addAction(action)
             self.present(alertController, animated: false, completion: nil)
         }else{
-            self.changePassword()
+            let appdelegate = UIApplication.shared.delegate as! AppDelegate
+            if appdelegate.isInternetAvailable() == true{
+                self.changePassword()
+            }else{
+                let alert = UIAlertController(title: "Internet turn on request", message: "Please make sure that your phone has internet connection! ", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                    alert.dismiss(animated: false, completion: nil)
+                }))
+                self.present(alert, animated: true, completion: nil)
+            }
         }
         
     }
@@ -87,7 +96,8 @@ class ChangePasswordController: UIViewController{
             alertController.view.addSubview(spinnerIndicator)
             self.present(alertController, animated: false, completion: nil)
             Alamofire.request(Constant.URLchangepass, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON(completionHandler: { (response:DataResponse) in
-                let code = (response.response?.statusCode)!
+                
+                guard let code = response.response?.statusCode else {return}
                 log.info("Change Password Status Code: \(code)")
                 alertController.dismiss(animated: false, completion: nil)
                 switch code{
