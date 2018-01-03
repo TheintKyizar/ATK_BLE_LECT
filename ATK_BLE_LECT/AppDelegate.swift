@@ -377,17 +377,132 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                                         NotificationCenter.default.post(name: Notification.Name(rawValue: returnString), object: nil)
                                     }
                                 }else{
-                                    let notificationContent = notification.notiContent(title: "Monitoring Error", body: "Please relaunch the app to begin monitoring")
-                                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                                    notification.addNotification(trigger: trigger, content: notificationContent, identifier: "monitor error")
+                                    
+                                    //Has error, try login
+                                    
+                                    let username = UserDefaults.standard.string(forKey: "username")
+                                    let password = UserDefaults.standard.string(forKey: "password")
+                                    let device_hash = UIDevice.current.identifierForVendor?.uuidString
+                                    
+                                    let parameters:[String:Any] = [
+                                        "username" : username!,
+                                        "password" : password!,
+                                        "device_hash" : device_hash!
+                                    ]
+                                    
+                                    Alamofire.request(Constant.URLLogin, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON { (response:DataResponse) in
+                                        
+                                        let code = response.response?.statusCode
+                                        if code == 200{
+                                            
+                                            if let JSON = response.result.value as? [String:AnyObject]{
+                                                
+                                                Constant.lecturer_id = JSON["id"] as! Int
+                                                Constant.name = JSON["name"] as! String
+                                                Constant.token = JSON["token"] as! String
+                                                Constant.major = JSON["major"] as! UInt16
+                                                Constant.minor = JSON["minor"] as! UInt16
+                                                
+                                                UserDefaults.standard.set(Constant.lecturer_id, forKey: "id")
+                                                UserDefaults.standard.set(Constant.name, forKey: "name")
+                                                UserDefaults.standard.set(Constant.token, forKey: "token")
+                                                UserDefaults.standard.set(Constant.major, forKey: "major")
+                                                UserDefaults.standard.set(Constant.minor, forKey: "minor")
+                                                
+                                                if let office = JSON["office"] as? String{
+                                                    UserDefaults.standard.set(office, forKey: "office")
+                                                }else{
+                                                    UserDefaults.standard.removeObject(forKey: "office")
+                                                }
+                                                if let email = JSON["email"] as? String{
+                                                    UserDefaults.standard.set(email, forKey: "email")
+                                                }else{
+                                                    UserDefaults.standard.removeObject(forKey: "email")
+                                                }
+                                                if let phone = JSON["phone"] as? String{
+                                                    UserDefaults.standard.set(phone, forKey: "phone")
+                                                }else{
+                                                    UserDefaults.standard.removeObject(forKey: "phone")
+                                                }
+                                                self.loadLateStudents()
+                                            }
+                                            
+                                        }else{
+                                            
+                                            let notificationContent = notification.notiContent(title: "Monitoring Error", body: "Please relaunch the app to begin monitoring")
+                                            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                                            notification.addNotification(trigger: trigger, content: notificationContent, identifier: "monitor error")
+                                            
+                                        }
+                                        
+                                    }
+                                    
+                                    
                                 }
                             }
                         }
                     }
                 }else{
-                    let notificationContent = notification.notiContent(title: "Monitoring Error", body: "Please relaunch the app to begin monitoring")
-                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                    notification.addNotification(trigger: trigger, content: notificationContent, identifier: "monitor error")
+                    
+                    //has error, try login
+                    let username = UserDefaults.standard.string(forKey: "username")
+                    let password = UserDefaults.standard.string(forKey: "password")
+                    let device_hash = UIDevice.current.identifierForVendor?.uuidString
+                    
+                    let parameters:[String:Any] = [
+                        "username" : username!,
+                        "password" : password!,
+                        "device_hash" : device_hash!
+                    ]
+                    
+                    Alamofire.request(Constant.URLLogin, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON { (response:DataResponse) in
+                        
+                        let code = response.response?.statusCode
+                        if code == 200{
+                            
+                            if let JSON = response.result.value as? [String:AnyObject]{
+                                
+                                Constant.lecturer_id = JSON["id"] as! Int
+                                Constant.name = JSON["name"] as! String
+                                Constant.token = JSON["token"] as! String
+                                Constant.major = JSON["major"] as! UInt16
+                                Constant.minor = JSON["minor"] as! UInt16
+                                
+                                UserDefaults.standard.set(Constant.lecturer_id, forKey: "id")
+                                UserDefaults.standard.set(Constant.name, forKey: "name")
+                                UserDefaults.standard.set(Constant.token, forKey: "token")
+                                UserDefaults.standard.set(Constant.major, forKey: "major")
+                                UserDefaults.standard.set(Constant.minor, forKey: "minor")
+                                
+                                if let office = JSON["office"] as? String{
+                                    UserDefaults.standard.set(office, forKey: "office")
+                                }else{
+                                    UserDefaults.standard.removeObject(forKey: "office")
+                                }
+                                if let email = JSON["email"] as? String{
+                                    UserDefaults.standard.set(email, forKey: "email")
+                                }else{
+                                    UserDefaults.standard.removeObject(forKey: "email")
+                                }
+                                if let phone = JSON["phone"] as? String{
+                                    UserDefaults.standard.set(phone, forKey: "phone")
+                                }else{
+                                    UserDefaults.standard.removeObject(forKey: "phone")
+                                }
+                                self.loadLateStudents()
+                                
+                            }
+                            
+                        }else{
+                            
+                            let notificationContent = notification.notiContent(title: "Monitoring Error", body: "Please relaunch the app to begin monitoring")
+                            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                            notification.addNotification(trigger: trigger, content: notificationContent, identifier: "monitor error")
+                            
+                        }
+                        
+                    }
+                   
                 }
             }
         }

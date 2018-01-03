@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class MonitorController: UITableViewController {
     
@@ -22,6 +23,7 @@ class MonitorController: UITableViewController {
     private var count = 0
     var internetConnection = Bool()
     var currentLesson = Bool()
+    var loginBool:Bool = false
     @IBOutlet weak var studentLabel: UIBarButtonItem!
     
     override func viewDidLoad() {
@@ -249,16 +251,72 @@ class MonitorController: UITableViewController {
     }
     
     @objc private func sessionExpired(){
-        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "session expired"), object: nil)
-        let alertController = UIAlertController(title: "Session expired", message: "Please log in to continue", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
-            self.performSegue(withIdentifier: "sign_in_segue", sender: nil)
-        })
-        alertController.addAction(action)
-        self.present(alertController, animated: false, completion: nil)
+        self.loginBool = true
+        //login
+        let username = UserDefaults.standard.string(forKey: "username")
+        let password = UserDefaults.standard.string(forKey: "password")
+        let device_hash = UIDevice.current.identifierForVendor?.uuidString
+        
+        let parameters:[String:Any] = [
+            "username" : username!,
+            "password" : password!,
+            "device_hash" : device_hash!
+        ]
+    
+        Alamofire.request(Constant.URLLogin, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON { (response:DataResponse) in
+            
+            let code = response.response?.statusCode
+            if code == 200{
+                
+                if let JSON = response.result.value as? [String:AnyObject]{
+                    
+                    Constant.lecturer_id = JSON["id"] as! Int
+                    Constant.name = JSON["name"] as! String
+                    Constant.token = JSON["token"] as! String
+                    Constant.major = JSON["major"] as! UInt16
+                    Constant.minor = JSON["minor"] as! UInt16
+                    
+                    UserDefaults.standard.set(Constant.lecturer_id, forKey: "id")
+                    UserDefaults.standard.set(Constant.name, forKey: "name")
+                    UserDefaults.standard.set(Constant.token, forKey: "token")
+                    UserDefaults.standard.set(Constant.major, forKey: "major")
+                    UserDefaults.standard.set(Constant.minor, forKey: "minor")
+                    
+                    if let office = JSON["office"] as? String{
+                        UserDefaults.standard.set(office, forKey: "office")
+                    }else{
+                        UserDefaults.standard.removeObject(forKey: "office")
+                    }
+                    if let email = JSON["email"] as? String{
+                        UserDefaults.standard.set(email, forKey: "email")
+                    }else{
+                        UserDefaults.standard.removeObject(forKey: "email")
+                    }
+                    if let phone = JSON["phone"] as? String{
+                        UserDefaults.standard.set(phone, forKey: "phone")
+                    }else{
+                        UserDefaults.standard.removeObject(forKey: "phone")
+                    }
+                    
+                    self.loginBool = false
+                }
+                
+            }else{
+                
+                let alertController = UIAlertController(title: "Session expired", message: "Please log in to continue", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default, handler: { (action:UIAlertAction) in
+                    self.performSegue(withIdentifier: "sign_in_segue", sender: nil)
+                })
+                alertController.addAction(action)
+                self.present(alertController, animated: false, completion: nil)
+                
+            }
+            
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(rawValue: "session expired"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sessionExpired), name: Notification.Name(rawValue: "session expired"), object: nil)
         self.checkLessons()
     }
@@ -289,9 +347,11 @@ class MonitorController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(refreshTableLoop), name: Notification.Name(rawValue: "refreshLoop"), object: nil)
         if timer == nil{
             timer = Timer.every(3, {
-                //refresh status here
-                self.lastStatus = GlobalData.studentStatus
-                alamofire.loadStudentsAndStatus(lesson: self.lesson!, lesson_date: self.lesson_date!, returnString: "refreshLoop")
+                if self.loginBool == false{
+                    //refresh status here
+                    self.lastStatus = GlobalData.studentStatus
+                    alamofire.loadStudentsAndStatus(lesson: self.lesson!, lesson_date: self.lesson_date!, returnString: "refreshLoop")
+                }
             })
         }
     }
