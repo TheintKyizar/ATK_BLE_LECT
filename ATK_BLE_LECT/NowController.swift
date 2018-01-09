@@ -102,6 +102,7 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
                         let appdelegate = UIApplication.shared.delegate as! AppDelegate
                         UserDefaults.standard.set("true", forKey: "\(currentLessonDateId) log file")
                         appdelegate.uploadLogFile()
+                        appdelegate.uploadAttendanceLogFile()
                     }
                 }
             }
@@ -152,6 +153,8 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
                 let timeInterval = format.formatTime(format: "HH:mm:ss", time: format.formateDate(format: "HH:mm:ss", date: Date())).timeIntervalSince(format.formatTime(format: "HH:mm:ss", time: (self.lesson?.start_time!)!))
                 if timeInterval < 0{
                     self.broadcast()
+                }else{
+                    appdelegate.loadLateStudents()
                 }
             })
             
@@ -199,6 +202,41 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
                 })
                 alertView.addAction(action)
                 self.present(alertView, animated: false, completion: nil)
+            }else if code == 200{
+                if let JSON = response.result.value as? [AnyObject]{
+                    GlobalData.weeklyTimetable.removeAll()
+                    for json in JSON{
+                        let newLesson = Lesson()
+                        if let lesson = json["lesson"] as? [String:Any]{
+                            newLesson.lesson_id = lesson["id"] as? Int
+                            newLesson.module_id = lesson["module_id"] as? String
+                            newLesson.subject = lesson["subject_area"] as? String
+                            newLesson.catalog = lesson["catalog_number"] as? String
+                            newLesson.class_section = lesson["class_section"] as? String
+                            newLesson.weekday = lesson["weekday"] as? String
+                            newLesson.start_time = lesson["start_time"] as? String
+                            newLesson.end_time = lesson["end_time"] as? String
+                            newLesson.credit_unit = Int((lesson["credit_unit"] as? String)!)
+                        }
+                        
+                        if let lesson_date = json["lesson_date_weekly"] as? [String:Any]{
+                            newLesson.ldate = lesson_date["ldate"] as? String
+                            newLesson.ldateid = lesson_date["id"] as? Int
+                        }
+                        
+                        if let venue = json["venue"] as? [String:Any]{
+                            newLesson.location = venue["location"] as? String
+                            newLesson.venueName = venue["name"] as? String
+                        }
+                        if let beacon = json["beacon_lesson"] as? [String:Any]{
+                            newLesson.uuid = beacon["uuid"] as? String
+                        }
+                        GlobalData.weeklyTimetable.append(newLesson)
+                    }
+                    log.info("Done refreshing timetable")
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "done loading timetable"), object: nil)
+                    NSKeyedArchiver.archiveRootObject(GlobalData.weeklyTimetable, toFile: filePath.weeklyTimetable)
+                }
             }
         }
         
@@ -418,7 +456,6 @@ class NowController: UIViewController, UNUserNotificationCenterDelegate, CLLocat
                 self.dismiss(animated: true, completion: nil)
             }))
             self.present(alert, animated: true, completion: nil)
-            
         }
     }
     private func turnOnData() {

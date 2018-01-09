@@ -33,6 +33,7 @@
 		E1959D2A1F6131910015F171 /* ChangePasswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1959D291F6131910015F171 /* ChangePasswordController.swift */; };
 		E1A357A31FA1A2F50056A270 /* ManualAttendanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A357A11FA1A2F50056A270 /* ManualAttendanceCell.swift */; };
 		E1A357A41FA1A2F50056A270 /* ManualAttendanceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1A357A21FA1A2F50056A270 /* ManualAttendanceCell.xib */; };
+		E1A8EB93200307BB00F4E68C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A8EB92200307BB00F4E68C /* Reachability.swift */; };
 		E1B910861F9F23EC00AA6A40 /* StudentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B910841F9F23EC00AA6A40 /* StudentCell.swift */; };
 		E1B910871F9F23EC00AA6A40 /* StudentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1B910851F9F23EC00AA6A40 /* StudentCell.xib */; };
 /* End PBXBuildFile section */
@@ -68,6 +69,7 @@
 		E1959D291F6131910015F171 /* ChangePasswordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswordController.swift; sourceTree = "<group>"; };
 		E1A357A11FA1A2F50056A270 /* ManualAttendanceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualAttendanceCell.swift; sourceTree = "<group>"; };
 		E1A357A21FA1A2F50056A270 /* ManualAttendanceCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ManualAttendanceCell.xib; sourceTree = "<group>"; };
+		E1A8EB92200307BB00F4E68C /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		E1B910841F9F23EC00AA6A40 /* StudentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentCell.swift; sourceTree = "<group>"; };
 		E1B910851F9F23EC00AA6A40 /* StudentCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StudentCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -143,6 +145,7 @@
 				E166BB761F5E2C1100EE41EF /* MonitorController.swift */,
 				E16EDCD91FAC3063007A967E /* MoreController.swift */,
 				E1959D291F6131910015F171 /* ChangePasswordController.swift */,
+				E1A8EB92200307BB00F4E68C /* Reachability.swift */,
 				E12CA3EC1F5FC19900597719 /* History */,
 			);
 			name = Controllers;
@@ -355,6 +358,7 @@
 				E1B910861F9F23EC00AA6A40 /* StudentCell.swift in Sources */,
 				E1748E721FAFFA340039AE23 /* PopupController.swift in Sources */,
 				E18248DF1F9DC627009939DD /* UserInfoCell.swift in Sources */,
+				E1A8EB93200307BB00F4E68C /* Reachability.swift in Sources */,
 				C37056201F56AC210029C0E4 /* AppDelegate.swift in Sources */,
 				E10278711F5D396A00429562 /* TimetableController.swift in Sources */,
 				E12CA3E91F5FA26300597719 /* HistoryDaySelectController.swift in Sources */,

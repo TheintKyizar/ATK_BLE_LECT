@@ -54,6 +54,7 @@ class GlobalData{
     static var regions = [CLBeaconRegion]()
     static var lateStudents = [Student]()
     static var regionStatus = [String]()
+    static var offlineData = [Attendance]()
     
     static let wdayStr = ["Monday", "Tuesday", "Wednesday", "Thursday" , "Friday", "Saturday"]
     static let wdayInt = ["2", "3", "4", "5", "6", "7"]

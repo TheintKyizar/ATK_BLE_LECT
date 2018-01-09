@@ -114,6 +114,32 @@ class Lesson : NSObject, NSCoding {
     
 }
 
+class Attendance: NSObject, NSCoding{
+    
+    var lessonDateID:Int?
+    var studentID:Int?
+    var lecturerID:Int?
+    
+    init(lessonDateId:Int,studentId:Int,lecturerId:Int){
+        lessonDateID = lessonDateId
+        studentID = studentId
+        lecturerID = lecturerId
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        lessonDateID = aDecoder.decodeObject(forKey: "lesson_date_id") as? Int
+        studentID = aDecoder.decodeObject(forKey: "student_id") as? Int
+        lecturerID = aDecoder.decodeObject(forKey: "lecturer_id") as? Int
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(lessonDateID, forKey: "lesson_date_id")
+        aCoder.encode(studentID, forKey: "student_id")
+        aCoder.encode(lecturerID, forKey: "lecturer_id")
+    }
+    
+}
+
 class Venue{
     
     var id = 0

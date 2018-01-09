@@ -23,18 +23,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     var window: UIWindow?
     var backgroundTask:UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
     var locationManager = CLLocationManager()
-    let studentsLimit = 19
+    let studentsLimit = 2
     var regionStatus = [String:String]()
     var flag = Bool()
     var commonFlag = Bool()
     var attendanceFlags = [String:String]()
     var refreshingFlag = Bool()
+    let file2 = FileDestination()
+    private var reachability:Reachability!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(checkForReachability(notification:)), name: ReachabilityChangedNotification, object: nil)
+        self.reachability = Reachability.init()
+        do{
+            try self.reachability.startNotifier()
+        }catch{
+            log.error(error.localizedDescription)
+        }
+//        GlobalData.offlineData.removeAll()
+//        NSKeyedArchiver.archiveRootObject(GlobalData.offlineData, toFile: filePath.offlineData)
         if UserDefaults.standard.string(forKey: "id") == nil{
             //No user logged in
         }else{
@@ -57,32 +67,66 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         //add log destinations.
         let console = ConsoleDestination() // log to Xcode Console
         let file = FileDestination() // log to default swiftybeaver.log file
-        let cloud = SBPlatformDestination(appID: "0G8vQ1", appSecret: "ieuq2buxAk4hOpxs6xhekpAizbbdlhsG", encryptionKey: "nFjc1oWmxr3morgyouJrtn1xzd0sNzg4")
+        //let cloud = SBPlatformDestination(appID: "0G8vQ1", appSecret: "ieuq2buxAk4hOpxs6xhekpAizbbdlhsG", encryptionKey: "nFjc1oWmxr3morgyouJrtn1xzd0sNzg4")
         // use custom format and set console output to short time, log level & message
         console.format = "$DHH:mm:ss$d $L $M"
+        
+        if let url = FileManager.default.urls(for:.cachesDirectory, in: .userDomainMask).first{
+            file2.logFileURL = url.appendingPathComponent("attendance.log", isDirectory: false)
+        }
+        
         //use this for JSON output: console.format = "$J"
         
         //add the destinations to SwifyBeaver
         log.addDestination(console)
         log.addDestination(file)
-        log.addDestination(cloud)
         //read the swiftybeaver.log file 
         var readString = ""
         //var fileURL = "~/Library/Caches/swiftybeaver.log"
         let CacheDirURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
         let fileURL = CacheDirURL.appendingPathComponent("swiftybeaver").appendingPathExtension("log")
+        let attendanceURL = CacheDirURL.appendingPathComponent("attendance").appendingPathExtension("log")
         //let pathString = fileURL.path
         
         do {
             readString = try String(contentsOf: fileURL)
         }
         catch let error as NSError {
-            log.info("Failed to read file")
-            log.info(error)
+            print("Failed to read file")
+            print(error)
         }
-        print("@@@@@@@contents of the file \(readString)")
-        
+        print("@@@@@@@contents of the SwiftyBeaver file \(readString)")
+        readString = ""
+        do {
+            readString = try String(contentsOf: attendanceURL)
+        }
+        catch let error as NSError{
+            print("Failed to read file")
+            print(error)
+        }
+        print("@@@@@@@contents of the attendance file \(readString)")
         return true
+    }
+    
+    @objc func checkForReachability(notification:NSNotification){
+        let reachability = notification.object as! Reachability
+        if reachability.isReachable{
+            if reachability.isReachableViaWiFi{
+                print("Reachable via WiFi")
+            } else{
+                print("Reachable via Cellular")
+            }
+            //take attendance for offline data
+            if let offlineData = NSKeyedUnarchiver.unarchiveObject(withFile: filePath.offlineData) as? [Attendance]{
+                GlobalData.offlineData = offlineData
+                for i in GlobalData.offlineData{
+                    self.takeAttendance(ldateId: i.lessonDateID!, studentId: i.studentID!, lecturerId: i.lecturerID!)
+                }
+            }
+            
+        }else{
+            print("Network not reachable")
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
@@ -105,7 +149,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 Constant.identifier = Int(region.identifier)!
                 log.debug("Entered specific")
                 if attendanceFlags[region.identifier] != "taken"{
-                    self.takeAttendance(region: region as! CLBeaconRegion)
+                    log.addDestination(file2)
+                    log.info("register attendance for \(region.identifier)")
+                    log.removeDestination(file2)
+                    self.registerAttendance(region: region as! CLBeaconRegion)
                     attendanceFlags[region.identifier] = "taken"
                 }
                 //self.endBackgroundTask()
@@ -152,7 +199,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             
         }else{
             
-           self.endBackgroundTask()
+            self.endBackgroundTask()
             
         }
         
@@ -262,9 +309,82 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             }
         })
     }
+    
+    public func uploadAttendanceLogFile(){
+        let cacheDirURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        let fileurl = cacheDirURL.appendingPathComponent("attendance").appendingPathExtension("log")
+        //let pathString = fileurl.path
+        let filename = fileurl.lastPathComponent
+        print("File Path: \(fileurl.path)")
+        print("File name: \(filename)")
+        var readString = ""
+        do{
+            readString = try String(contentsOf: fileurl)
+        }
+        catch let error as NSError {
+            print("Failed to read file")
+            print(error)
+        }
+        print("~~~~~~~~~~~~~~~`Contents of file \(readString)")
+        let headers: HTTPHeaders = [
+            "Content-Type" : "multipart/form-data"
+        ]
+        
+        let url = try! URLRequest(url: Constant.URLLogFile, method: .post, headers: headers)
+        var data = Data()
+        if let fileContents = FileManager.default.contents(atPath: fileurl.path) {
+            data = fileContents as Data
+        }
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        let result = formatter.string(from: date)
+        let Name = "iOS_\(result)_\((GlobalData.currentLesson.ldateid)!)_\(UserDefaults.standard.string(forKey: "id")!)_attendance"
+        print("Name&&&&&&&&&&&&&&&&\(Name)")
+        Alamofire.upload(multipartFormData: {(MultipartFormData) in
+            MultipartFormData.append(data, withName: "logFile", fileName: Name, mimeType: "text/plain")
+            /*for (key,_) in parameters {
+             let name = String(key)
+             if let value = parameters[name] as? String {
+             MultipartFormData.append((value as AnyObject).data(using: String.Encoding.utf8.rawValue)!, withName: key)
+             }
+             }*/
+            
+        }, with: url, encodingCompletion: { (result) in
+            switch result {
+            case .success(let upload, _, _):
+                upload.responseJSON {
+                    response in
+                    print("MultipartFormData@@@@@@@@@@@@@\(data.endIndex)")
+                    print("response.request\(String(describing: response.request))")  // original URL request
+                    print("response.response\(String(describing: response.response))" ) // URL response
+                    print("response.data\(String(describing: response.data))")     // server data
+                    print(response.result)   // result of response serialization
+                    //remove the file
+                    if response.response?.statusCode == 200{
+                        self.deleteLogFile()
+                    }
+                    if let JSON = response.result.value {
+                        print("JSON: \(JSON)")
+                    }
+                }
+            case .failure(let encodingError):
+                print(encodingError)
+            }
+        })
+    }
+    
     func deleteLogFile(){
         let file = FileDestination()
         let _  = file.deleteLogFile()
+    }
+    
+    func deleteAttendanceLogFile(){
+        let file = FileDestination()
+        if let url = FileManager.default.urls(for:.cachesDirectory, in: .userDomainMask).first{
+            file.logFileURL = url.appendingPathComponent("attendance.log", isDirectory: false)
+        }
+        let _ = file.deleteLogFile()
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
@@ -502,16 +622,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                         }
                         
                     }
-                   
+                    
                 }
             }
         }
     }
-
+    
     @objc func doneLoadingStudentsAndStatus(){
-            self.getLateStudents()
+        self.getLateStudents()
     }
-
+    
     private func getLateStudents() {
         if GlobalData.studentStatus.count > 0 {
             for i in 0...GlobalData.studentStatus.count-1 {
@@ -555,7 +675,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                     log.info("Student Id: " + String(describing: GlobalData.lateStudents[i].student_id!))
                     log.info("minor: " + String(describing: GlobalData.lateStudents[i].minor!))
                     log.info("major: " + String(describing: GlobalData.lateStudents[i].major!))
-                  
+                    
                     let newRegion = CLBeaconRegion(proximityUUID: uuid!, major:UInt16(GlobalData.lateStudents[i].major!), minor: UInt16(GlobalData.lateStudents[i].minor!), identifier: String(GlobalData.lateStudents[i].student_id!))
                     if i<19{
                         locationManager.startMonitoring(for: newRegion)
@@ -658,14 +778,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         
         //locationManager.requestState(for: newRegion)
     }
-    func takeAttendance(region:CLBeaconRegion) {
+    
+    private func registerAttendance(region:CLBeaconRegion){
+        let lecturer_id = UserDefaults.standard.integer(forKey: "id") as! Int
+        if isInternetAvailable() == true{
+            self.takeAttendance(ldateId: GlobalData.currentLesson.ldateid!, studentId: Constant.identifier, lecturerId: lecturer_id)
+        }else{
+            let newAttendance = Attendance(lessonDateId: GlobalData.currentLesson.ldateid!, studentId: Constant.identifier, lecturerId: lecturer_id)
+            
+            if let offlineData = NSKeyedUnarchiver.unarchiveObject(withFile: filePath.offlineData) as? [Attendance]{
+                GlobalData.offlineData = offlineData
+                if GlobalData.offlineData.filter({$0.studentID==newAttendance.studentID}).first == nil{
+                    GlobalData.offlineData.append(newAttendance)
+                }
+            }else{
+                GlobalData.offlineData.append(newAttendance)
+            }
+            
+            NSKeyedArchiver.archiveRootObject(GlobalData.offlineData, toFile: filePath.offlineData)
+        }
+    }
+    
+    private func removeAttendance(attendance:Attendance){
+        GlobalData.offlineData = GlobalData.offlineData.filter({$0.studentID != attendance.studentID})
+        NSKeyedArchiver.archiveRootObject(GlobalData.offlineData, toFile: filePath.offlineData)
+    }
+    
+    func takeAttendance(ldateId:Int,studentId:Int,lecturerId:Int) {
         Constant.token = UserDefaults.standard.string(forKey: "token")!
         Constant.lecturer_id = UserDefaults.standard.integer(forKey: "id")
         
         let para1: Parameters = [
-            "lesson_date_id": GlobalData.currentLesson.ldateid!,
-            "student_id": Constant.identifier,
-            "lecturer_id": Constant.lecturer_id,
+            "lesson_date_id": ldateId,
+            "student_id": studentId,
+            "lecturer_id": lecturerId,
             ]
         let parameters: [String: Any] = ["data": [para1]]
         
@@ -679,11 +825,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             
             let statusCode = response.response?.statusCode
             if (statusCode == 200){
-                log.info("Attendance taken successful\(region.identifier)")
+                log.info("Attendance taken successful\(studentId)")
                 print("GlobalData.lateStudents: \(GlobalData.lateStudents.count)")
-                
-                if let student = GlobalData.lateStudents.filter({$0.student_id == Int(region.identifier)}).first{
+                self.removeAttendance(attendance: Attendance(lessonDateId: ldateId, studentId: studentId, lecturerId: lecturerId))
+                if let student = GlobalData.lateStudents.filter({$0.student_id == studentId}).first{
                     GlobalData.lateStudents = GlobalData.lateStudents.filter({$0.student_id != student.student_id!})
+                    log.addDestination(self.file2)
+                    log.info("attendance taking successful for \(studentId)")
+                    log.removeDestination(self.file2)
                     self.reMonitor()
                 }
             }

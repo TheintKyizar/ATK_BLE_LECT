@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ATK_BLE_LECT/NowController.swift"
-            timestampString = "536551010.853507"
+            timestampString = "537153486.869832"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "352"
-            endingLineNumber = "352"
+            startingLineNumber = "390"
+            endingLineNumber = "390"
             landmarkName = "peripheralManagerDidUpdateState(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ATK_BLE_LECT/AppDelegate.swift"
-            timestampString = "536660236.072525"
+            timestampString = "537171797.451956"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "315"
-            endingLineNumber = "315"
+            startingLineNumber = "435"
+            endingLineNumber = "435"
             landmarkName = "loadLateStudents()"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ATK_BLE_LECT/AppDelegate.swift"
-            timestampString = "536660236.072897"
+            timestampString = "537171797.452352"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "320"
-            endingLineNumber = "320"
+            startingLineNumber = "440"
+            endingLineNumber = "440"
             landmarkName = "loadLateStudents()"
             landmarkType = "7">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ATK_BLE_LECT/classes.swift"
-            timestampString = "534042229.973557"
+            timestampString = "537153073.972804"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "193"
-            endingLineNumber = "193"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
             landmarkName = "checkCurrentLesson()"
             landmarkType = "7">
          </BreakpointContent>
@@ -90,7 +90,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ATK_BLE_LECT/LoginController.swift"
-            timestampString = "536658643.784303"
+            timestampString = "537091983.6850621"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "208"
